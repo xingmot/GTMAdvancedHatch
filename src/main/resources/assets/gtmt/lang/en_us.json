@@ -1,0 +1,7 @@
+{
+  "gtmthings.machine.wireless_energy_monitor.tooltip.net_power": "Average Net Power: ",
+  "gtmthings.machine.wireless_energy_monitor.tooltip.last_minute": "Last minute: §a%s EU/t",
+  "gtmthings.machine.wireless_energy_monitor.tooltip.last_hour": "Last hour: §a%s EU/t",
+  "gtmthings.machine.wireless_energy_monitor.tooltip.last_day": "Last day: §a%s EU/t",
+  "gtmthings.machine.wireless_energy_monitor.tooltip.now": "Now: §a%s EU/t"
+}
