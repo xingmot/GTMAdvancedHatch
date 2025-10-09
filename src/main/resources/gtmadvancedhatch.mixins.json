@@ -6,8 +6,8 @@
   "mixins": [
     "gtm.GTUtilMixin",
     "gtmt.WirelessEnergyManagerMixin",
-    "gtmt.WirelessEnergySavedDataMixin",
-    "gtmt.WirelessMachinesMixin"
+    "gtmt.WirelessEnergyMonitorMixin",
+    "gtmt.WirelessEnergySavedDataMixin"
   ],
   "client": [
   ],

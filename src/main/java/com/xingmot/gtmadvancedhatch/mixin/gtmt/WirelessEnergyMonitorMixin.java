@@ -1,113 +1,69 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-package com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor;
-
-import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.xingmot.gtmadvancedhatch.util.NumberUtils;
+package com.xingmot.gtmadvancedhatch.mixin.gtmt;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
+import com.gregtechceu.gtceu.utils.GTUtil;
+import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
+import com.hepdd.gtmthings.common.block.machine.electric.WirelessEnergyMonitor;
+import com.hepdd.gtmthings.utils.TeamUtil;
+import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
+import com.lowdragmc.lowdraglib.gui.util.ClickData;
+import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.mojang.datafixers.util.Pair;
+import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.gregtechceu.gtceu.utils.GTUtil;
-
-import com.lowdragmc.lowdraglib.gui.util.ClickData;
-import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.BlockHitResult;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.xingmot.gtmadvancedhatch.util.NumberUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.FormatUtil.formatWithConstantWidth;
 import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigDecimalNumberOrSic;
 import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigIntegerNumberOrSic;
 
-import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
-import com.hepdd.gtmthings.utils.TeamUtil;
-import com.mojang.datafixers.util.Pair;
-import org.jetbrains.annotations.NotNull;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public class NewWirelessEnergyMonitor extends MetaMachine implements IFancyUIMachine {
-
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER;
-    private static final BigInteger BIG_INTEGER_MAX_LONG;
-    public static int p;
-    public static BlockPos pPos;
+@Mixin(WirelessEnergyMonitor.class)
+public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements IFancyUIMachine {
+    @Shadow
     private UUID userid;
-    private BigInteger beforeEnergy;
-    private List<Map.Entry<Pair<UUID, MetaMachine>, Long>> sortedEntries = null;
+    @Shadow
     private boolean all = false;
 
-    public NewWirelessEnergyMonitor(IMachineBlockEntity holder) {
+    public WirelessEnergyMonitorMixin(IMachineBlockEntity holder) {
         super(holder);
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
+    @Shadow
+    protected abstract void handleDisplayClick(String s, ClickData clickData);
 
-    @Override
-    public void onLoad() {
-        super.onLoad();
-    }
+    @Shadow
+    protected abstract void addDisplayText(@NotNull List<Component> textList);
 
-    @Override
-    public void onUnload() {
-        super.onUnload();
-    }
+    @Shadow
+    private static Component getTimeToFillDrainText(BigInteger timeToFillSeconds){return  null;};
 
-    private void handleDisplayClick(String componentData, ClickData clickData) {
-        if (!clickData.isRemote) {
-            if (componentData.equals("all")) {
-                this.all = !this.all;
-            } else {
-                p = 100;
-                String[] parts = componentData.split(", ");
-                pPos = new BlockPos(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
-            }
-        }
-    }
+    @Shadow
+    protected abstract List<Map.Entry<Pair<UUID, MetaMachine>, Long>> getSortedEntries();
 
-    @Override
-    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
-        if (this.userid == null) {
-            this.userid = player.getUUID();
-        }
-
-        this.beforeEnergy = WirelessEnergyManager.getUserEU(this.userid);
-        return true;
-    }
-
-    @Override
-    public Widget createUIWidget() {
+    @Inject(remap = false, method = "createUIWidget",at = @At("HEAD"), cancellable = true)
+    private void createUIWidgetMixin(CallbackInfoReturnable<Widget> cir) {
         WidgetGroup group = new WidgetGroup(0, 0, 220+8+8, 117+8);
         group.addWidget((new DraggableScrollableWidgetGroup(4, 4, 220+8, 117)).setBackground(GuiTextures.DISPLAY)
                 .addWidget(new LabelWidget(4, 5, this.self().getBlockState().getBlock().getDescriptionId()))
@@ -115,10 +71,14 @@ public class NewWirelessEnergyMonitor extends MetaMachine implements IFancyUIMac
                         .setMaxWidthLimit(220)
                         .clickHandler(this::handleDisplayClick)));
         group.setBackground(new IGuiTexture[]{GuiTextures.BACKGROUND_INVERSE});
-        return group;
+        cir.setReturnValue(group);
+        cir.cancel();
     }
 
-    public void addDisplayText(@NotNull List<Component> textList) {
+
+
+    @Inject(remap = false, method = "addDisplayText",at = @At("HEAD"), cancellable = true)
+    private void addDisplayTextMixin(@NotNull List<Component> textList, CallbackInfo ci) {
         BigInteger energyTotal = WirelessEnergyManager.getUserEU(this.userid);
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", TeamUtil.GetName(this.holder.level(), this.userid)).withStyle(ChatFormatting.AQUA));
         textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.1", 180, Component.literal(formatBigIntegerNumberOrSic(energyTotal))).withStyle(ChatFormatting.GOLD));
@@ -160,51 +120,7 @@ public class NewWirelessEnergyMonitor extends MetaMachine implements IFancyUIMac
                 }
             }
         }
+        ci.cancel();
     }
 
-    private List<Map.Entry<Pair<UUID, MetaMachine>, Long>> getSortedEntries() {
-        if (this.sortedEntries == null || this.getOffsetTimer() % 20L == 0L) {
-            this.sortedEntries = WirelessEnergyManager.MachineData.entrySet().stream().sorted(Entry.comparingByValue()).toList();
-            WirelessEnergyManager.MachineData.clear();
-        }
-
-        return this.sortedEntries;
-    }
-
-    private static Component getTimeToFillDrainText(BigInteger timeToFillSeconds) {
-        if (timeToFillSeconds.compareTo(BIG_INTEGER_MAX_LONG) > 0) {
-            timeToFillSeconds = BIG_INTEGER_MAX_LONG;
-        }
-
-        Duration duration = Duration.ofSeconds(timeToFillSeconds.longValue());
-        String key;
-        long fillTime;
-        if (duration.getSeconds() <= 180L) {
-            fillTime = duration.getSeconds();
-            key = "gtceu.multiblock.power_substation.time_seconds";
-        } else if (duration.toMinutes() <= 180L) {
-            fillTime = duration.toMinutes();
-            key = "gtceu.multiblock.power_substation.time_minutes";
-        } else if (duration.toHours() <= 72L) {
-            fillTime = duration.toHours();
-            key = "gtceu.multiblock.power_substation.time_hours";
-        } else if (duration.toDays() <= 730L) {
-            fillTime = duration.toDays();
-            key = "gtceu.multiblock.power_substation.time_days";
-        } else {
-            if (duration.toDays() / 365L >= 1000000L) {
-                return Component.translatable("gtceu.multiblock.power_substation.time_forever");
-            }
-
-            fillTime = duration.toDays() / 365L;
-            key = "gtceu.multiblock.power_substation.time_years";
-        }
-
-        return Component.translatable(key, FormattingUtil.formatNumbers(fillTime));
-    }
-
-    static {
-        MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NewWirelessEnergyMonitor.class, MetaMachine.MANAGED_FIELD_HOLDER);
-        BIG_INTEGER_MAX_LONG = BigInteger.valueOf(Long.MAX_VALUE);
-    }
 }

@@ -63,23 +63,6 @@ public class NetEnergyProvider extends CapabilityBlockProvider<IBindable> {
                     @Override
                     public void setUUID(UUID uuid1) {}
                 };
-            } else if (metaMachine instanceof SimpleTieredMachine simpleTieredMachine) {
-                var covers = simpleTieredMachine.getCoverContainer().getCovers();
-                for (var cover : covers) {
-                    if (cover instanceof WirelessEnergyReceiveCover wirelessEnergyReceiveCover) {
-                        UUID uuid = wirelessEnergyReceiveCover.getUuid();
-                        return new IBindable() {
-
-                            @Override
-                            public UUID getUUID() {
-                                return uuid;
-                            }
-
-                            @Override
-                            public void setUUID(UUID uuid1) {}
-                        };
-                    }
-                }
             }
         }
         return null;
@@ -89,6 +72,7 @@ public class NetEnergyProvider extends CapabilityBlockProvider<IBindable> {
     protected void write(CompoundTag data, IBindable capability) {
         if (capability.getUUID() != null) {
             data.putUUID("uuid", capability.getUUID());
+            data.putString("energy", NumberUtils.formatBigIntegerNumberOrSic(WirelessEnergyManager.getUserEU(capability.getUUID())));
         }
     }
 
@@ -100,8 +84,9 @@ public class NetEnergyProvider extends CapabilityBlockProvider<IBindable> {
         if (metaMachine instanceof NetEnergyHatchPartMachine || metaMachine instanceof NetLaserHatchPartMachine) {
             if (capData.hasUUID("uuid")) {
                 UUID uuid = capData.getUUID("uuid");
+                WirelessEnergyManager.strongCheckOrAddUser(uuid);
                 tooltip.add(Component.translatable("gtmadvancedhatch.machine.net_energy_stored.tooltip",
-                        NumberUtils.formatBigIntegerNumberOrSic(WirelessEnergyManager.getUserEU(uuid))));
+                        capData.getString("energy")));
             }
         }
     }
