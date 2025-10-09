@@ -26,22 +26,6 @@
   "block.gtmadvancedhatch.opv_lock_item_output_bus":"§9§lOpV§r留存输出总线",
   "block.gtmadvancedhatch.max_lock_item_output_bus":"§c§lMAX§r留存输出总线",
 
-  "block.gtmadvancedhatch.ev_configurable_item_output_bus":"§5EV§r可配置输出总线",
-  "block.gtmadvancedhatch.iv_configurable_item_output_bus":"§9IV§r可配置输出总线",
-  "block.gtmadvancedhatch.luv_configurable_item_output_bus":"§dLUV§r可配置输出总线",
-  "block.gtmadvancedhatch.zpm_configurable_item_output_bus":"§cZPM§r可配置输出总线",
-  "block.gtmadvancedhatch.uv_configurable_item_output_bus":"§3UV§r可配置输出总线",
-  "block.gtmadvancedhatch.uhv_configurable_item_output_bus":"§4UHV§r可配置输出总线",
-  "block.gtmadvancedhatch.uev_configurable_item_output_bus":"§aUEV§r可配置输出总线",
-  "block.gtmadvancedhatch.uiv_configurable_item_output_bus":"§2UIV§r可配置输出总线",
-  "block.gtmadvancedhatch.uxv_configurable_item_output_bus":"§eUXV§r可配置输出总线",
-  "block.gtmadvancedhatch.opv_configurable_item_output_bus":"§9§lOpV§r可配置输出总线",
-  "block.gtmadvancedhatch.max_configurable_item_output_bus":"§c§lMAX§r可配置输出总线",
-
-
-  "block.gtmadvancedhatch.me_filter_export_buffer":"ME存储输出总成",
-
-
   "block.gtmadvancedhatch.lv_2a_net_energy_input_hatch": "§7LV§r电网能源仓",
   "block.gtmadvancedhatch.lv_4a_net_energy_input_hatch": "4安§7LV§r电网能源仓",
   "block.gtmadvancedhatch.lv_16a_net_energy_input_hatch": "16安§7LV§r电网能源仓",

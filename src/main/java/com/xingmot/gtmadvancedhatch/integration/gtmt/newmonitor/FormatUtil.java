@@ -30,14 +30,6 @@ public class FormatUtil {
         }
     }
 
-    public static String formatBigDecimalNumberOrSic(BigDecimal number) {
-        return number.compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) > 0 ? DECIMAL_FORMAT_SIC_2F.format(number) : formatNumberReadable(number.longValue());
-    }
-
-    public static String formatBigIntegerNumberOrSic(BigInteger number) {
-        return number.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0 ? DECIMAL_FORMAT_SIC_2F.format(number) : formatNumberReadable(number.longValue());
-    }
-
     public static MutableComponent formatWithConstantWidth(String labelKey, int width, Component body, Component... appends) {
         var a = new Component[appends.length + 1];
         a[0] = body;
