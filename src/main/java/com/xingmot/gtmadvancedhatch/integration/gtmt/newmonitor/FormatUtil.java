@@ -69,7 +69,7 @@ public class FormatUtil {
         if (GTMAdvancedHatch.isClientSide()) {
             return Minecraft.getInstance().font.width(component.getString());
         } else {
-            return component.getString().length()*9;
+            return component.getString().length() * 9;
         }
     }
 }

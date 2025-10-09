@@ -1,6 +1,5 @@
 package com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor;
 
-import com.hepdd.gtmthings.utils.TeamUtil;
 import net.minecraft.server.MinecraftServer;
 
 import java.math.BigDecimal;
@@ -9,9 +8,8 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.hepdd.gtmthings.utils.TeamUtil;
 import lombok.Getter;
-
-import static com.lowdragmc.lowdraglib.LDLib.isRemote;
 
 public class EnergyStat {
 
@@ -26,7 +24,7 @@ public class EnergyStat {
             GlobalEnergyStat.put(TeamUtil.getTeamUUID(uuid), energyStat);
             return energyStat;
         }
-            return GlobalEnergyStat.get(TeamUtil.getTeamUUID(uuid));
+        return GlobalEnergyStat.get(TeamUtil.getTeamUUID(uuid));
     }
 
     private final TimeWheel minute;

@@ -1,20 +1,23 @@
 package com.xingmot.gtmadvancedhatch.mixin.gtmt;
 
+import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
+import com.xingmot.gtmadvancedhatch.util.NumberUtils;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.utils.GTUtil;
-import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
-import com.hepdd.gtmthings.common.block.machine.electric.WirelessEnergyMonitor;
-import com.hepdd.gtmthings.utils.TeamUtil;
+
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.mojang.datafixers.util.Pair;
-import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -22,11 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.xingmot.gtmadvancedhatch.util.NumberUtils;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
+import static com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.FormatUtil.formatWithConstantWidth;
+import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigDecimalNumberOrSic;
+import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigIntegerNumberOrSic;
+
+import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
+import com.hepdd.gtmthings.common.block.machine.electric.WirelessEnergyMonitor;
+import com.hepdd.gtmthings.utils.TeamUtil;
+import com.mojang.datafixers.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,49 +41,46 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.FormatUtil.formatWithConstantWidth;
-import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigDecimalNumberOrSic;
-import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigIntegerNumberOrSic;
-
 @Mixin(WirelessEnergyMonitor.class)
 public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements IFancyUIMachine {
-    @Shadow
+
+    @Shadow(remap = false)
     private UUID userid;
-    @Shadow
+    @Shadow(remap = false)
     private boolean all = false;
 
     public WirelessEnergyMonitorMixin(IMachineBlockEntity holder) {
         super(holder);
     }
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract void handleDisplayClick(String s, ClickData clickData);
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract void addDisplayText(@NotNull List<Component> textList);
 
-    @Shadow
-    private static Component getTimeToFillDrainText(BigInteger timeToFillSeconds){return  null;};
+    @Shadow(remap = false)
+    private static Component getTimeToFillDrainText(BigInteger timeToFillSeconds) {
+        return null;
+    }
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract List<Map.Entry<Pair<UUID, MetaMachine>, Long>> getSortedEntries();
 
-    @Inject(remap = false, method = "createUIWidget",at = @At("HEAD"), cancellable = true)
+    @Inject(remap = false, method = "createUIWidget", at = @At("HEAD"), cancellable = true)
     private void createUIWidgetMixin(CallbackInfoReturnable<Widget> cir) {
-        WidgetGroup group = new WidgetGroup(0, 0, 220+8+8, 117+8);
-        group.addWidget((new DraggableScrollableWidgetGroup(4, 4, 220+8, 117)).setBackground(GuiTextures.DISPLAY)
+        WidgetGroup group = new WidgetGroup(0, 0, 220 + 8 + 8, 117 + 8);
+        group.addWidget((new DraggableScrollableWidgetGroup(4, 4, 220 + 8, 117)).setBackground(GuiTextures.DISPLAY)
                 .addWidget(new LabelWidget(4, 5, this.self().getBlockState().getBlock().getDescriptionId()))
                 .addWidget((new ComponentPanelWidget(4, 17, this::addDisplayText))
                         .setMaxWidthLimit(220)
                         .clickHandler(this::handleDisplayClick)));
-        group.setBackground(new IGuiTexture[]{GuiTextures.BACKGROUND_INVERSE});
+        group.setBackground(new IGuiTexture[] { GuiTextures.BACKGROUND_INVERSE });
         cir.setReturnValue(group);
         cir.cancel();
     }
 
-
-
-    @Inject(remap = false, method = "addDisplayText",at = @At("HEAD"), cancellable = true)
+    @Inject(remap = false, method = "addDisplayText", at = @At("HEAD"), cancellable = true)
     private void addDisplayTextMixin(@NotNull List<Component> textList, CallbackInfo ci) {
         BigInteger energyTotal = WirelessEnergyManager.getUserEU(this.userid);
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", TeamUtil.GetName(this.holder.level(), this.userid)).withStyle(ChatFormatting.AQUA));
@@ -122,5 +125,4 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
         }
         ci.cancel();
     }
-
 }

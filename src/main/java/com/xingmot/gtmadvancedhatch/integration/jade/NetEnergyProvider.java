@@ -6,7 +6,6 @@ import com.xingmot.gtmadvancedhatch.common.machines.NetLaserHatchPartMachine;
 import com.xingmot.gtmadvancedhatch.util.NumberUtils;
 
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.integration.jade.provider.CapabilityBlockProvider;
 
 import net.minecraft.core.BlockPos;
@@ -23,7 +22,6 @@ import com.hepdd.gtmthings.api.capability.IBindable;
 import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
 import com.hepdd.gtmthings.common.block.machine.multiblock.part.WirelessEnergyHatchPartMachine;
 import com.hepdd.gtmthings.common.block.machine.multiblock.part.WirelessLaserHatchPartMachine;
-import com.hepdd.gtmthings.common.cover.WirelessEnergyReceiveCover;
 import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
