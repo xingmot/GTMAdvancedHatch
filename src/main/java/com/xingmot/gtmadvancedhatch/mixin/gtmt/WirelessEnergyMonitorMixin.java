@@ -75,7 +75,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 .addWidget((new ComponentPanelWidget(4, 17, this::addDisplayText))
                         .setMaxWidthLimit(220)
                         .clickHandler(this::handleDisplayClick)));
-        group.setBackground(new IGuiTexture[] { GuiTextures.BACKGROUND_INVERSE });
+        group.setBackground(new IGuiTexture[]{GuiTextures.BACKGROUND_INVERSE});
         cir.setReturnValue(group);
         cir.cancel();
     }
@@ -90,14 +90,14 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.net_power"));
 
         BigDecimal avgMinute = stat.getMinuteAvg();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_minute", 180, Component.literal((avgMinute.signum() < 0 ? "-" : "") + formatBigDecimalNumberOrSic(avgMinute)).withStyle(ChatFormatting.DARK_AQUA)));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_minute", 180, Component.literal((avgMinute.signum() < 0 ? "-" : "+") + formatBigDecimalNumberOrSic(avgMinute)).withStyle(ChatFormatting.DARK_AQUA)));
         BigDecimal avgHour = stat.getHourAvg();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_hour", 180, Component.literal((avgHour.signum() < 0 ? "-" : "") + formatBigDecimalNumberOrSic(avgHour)).withStyle(ChatFormatting.YELLOW)));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_hour", 180, Component.literal((avgHour.signum() < 0 ? "-" : "+") + formatBigDecimalNumberOrSic(avgHour)).withStyle(ChatFormatting.YELLOW)));
         BigDecimal avgDay = stat.getDayAvg();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_day", 180, Component.literal((avgDay.signum() < 0 ? "-" : "") + formatBigDecimalNumberOrSic(avgDay)).withStyle(ChatFormatting.DARK_GREEN)));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_day", 180, Component.literal((avgDay.signum() < 0 ? "-" : "+") + formatBigDecimalNumberOrSic(avgDay)).withStyle(ChatFormatting.DARK_GREEN)));
         // average useage
         BigDecimal avgEnergy = stat.getAvgEnergy();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.now", 180, Component.literal((energyTotal.signum() < 0 ? "-" : "") + formatBigDecimalNumberOrSic(avgEnergy)).withStyle(ChatFormatting.DARK_PURPLE)));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.now", 180, Component.literal((energyTotal.signum() < 0 ? "-" : "+") + formatBigDecimalNumberOrSic(avgEnergy)).withStyle(ChatFormatting.DARK_PURPLE)));
 
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.statistics").append(ComponentPanelWidget.withButton(this.all ? Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.all") : Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.team"), "all")));
 
@@ -117,9 +117,9 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 long eut = (Long) m.getValue();
                 String pos = machine.getPos().toShortString();
                 if (eut > 0L) {
-                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[] { machine.getLevel().dimension().location() }).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[] { TeamUtil.GetName(this.holder.level(), uuid) }))))).append(" +").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(eut)]).append(")").append(" [ ] "));
+                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[]{machine.getLevel().dimension().location()}).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[]{TeamUtil.GetName(this.holder.level(), uuid)}))))).append(" +").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(eut)]).append(")"));
                 } else {
-                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[] { machine.getLevel().dimension().location() }).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[] { TeamUtil.GetName(this.holder.level(), uuid) }))))).append(" -").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(-eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(-eut)]).append(")").append(" [ ] "));
+                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[]{machine.getLevel().dimension().location()}).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[]{TeamUtil.GetName(this.holder.level(), uuid)}))))).append(" -").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(-eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(-eut)]).append(")"));
                 }
             }
         }

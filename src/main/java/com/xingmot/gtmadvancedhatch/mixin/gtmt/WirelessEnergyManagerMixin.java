@@ -38,7 +38,7 @@ public class WirelessEnergyManagerMixin {
         MachineData.put(Pair.of(user_uuid, machine), EU.longValue());
         BigInteger totalEU = (BigInteger) GlobalVariableStorage.GlobalEnergy.getOrDefault(teamUUID, BigInteger.ZERO);
         if (machine != null) {
-            EnergyStat.createOrgetEnergyStat(user_uuid).update(totalEU);
+            EnergyStat.createOrgetEnergyStat(user_uuid).update(EU);
         }
         if (totalEU.signum() < 0) {
             totalEU = BigInteger.ZERO;

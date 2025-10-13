@@ -42,7 +42,7 @@ public class FormatUtil {
         var spaceLength = width - baseLength;
         if (spaceLength <= 0) return tmp;
         var spacerCount = (spaceLength / 2) - 4;
-        var spacer = spacerCount > 0 ? (".".repeat((spaceLength / 2) - 4) + " ") : "";
+        var spacer = spacerCount > 0 ? ("·".repeat((spaceLength / 2) - 4) + " ") : "";
         var spacerComponent = Component.literal(spacer);
         // return tmp;
         a[0] = spacerComponent.append(body);
