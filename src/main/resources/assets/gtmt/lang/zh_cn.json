@@ -1,7 +1,7 @@
 {
   "gtmthings.machine.wireless_energy_monitor.tooltip.net_power": "平均净功率：",
-  "gtmthings.machine.wireless_energy_monitor.tooltip.last_minute": "近一分钟：§a%s EU/t",
-  "gtmthings.machine.wireless_energy_monitor.tooltip.last_hour": "近一小时：§a%s EU/t",
-  "gtmthings.machine.wireless_energy_monitor.tooltip.last_day": "近一天：§a%s EU/t",
-  "gtmthings.machine.wireless_energy_monitor.tooltip.now": "当前：§a%s EU/t"
+  "gtmthings.machine.wireless_energy_monitor.tooltip.last_minute": "近一分钟：%s EU/t",
+  "gtmthings.machine.wireless_energy_monitor.tooltip.last_hour": "近一小时：%s EU/t",
+  "gtmthings.machine.wireless_energy_monitor.tooltip.last_day": "近一天\u3000：%s EU/t",
+  "gtmthings.machine.wireless_energy_monitor.tooltip.now": "当前\u3000\u3000：%s EU/t"
 }
