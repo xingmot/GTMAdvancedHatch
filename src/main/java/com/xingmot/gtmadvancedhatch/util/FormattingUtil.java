@@ -14,8 +14,8 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnnecessaryUnicodeEscape")
 public class FormattingUtil {
 
-    public static final DecimalFormat DECIMAL_FORMAT_1F = new DecimalFormat("#,##0.#");
-    public static final DecimalFormat DECIMAL_FORMAT_2F = new DecimalFormat("#,##0.##");
+    public static final DecimalFormat DECIMAL_FORMAT_1F = new DecimalFormat("#,##0.0");
+    public static final DecimalFormat DECIMAL_FORMAT_2F = new DecimalFormat("#,##0.00");
     public static final DecimalFormat DECIMAL_FORMAT_SIC_2F = new DecimalFormat("0.00E00");
 
     public static String formatNumberReadable(BigDecimal number) {
@@ -33,6 +33,8 @@ public class FormattingUtil {
         if (number.compareTo(zero) < 0) {
             number = number.abs();
             sb.append('-');
+        } else {
+            sb.append('+');
         }
 
         if (milli && number.compareTo(oneThousand) >= 0) {
@@ -48,7 +50,7 @@ public class FormattingUtil {
         }
 
         sb.append(fmt.format(number));
-        if (exp > 0) sb.append("kMGTPEZ".charAt(exp - 1));
+        if (exp > 0) sb.append("KMGTPEZ".charAt(exp - 1));
         else if (milli && number.compareTo(zero) != 0) sb.append('m');
 
         if (unit != null) sb.append(unit);

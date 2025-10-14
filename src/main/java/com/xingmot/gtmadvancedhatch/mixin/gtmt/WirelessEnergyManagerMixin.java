@@ -1,12 +1,13 @@
 package com.xingmot.gtmadvancedhatch.mixin.gtmt;
 
+import com.xingmot.gtmadvancedhatch.extra.MachineDataStorage;
 import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.UUID;
-import java.util.WeakHashMap;
 
 import com.hepdd.gtmthings.api.misc.GlobalVariableStorage;
 import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
@@ -14,16 +15,12 @@ import com.hepdd.gtmthings.data.WirelessEnergySavaedData;
 import com.hepdd.gtmthings.utils.TeamUtil;
 import com.mojang.datafixers.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WirelessEnergyManager.class)
 public class WirelessEnergyManagerMixin {
-
-    @Shadow(remap = false)
-    public static WeakHashMap<Pair<UUID, MetaMachine>, Long> MachineData;
 
     @Inject(remap = false, method = "addEUToGlobalEnergyMap(Ljava/util/UUID;Ljava/math/BigInteger;Lcom/gregtechceu/gtceu/api/machine/MetaMachine;)Z", at = @At(value = "HEAD"), cancellable = true)
     private static void addEUToGlobalEnergyMap(UUID user_uuid, BigInteger EU, MetaMachine machine, CallbackInfoReturnable<Boolean> cir) {
@@ -35,7 +32,7 @@ public class WirelessEnergyManagerMixin {
         }
 
         UUID teamUUID = TeamUtil.getTeamUUID(user_uuid);
-        MachineData.put(Pair.of(user_uuid, machine), EU.longValue());
+        MachineDataStorage.put(Pair.of(user_uuid, machine), new BigDecimal(EU));
         BigInteger totalEU = (BigInteger) GlobalVariableStorage.GlobalEnergy.getOrDefault(teamUUID, BigInteger.ZERO);
         if (machine != null) {
             EnergyStat.createOrgetEnergyStat(user_uuid).update(EU);

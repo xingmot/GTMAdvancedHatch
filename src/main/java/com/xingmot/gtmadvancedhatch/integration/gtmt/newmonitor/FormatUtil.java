@@ -6,8 +6,11 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -37,10 +40,29 @@ public class FormatUtil {
         var baseLength = getComponentLength(tmp);
         var spaceLength = width - baseLength;
         if (spaceLength <= 0) return tmp;
-        var spacerCount = (spaceLength / 2) - 4;
-        var spacer = spacerCount > 0 ? ("·".repeat((spaceLength / 2) - 4) + " ") : "";
-        var spacerComponent = Component.literal(spacer);
-        // return tmp;
+
+        // 获取字体实例
+        Font font = Minecraft.getInstance().font;
+        // 测量一个分隔符的宽度
+        int dotWidth = font.width(Component.literal("·").setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font"))));
+        // 测量一个空格的宽度
+        int spaceWidth = font.width(" ");
+
+        // 计算可以容纳的分隔符数量
+        int totalSpacerWidth = spaceLength - spaceWidth; // 预留一个空格的宽度
+        if (totalSpacerWidth <= 0) {
+            a[0] = body;
+            return Component.translatable(labelKey, (Object[]) a);
+        }
+
+        int spacerCount = totalSpacerWidth / dotWidth;
+        if (spacerCount <= 0) {
+            a[0] = body;
+            return Component.translatable(labelKey, (Object[]) a);
+        }
+
+        var separatorComponent = Component.literal("·".repeat(spacerCount)).setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font")));
+        var spacerComponent = Component.literal("").append(separatorComponent).append(Component.literal("  "));
         a[0] = spacerComponent.append(body);
         return Component.translatable(labelKey, (Object[]) a);
     }

@@ -45,4 +45,8 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+
+    tasks.register('cleanOutputsLibs', Delete) {
+        delete fileTree(dir: layout.buildDirectory.dir("libs").get().asFile, includes: ['*.jar', '*.zip'])
+    }
 }
