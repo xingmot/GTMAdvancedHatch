@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class NumberUtils {
 
     public static @NotNull String formatNumber(double number) {
-        final String[] UNITS = {"", "K", "M", "G", "T", "P", "E", "Z", "Y", "B", "N", "D"};
+        final String[] UNITS = { "", "K", "M", "G", "T", "P", "E", "Z", "Y", "B", "N", "D" };
         DecimalFormat df = new DecimalFormat("#.##");
         double temp = number;
         int unitIndex = 0;

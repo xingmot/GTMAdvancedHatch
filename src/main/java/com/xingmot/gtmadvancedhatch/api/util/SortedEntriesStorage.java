@@ -1,4 +1,4 @@
-package com.xingmot.gtmadvancedhatch.extra;
+package com.xingmot.gtmadvancedhatch.api.util;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 

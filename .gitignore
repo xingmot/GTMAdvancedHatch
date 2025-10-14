@@ -3,3 +3,4 @@
 /build/
 /.gradle/
 /.idea/
+/src/generated/resources/.cache/

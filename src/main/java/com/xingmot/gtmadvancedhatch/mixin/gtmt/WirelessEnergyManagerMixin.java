@@ -1,6 +1,6 @@
 package com.xingmot.gtmadvancedhatch.mixin.gtmt;
 
-import com.xingmot.gtmadvancedhatch.extra.MachineDataStorage;
+import com.xingmot.gtmadvancedhatch.api.util.MachineDataStorage;
 import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
