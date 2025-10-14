@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "gtmadvancedhatch:font/separator_dot.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\u00b7"
+      ]
+    }
+  ]
+}
