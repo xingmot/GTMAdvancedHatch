@@ -15,24 +15,24 @@ import javax.annotation.Nonnull;
 import com.hepdd.gtmthings.api.misc.UnlimitedItemStackTransfer;
 import lombok.Setter;
 
-public class MyStackTransfer extends UnlimitedItemStackTransfer {
+public class LockStackTransfer extends UnlimitedItemStackTransfer {
 
     @Setter
     private Function<ItemStack, Boolean> filter;
 
-    public MyStackTransfer() {
+    public LockStackTransfer() {
         this(1);
     }
 
-    public MyStackTransfer(int size) {
+    public LockStackTransfer(int size) {
         super(size);
     }
 
-    public MyStackTransfer(NonNullList<ItemStack> stacks) {
+    public LockStackTransfer(NonNullList<ItemStack> stacks) {
         super(stacks);
     }
 
-    public MyStackTransfer(ItemStack stack) {
+    public LockStackTransfer(ItemStack stack) {
         super(stack);
     }
 
@@ -120,12 +120,12 @@ public class MyStackTransfer extends UnlimitedItemStackTransfer {
     }
 
     @Override
-    public MyStackTransfer copy() {
+    public LockStackTransfer copy() {
         NonNullList<ItemStack> copiedStack = NonNullList.withSize(stacks.size(), ItemStack.EMPTY);
         for (int i = 0; i < stacks.size(); i++) {
             copiedStack.set(i, stacks.get(i).copy());
         }
-        var copied = new MyStackTransfer(copiedStack);
+        var copied = new LockStackTransfer(copiedStack);
         copied.setFilter(filter);
         return copied;
     }

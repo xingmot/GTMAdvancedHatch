@@ -10,11 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
-
-import static com.xingmot.gtmadvancedhatch.util.FormattingUtil.DECIMAL_FORMAT_SIC_2F;
-import static com.xingmot.gtmadvancedhatch.util.FormattingUtil.formatNumberReadable;
 
 public class FormatUtil {
 

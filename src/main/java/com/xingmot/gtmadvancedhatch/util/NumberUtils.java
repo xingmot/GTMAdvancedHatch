@@ -1,14 +1,16 @@
 package com.xingmot.gtmadvancedhatch.util;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import org.jetbrains.annotations.NotNull;
 import static com.xingmot.gtmadvancedhatch.util.FormattingUtil.DECIMAL_FORMAT_SIC_2F;
 import static com.xingmot.gtmadvancedhatch.util.FormattingUtil.formatNumberReadable;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author qiuyeqaq

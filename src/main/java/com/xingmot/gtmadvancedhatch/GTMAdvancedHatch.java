@@ -1,8 +1,10 @@
 package com.xingmot.gtmadvancedhatch;
 
+import com.xingmot.gtmadvancedhatch.common.AHItems;
 import com.xingmot.gtmadvancedhatch.common.AHRegistration;
 import com.xingmot.gtmadvancedhatch.common.data.AHMachines;
 import com.xingmot.gtmadvancedhatch.common.data.AHTabs;
+import com.xingmot.gtmadvancedhatch.config.AHConfig;
 import com.xingmot.gtmadvancedhatch.integration.gtlcore.ExGTLMachines;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -34,7 +36,10 @@ public class GTMAdvancedHatch {
     public GTMAdvancedHatch() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         AHRegistration.registrate.registerEventListeners(bus);
+        // 注册GT机器
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
+        // 注册配置
+        AHConfig.init();
         bus.register(this);
     }
 
@@ -43,10 +48,9 @@ public class GTMAdvancedHatch {
     }
 
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        AHMachines.init();
         AHTabs.init();
-        // if (ModList.get().isLoaded("gtlcore")) {
+        AHMachines.init();
+        AHItems.init();
         ExGTLMachines.init();
-        // }
     }
 }

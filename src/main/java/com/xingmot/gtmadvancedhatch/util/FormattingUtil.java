@@ -54,5 +54,4 @@ public class FormattingUtil {
         if (unit != null) sb.append(unit);
         return sb.toString();
     }
-
 }

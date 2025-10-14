@@ -1,0 +1,8 @@
+{
+  "type": "patchouli:shapeless_book_recipe",
+  "ingredients": [
+    { "item": "minecraft:book" },
+    { "item": "gtceu:lv_machine_hull" }
+  ],
+  "book": "gtmadvancedhatch:gtmah_book"
+}

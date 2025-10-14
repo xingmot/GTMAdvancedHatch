@@ -1,0 +1,19 @@
+{
+  "name": "自适配电网仓",
+  "icon": "gtmadvancedhatch:adaptive_net_energy_terminal",
+  "category": "gtmadvancedhatch:adaptive_net",
+  "pages": [
+    {
+      "type": "text",
+      "text": "能够$(_)随着终端的配置等级跟随同步$()，这意味着可以一端同步全基地的仓室等级。$(p)摆下来后使用$(l:adaptive_net/net_data_stick)网络配置闪存$()右键连接适配网络。需要$(thing)终端和适配仓保持加载$()才可正常工作。默认情况是$(thing)每秒更新一次$()配置。"
+    }
+    ,
+    {
+      "type": "2item_text",
+      "title":"自适配电网仓与电网激光仓",
+      "item1":"gtmadvancedhatch:adaptive_net_energy_input_hatch,gtmadvancedhatch:adaptive_net_energy_output_hatch",
+      "item2":"gtmadvancedhatch:adaptive_net_laser_target_hatch,gtmadvancedhatch:adaptive_net_laser_source_hatch",
+      "text": "自适配电网仓通常$(hv)阶段就可以在组装机中生产，激光版本则一般要等到$(luv)阶段才能制造。$(thing)$(bold)注意：在机器运行时如果仓室功率等级从很高同步到很低，可能会导致机器运行暂停，此时需要同步回足够功率仓室等级才能继续运行。"
+    }
+  ]
+}

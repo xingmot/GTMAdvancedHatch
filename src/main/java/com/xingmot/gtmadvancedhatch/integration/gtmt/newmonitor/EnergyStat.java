@@ -1,6 +1,7 @@
 package com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor;
 
 import com.lowdragmc.lowdraglib.LDLib;
+
 import net.minecraft.server.MinecraftServer;
 
 import java.math.BigDecimal;
@@ -13,13 +14,14 @@ import com.hepdd.gtmthings.utils.TeamUtil;
 import lombok.Getter;
 
 public class EnergyStat {
+
     public static HashMap<UUID, EnergyStat> GlobalEnergyStat = new HashMap<>(100, 0.9F);
     public static MinecraftServer server;
 
     static boolean observed = false;
 
     public static EnergyStat createOrgetEnergyStat(UUID uuid) {
-        if(LDLib.isRemote())return new EnergyStat(0);
+        if (LDLib.isRemote()) return new EnergyStat(0);
         if (GlobalEnergyStat.get(TeamUtil.getTeamUUID(uuid)) == null) {
             EnergyStat energyStat = new EnergyStat(server.getTickCount());
             GlobalEnergyStat.put(TeamUtil.getTeamUUID(uuid), energyStat);

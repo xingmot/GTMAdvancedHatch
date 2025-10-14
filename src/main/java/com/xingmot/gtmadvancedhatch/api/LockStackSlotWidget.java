@@ -19,45 +19,45 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 
 // 超堆叠物品格组件
-public class MyStackSlotWidget extends SlotWidget {
+public class LockStackSlotWidget extends SlotWidget {
 
     protected IGuiTexture occupiedTexture;
 
-    public MyStackSlotWidget() {}
+    public LockStackSlotWidget() {}
 
-    public MyStackSlotWidget(
-                             Container inventory,
-                             int slotIndex,
-                             int xPosition,
-                             int yPosition,
-                             boolean canTakeItems,
-                             boolean canPutItems) {
+    public LockStackSlotWidget(
+                               Container inventory,
+                               int slotIndex,
+                               int xPosition,
+                               int yPosition,
+                               boolean canTakeItems,
+                               boolean canPutItems) {
         super(inventory, slotIndex, xPosition, yPosition, canTakeItems, canPutItems);
     }
 
-    public MyStackSlotWidget(
-                             IItemTransfer itemHandler,
-                             int slotIndex,
-                             int xPosition,
-                             int yPosition,
-                             boolean canTakeItems,
-                             boolean canPutItems) {
+    public LockStackSlotWidget(
+                               IItemTransfer itemHandler,
+                               int slotIndex,
+                               int xPosition,
+                               int yPosition,
+                               boolean canTakeItems,
+                               boolean canPutItems) {
         super(itemHandler, slotIndex, xPosition, yPosition, canTakeItems, canPutItems);
     }
 
-    public MyStackSlotWidget(
-                             IItemTransfer itemHandler, int slotIndex, int xPosition, int yPosition) {
+    public LockStackSlotWidget(
+                               IItemTransfer itemHandler, int slotIndex, int xPosition, int yPosition) {
         super(itemHandler, slotIndex, xPosition, yPosition);
     }
 
-    public MyStackSlotWidget(Container inventory, int slotIndex, int xPosition, int yPosition) {
+    public LockStackSlotWidget(Container inventory, int slotIndex, int xPosition, int yPosition) {
         super(inventory, slotIndex, xPosition, yPosition);
     }
 
     // =============================
     // === GUI ==
     // =============================
-    public MyStackSlotWidget setOccupiedTexture(IGuiTexture... occupiedTexture) {
+    public LockStackSlotWidget setOccupiedTexture(IGuiTexture... occupiedTexture) {
         this.occupiedTexture = occupiedTexture.length > 1 ? new GuiTextureGroup(occupiedTexture) : occupiedTexture[0];
         return this;
     }

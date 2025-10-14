@@ -75,7 +75,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 .addWidget((new ComponentPanelWidget(4, 17, this::addDisplayText))
                         .setMaxWidthLimit(220)
                         .clickHandler(this::handleDisplayClick)));
-        group.setBackground(new IGuiTexture[]{GuiTextures.BACKGROUND_INVERSE});
+        group.setBackground(new IGuiTexture[] { GuiTextures.BACKGROUND_INVERSE });
         cir.setReturnValue(group);
         cir.cancel();
     }
@@ -117,9 +117,9 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 long eut = (Long) m.getValue();
                 String pos = machine.getPos().toShortString();
                 if (eut > 0L) {
-                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[]{machine.getLevel().dimension().location()}).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[]{TeamUtil.GetName(this.holder.level(), uuid)}))))).append(" +").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(eut)]).append(")"));
+                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[] { machine.getLevel().dimension().location() }).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[] { TeamUtil.GetName(this.holder.level(), uuid) }))))).append(" +").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(eut)]).append(")"));
                 } else {
-                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[]{machine.getLevel().dimension().location()}).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[]{TeamUtil.GetName(this.holder.level(), uuid)}))))).append(" -").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(-eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(-eut)]).append(")"));
+                    textList.add(Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[] { machine.getLevel().dimension().location() }).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", new Object[] { TeamUtil.GetName(this.holder.level(), uuid) }))))).append(" -").append(NumberUtils.formatBigDecimalNumberOrSic(BigDecimal.valueOf(-eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(-eut)]).append(")"));
                 }
             }
         }

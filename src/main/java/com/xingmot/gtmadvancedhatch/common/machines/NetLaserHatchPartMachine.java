@@ -24,6 +24,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import static com.xingmot.gtmadvancedhatch.common.data.MachinesConstants.getMaxCapacity;
+
 import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
 import com.hepdd.gtmthings.common.block.machine.multiblock.part.WirelessLaserHatchPartMachine;
 import com.hepdd.gtmthings.utils.TeamUtil;
@@ -50,16 +52,10 @@ public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
     @Override
     protected @NotNull NoConsumeNotifiabbleLaserContainer createEnergyContainer(Object... args) {
         NoConsumeNotifiabbleLaserContainer container;
-        Long capacity = 0L;
+        long capacity = getMaxCapacity(this.io, this.amperage, GTValues.V[this.tier]);
         if (this.io == IO.OUT) {
-            capacity = GTValues.V[this.tier] * 64L * (long) this.amperage;
-            if ((long) this.amperage > Long.MAX_VALUE / GTValues.V[this.tier] / 128)
-                capacity = Long.MAX_VALUE - 1;
             container = NoConsumeNotifiabbleLaserContainer.emitterContainer(this, capacity, GTValues.V[this.tier], (long) this.amperage);
         } else {
-            capacity = GTValues.V[this.tier] * 16L * (long) this.amperage;
-            if ((long) this.amperage > Long.MAX_VALUE / GTValues.V[this.tier] / 32)
-                capacity = Long.MAX_VALUE - 1;
             container = NoConsumeNotifiabbleLaserContainer.receiverContainer(this, capacity, GTValues.V[this.tier], (long) this.amperage);
         }
 
@@ -117,7 +113,7 @@ public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
 
             this.updateEnergySubscription();
             return InteractionResult.SUCCESS;
-        } else if (is.is(Items.STICK)) {
+        } else if (is.is(Items.STICK) && player.isCreative()) {
             if (this.io == IO.OUT) {
                 this.energyContainer.setEnergyStored(GTValues.V[this.tier] * 64L * (long) this.amperage);
             }
