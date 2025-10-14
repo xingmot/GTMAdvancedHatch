@@ -1,6 +1,6 @@
 package com.xingmot.gtmadvancedhatch.mixin.gtmt;
 
-import com.xingmot.gtmadvancedhatch.extra.SortedEntriesStorage;
+import com.xingmot.gtmadvancedhatch.api.util.SortedEntriesStorage;
 import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
 import com.xingmot.gtmadvancedhatch.util.NumberUtils;
 
