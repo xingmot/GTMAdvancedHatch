@@ -1,0 +1,18 @@
+{
+  "name": "网络配置闪存",
+  "icon": "gtmadvancedhatch:net_data_stick",
+  "category": "gtmadvancedhatch:adaptive_net",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这是专门用于网络配置的闪存，制作工艺更为复杂。手持时左击自适配$(thing)电网系统终端$()会$(_)将终端内的所有者数据与频率存入$()其中，并且鼠标移动到该物品上时会显示具体的信息。$(p)一旦写入数据无法被清空，但是可以被覆盖。$(p)右边展示了有数据和无数据的网络配置闪存。"
+    },
+    {
+      "type": "2item_text",
+      "title":"带数据的网络配置闪存",
+      "item1":"gtmadvancedhatch:net_data_stick",
+      "item2":"gtmadvancedhatch:net_data_stick{adaptive_net_name:\"Dev\",adaptive_net_frequency:4L,adaptive_net_uuid:[I;940439953,-167562164,-1601161573,-1389718966],display:{Name:\\'{\"translate\":\"gtmadvancedhatch.machine.adaptivee.data_stick.name\"}\\'}}",
+      "text": "如果需要复制网络配置闪存，只需将有带有数据的网络配置闪存放在副手，任意网络配置闪存放在主手，对着任意方块右击，即可将副手的数据复制到主手中。"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 package com.xingmot.gtmadvancedhatch.common.machines;
 
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
-import com.xingmot.gtmadvancedhatch.api.MyStackSlotWidget;
-import com.xingmot.gtmadvancedhatch.api.MyStackTransfer;
+import com.xingmot.gtmadvancedhatch.api.LockStackSlotWidget;
+import com.xingmot.gtmadvancedhatch.api.LockStackTransfer;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
@@ -38,7 +38,7 @@ import java.util.Set;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.xingmot.gtmadvancedhatch.common.data.ConstantsMachines.*;
+import static com.xingmot.gtmadvancedhatch.common.data.MachinesConstants.*;
 
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +94,7 @@ public class LockItemOutputBus extends TieredIOPartMachine implements IDistinctP
 
     protected NotifiableItemStackHandler createInventory(IO handlerIO, IO capIO, Object... args) {
         // 重写，不知道为什么不重写就用不了
-        return new NotifiableItemStackHandler(this, getInventorySize(), handlerIO, capIO, MyStackTransfer::new) {
+        return new NotifiableItemStackHandler(this, getInventorySize(), handlerIO, capIO, LockStackTransfer::new) {
 
             @Override
             public boolean isEmpty() {
@@ -355,13 +355,13 @@ public class LockItemOutputBus extends TieredIOPartMachine implements IDistinctP
         int index = 0;
         for (int y = 0; y < colSize; y++) {
             for (int x = 0; x < rowSize; x++) {
-                container.addWidget(new MyStackSlotWidget(getOuterInventory().storage, index++,
+                container.addWidget(new LockStackSlotWidget(getOuterInventory().storage, index++,
                         4 + x * 18, 4 + y * 18, true, true)
                         .setOccupiedTexture(GuiTextures.SLOT)
                         .setBackgroundTexture(new GuiTextureGroup(GuiTextures.SLOT, GuiTextures.CONFIG_ARROW_DARK))
                         // .setChangeListener(()-> onOuterSlotChanged(finalIndex))
                         .setIngredientIO(IngredientIO.OUTPUT));
-                new MyStackSlotWidget(getInventory().storage, index,
+                new LockStackSlotWidget(getInventory().storage, index,
                         4 + x * 18, 4 + y * 18, true, true)
                         .setIngredientIO(IngredientIO.OUTPUT).setVisible(false).setActive(false);
             }

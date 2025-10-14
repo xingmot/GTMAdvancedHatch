@@ -12,6 +12,8 @@ dependencies {
     modImplementation("com.tterrag.registrate:Registrate:$project.registrate_version")
     modImplementation("dev:gtmthings-$project.gtmthings_version")
     modImplementation("maven.modrinth:jade-1.20.1-forge-$project.jade_version")
+    modImplementation("maven.modrinth:patchouli:1.20.1-84.1-forge")
+    jarJar("maven.modrinth:patchouli:1.20.1-84.1-forge")
 
     // GTL
     modCompileOnly("dev.latvian.mods:rhino-forge:$project.rhino_version")
@@ -22,8 +24,8 @@ dependencies {
 
     modRuntimeOnly("curse.maven:glodium-957920:5006780")
     modImplementation('appeng:appliedenergistics2-forge-15.2.13')
-//
-//    modImplementation("dev.toma.configuration:configuration-forge-$project.minecraft_version:$project.configuration_version")
+
+    modImplementation("dev.toma.configuration:configuration-forge-$project.minecraft_version:$project.configuration_version")
 //
 //    modImplementation("com.teamresourceful:yabn:1.0.3")
 //    modImplementation("com.teamresourceful:bytecodecs:1.0.2")

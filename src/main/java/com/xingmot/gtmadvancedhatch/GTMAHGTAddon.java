@@ -1,7 +1,7 @@
 package com.xingmot.gtmadvancedhatch;
 
 import com.xingmot.gtmadvancedhatch.common.AHRegistration;
-import com.xingmot.gtmadvancedhatch.common.data.AHRecipes;
+import com.xingmot.gtmadvancedhatch.common.data.recipe.AHRecipes;
 import com.xingmot.gtmadvancedhatch.integration.gtlcore.ExGTLRecipes;
 
 import com.gregtechceu.gtceu.api.addon.GTAddon;

@@ -1,0 +1,17 @@
+{
+  "name": "留存输出总线",
+  "icon": "gtmadvancedhatch:ev_lock_item_output_bus",
+  "category": "gtmadvancedhatch:hatch",
+  "pages": [
+    {
+      "type": "text",
+      "text": "留存输出总线是普通输出总线的升级版，通常用于$(_)被动产线中为同一机器运行多个配方并维持数量而使用$()。$(p)$(li)1.玩家可以任意放入或取出其中的物品。$(li)2.比同级别的物品输出总线$(thing)格子多将近一倍$()。$(li)3.自动输出与外部物流或AE存储总线都$(thing)不会取出每个格子中最后一个物品$()。"
+    },
+    {
+      "type": "spotlight",
+      "item": "gtmadvancedhatch:ulv_lock_item_output_bus,gtmadvancedhatch:lv_lock_item_output_bus,gtmadvancedhatch:mv_lock_item_output_bus,gtmadvancedhatch:hv_lock_item_output_bus,gtmadvancedhatch:ev_lock_item_output_bus,gtmadvancedhatch:iv_lock_item_output_bus,gtmadvancedhatch:luv_lock_item_output_bus,gtmadvancedhatch:zpm_lock_item_output_bus,gtmadvancedhatch:uv_lock_item_output_bus,gtmadvancedhatch:uhv_lock_item_output_bus,gtmadvancedhatch:uev_lock_item_output_bus,gtmadvancedhatch:uiv_lock_item_output_bus,gtmadvancedhatch:uxv_lock_item_output_bus,gtmadvancedhatch:opv_lock_item_output_bus,gtmadvancedhatch:max_lock_item_output_bus",
+      "title": "电网能源仓/动力仓",
+      "text": "在组装机中由1个物品输出总线和1个物品探测覆盖板进行制作，$(iv)及以上等级需要改用进阶物品探测器制作。"
+    }
+  ]
+}

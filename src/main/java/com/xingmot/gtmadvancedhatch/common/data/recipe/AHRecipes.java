@@ -1,9 +1,14 @@
-package com.xingmot.gtmadvancedhatch.common.data;
+package com.xingmot.gtmadvancedhatch.common.data.recipe;
 
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
+import com.xingmot.gtmadvancedhatch.common.AHItems;
+import com.xingmot.gtmadvancedhatch.common.data.AHMachines;
+import com.xingmot.gtmadvancedhatch.common.data.MachinesConstants;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -21,6 +26,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
 import static com.xingmot.gtmadvancedhatch.common.data.AHMachines.NET_HIGH_TIERS2;
 
 import com.hepdd.gtmthings.GTMThings;
+import com.hepdd.gtmthings.data.CustomItems;
 import com.hepdd.gtmthings.data.WirelessMachines;
 
 public class AHRecipes {
@@ -56,7 +62,7 @@ public class AHRecipes {
                         .inputItems(WirelessMachines.WIRELESS_ENERGY_INPUT_HATCH[tier].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                         .inputItems(GTMachines.TRANSFORMER[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
                         .EUt(GTValues.VA[tier])
@@ -67,7 +73,7 @@ public class AHRecipes {
                         .inputItems(AHMachines.NET_ENERGY_INPUT_HATCH[GTValues.OpV].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                         .inputItems(GTMachines.TRANSFORMER[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
                         .EUt(GTValues.VA[GTValues.MAX])
@@ -78,7 +84,7 @@ public class AHRecipes {
                         .inputItems(WirelessMachines.WIRELESS_ENERGY_OUTPUT_HATCH[tier].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                         .inputItems(GTMachines.TRANSFORMER[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
                         .EUt(GTValues.VA[tier])
@@ -89,7 +95,7 @@ public class AHRecipes {
                         .inputItems(AHMachines.NET_ENERGY_OUTPUT_HATCH[GTValues.OpV].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                         .inputItems(GTMachines.TRANSFORMER[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
                         .EUt(GTValues.VA[GTValues.MAX])
@@ -102,7 +108,7 @@ public class AHRecipes {
                         .inputItems(WirelessMachines.WIRELESS_ENERGY_INPUT_HATCH_4A[tier].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_2A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -114,7 +120,7 @@ public class AHRecipes {
                         .inputItems(AHMachines.NET_ENERGY_INPUT_HATCH_4A[GTValues.OpV].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_2A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -126,7 +132,7 @@ public class AHRecipes {
                         .inputItems(WirelessMachines.WIRELESS_ENERGY_OUTPUT_HATCH_4A[tier].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_2A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -138,7 +144,7 @@ public class AHRecipes {
                         .inputItems(AHMachines.NET_ENERGY_OUTPUT_HATCH_16A[GTValues.OpV].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_2A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -152,7 +158,7 @@ public class AHRecipes {
                         .inputItems(WirelessMachines.WIRELESS_ENERGY_INPUT_HATCH_16A[tier].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_4A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -164,7 +170,7 @@ public class AHRecipes {
                         .inputItems(AHMachines.NET_ENERGY_INPUT_HATCH_16A[GTValues.OpV].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_4A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -176,7 +182,7 @@ public class AHRecipes {
                         .inputItems(WirelessMachines.WIRELESS_ENERGY_OUTPUT_HATCH_16A[tier].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_4A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -188,7 +194,7 @@ public class AHRecipes {
                         .inputItems(AHMachines.NET_ENERGY_OUTPUT_HATCH_16A[GTValues.OpV].asStack(4))
                         .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                         .inputItems(GTMachines.HI_AMP_TRANSFORMER_4A[getTierTransformer(tier)].asStack())
-                        .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                        .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                         .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                         .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                         .duration(400)
@@ -210,7 +216,7 @@ public class AHRecipes {
                             .inputItems(stack)
                             .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                             .inputItems(GTMachines.POWER_TRANSFORMER[getTierTransformer(tier)].asStack())
-                            .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                            .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                             .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                             .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                             .duration(400)
@@ -222,7 +228,7 @@ public class AHRecipes {
                             .inputItems(AHMachines.NET_ENERGY_INPUT_HATCH_64A[GTValues.OpV].asStack(16))
                             .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                             .inputItems(GTMachines.POWER_TRANSFORMER[getTierTransformer(tier)].asStack())
-                            .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                            .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                             .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                             .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                             .duration(400)
@@ -237,7 +243,7 @@ public class AHRecipes {
                             .inputItems(stack)
                             .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(tier)].asStack())
                             .inputItems(GTMachines.POWER_TRANSFORMER[getTierTransformer(tier)].asStack())
-                            .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                            .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                             .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                             .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                             .duration(400)
@@ -249,7 +255,7 @@ public class AHRecipes {
                             .inputItems(AHMachines.NET_ENERGY_OUTPUT_HATCH_64A[GTValues.OpV].asStack(16))
                             .inputItems(GTMachines.WORLD_ACCELERATOR[getTierWorldAccelerator(GTValues.MAX)].asStack())
                             .inputItems(GTMachines.POWER_TRANSFORMER[getTierTransformer(tier)].asStack())
-                            .inputItems(ConstantsMachines.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
+                            .inputItems(MachinesConstants.WIRELESS_ENERGY_RECEIVE_COVER_4A.get(getTierWirelessEnergyRecieverCover(tier)).asStack())
                             .inputItems(GTItems.COVER_ENERGY_DETECTOR_ADVANCED.asStack())
                             .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
                             .duration(400)
@@ -397,6 +403,73 @@ public class AHRecipes {
                     .EUt(GTValues.VA[tier])
                     .save(provider);
         }
+        // endregion
+
+        // region 适配系统
+        ASSEMBLER_RECIPES.recipeBuilder(GTMAdvancedHatch.id("tool_net_data_stick"))
+                .outputItems(AHItems.TOOL_NET_DATA_STICK.asStack())
+                .inputItems(GTItems.EPOXY_BOARD.asStack())
+                .inputItems(GTItems.WORKSTATION_EV.asStack())
+                .inputItems(TagPrefix.wireFine, GTMaterials.Electrum, 16)
+                .inputItems(TagPrefix.plate, GTMaterials.PolyvinylChloride, 4)
+                .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
+                .duration(400)
+                .EUt(GTValues.VA[HV])
+                .save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(GTMAdvancedHatch.id("adaptive_net_energy_output_hatch"))
+                .outputItems(AHMachines.ADAPTIVE_NET_ENERGY_OUTPUT_HATCH.asStack())
+                .inputItems(AHMachines.NET_ENERGY_OUTPUT_HATCH[HV].asStack(4))
+                .inputItems(GTItems.SENSOR_HV.asStack(4))
+                .inputItems(WirelessMachines.WIRELESS_ENERGY_INTERFACE.asStack())
+                .inputItems(CustomItems.WIRELESS_ENERGY_RECEIVE_COVER_HV_4A.asStack())
+                .inputItems(GTBlocks.COIL_NICHROME.asStack())
+                .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
+                .duration(400)
+                .EUt(GTValues.VA[HV])
+                .save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(GTMAdvancedHatch.id("adaptive_net_energy_input_hatch"))
+                .outputItems(AHMachines.ADAPTIVE_NET_ENERGY_INPUT_HATCH.asStack())
+                .inputItems(AHMachines.NET_ENERGY_INPUT_HATCH[HV].asStack(4))
+                .inputItems(GTItems.SENSOR_HV.asStack(4))
+                .inputItems(WirelessMachines.WIRELESS_ENERGY_INTERFACE.asStack())
+                .inputItems(CustomItems.WIRELESS_ENERGY_RECEIVE_COVER_HV_4A.asStack())
+                .inputItems(GTBlocks.COIL_NICHROME.asStack())
+                .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
+                .duration(400)
+                .EUt(GTValues.VA[HV])
+                .save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(GTMAdvancedHatch.id("adaptive_net_laser_output_hatch"))
+                .outputItems(AHMachines.ADAPTIVE_NET_LASER_OUTPUT_HATCH.asStack())
+                .inputItems(AHMachines.NET_ENERGY_OUTPUT_HATCH_256A[LuV].asStack(4))
+                .inputItems(GTItems.SENSOR_LuV.asStack(4))
+                .inputItems(WirelessMachines.WIRELESS_ENERGY_INTERFACE.asStack())
+                .inputItems(CustomItems.WIRELESS_ENERGY_RECEIVE_COVER_LUV_4A.asStack())
+                .inputItems(GTBlocks.COIL_HSSG.asStack())
+                .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
+                .duration(400)
+                .EUt(GTValues.VA[IV])
+                .save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(GTMAdvancedHatch.id("adaptive_net_laser_input_hatch"))
+                .outputItems(AHMachines.ADAPTIVE_NET_LASER_INPUT_HATCH.asStack())
+                .inputItems(AHMachines.NET_ENERGY_INPUT_HATCH_256A[LuV].asStack(4))
+                .inputItems(GTItems.SENSOR_LuV.asStack(4))
+                .inputItems(WirelessMachines.WIRELESS_ENERGY_INTERFACE.asStack())
+                .inputItems(CustomItems.WIRELESS_ENERGY_RECEIVE_COVER_LUV_4A.asStack())
+                .inputItems(GTBlocks.COIL_HSSG.asStack())
+                .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
+                .duration(400)
+                .EUt(GTValues.VA[IV])
+                .save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(GTMAdvancedHatch.id("adaptive_net_energy_terminal"))
+                .outputItems(AHMachines.ADAPTIVE_NET_ENERGY_TERMINAL.asStack())
+                .inputItems(GTItems.SENSOR_HV.asStack(4))
+                .inputItems(GTItems.EMITTER_HV.asStack(4))
+                .inputItems(WirelessMachines.WIRELESS_ENERGY_INTERFACE.asStack())
+                .inputItems(WirelessMachines.WIRELESS_ENERGY_MONITOR.asStack())
+                .inputFluids(GTMaterials.SolderingAlloy.getFluid(576))
+                .duration(400)
+                .EUt(GTValues.VA[HV])
+                .save(provider);
         // endregion
     }
 

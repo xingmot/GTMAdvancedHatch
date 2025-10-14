@@ -111,7 +111,7 @@ public class NetEnergyHatchPartMachine extends WirelessEnergyHatchPartMachine {
             this.updateEnergySubscription();
             return InteractionResult.SUCCESS;
         } else if (is.is(Items.STICK)) {
-            if (this.io == IO.OUT) {
+            if (this.io == IO.OUT && player.isCreative()) {
                 this.energyContainer.setEnergyStored(GTValues.V[this.tier] * 64L * (long) this.amperage);
             }
 

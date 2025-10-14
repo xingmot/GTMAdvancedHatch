@@ -1,0 +1,57 @@
+{
+  "name": "电网激光仓",
+  "icon": "gtmadvancedhatch:max_256a_net_laser_target_hatch",
+  "category": "gtmadvancedhatch:hatch",
+  "pages": [
+    {
+      "type": "text",
+      "text": "电网激光仓是无线激光仓的升级版，与$(l:hatch/net_energy_hatch)电网仓$()基本相同，$(thing)只是功率和容量更大，并且只可用于支持激光仓室的机器$()。此外也有超大安培的版本，不过一些配方需要整合包支持或魔改添加。"
+    },
+    {
+      "type": "spotlight",
+      "item": "gtmadvancedhatch:ev_256a_net_laser_target_hatch,gtmadvancedhatch:ev_4096a_net_laser_target_hatch,gtmadvancedhatch:ev_16384a_net_laser_target_hatch,gtmadvancedhatch:ev_65536a_net_laser_target_hatch,gtmadvancedhatch:ev_256a_net_laser_source_hatch,gtmadvancedhatch:ev_4096a_net_laser_source_hatch,gtmadvancedhatch:ev_16384a_net_laser_source_hatch,gtmadvancedhatch:ev_65536a_net_laser_source_hatch",
+      "title": "电网激光靶仓/激光源仓",
+      "text": "在组装机中由$(_)4个$()对应等级的无线激光靶仓/激光源仓，世界加速器，无线能源接收器,一个进阶能量探测器制作而成。$(p)后面两页会展示一部分电网能源仓和电网动力仓。最高的两个电压还会有额外的$(_)3个极致安培版本$()。"
+    },
+    {
+      "type": "4x4item_display",
+      "title": "一些电网激光靶仓",
+      "item11": "gtmadvancedhatch:ev_256a_net_laser_target_hatch,gtmadvancedhatch:ev_1024a_net_laser_target_hatch",
+      "item12": "gtmadvancedhatch:ev_4096a_net_laser_target_hatch,gtmadvancedhatch:ev_16384a_net_laser_target_hatch",
+      "item13": "gtmadvancedhatch:ev_65536a_net_laser_target_hatch,gtmadvancedhatch:ev_262144a_net_laser_target_hatch",
+      "item14": "gtmadvancedhatch:ev_1048576a_net_laser_target_hatch,gtmadvancedhatch:ev_4194304a_net_laser_target_hatch",
+      "item21": "gtmadvancedhatch:uv_256a_net_laser_target_hatch,gtmadvancedhatch:uv_1024a_net_laser_target_hatch",
+      "item22": "gtmadvancedhatch:uv_4096a_net_laser_target_hatch,gtmadvancedhatch:uv_16384a_net_laser_target_hatch",
+      "item23": "gtmadvancedhatch:uv_65536a_net_laser_target_hatch,gtmadvancedhatch:uv_262144a_net_laser_target_hatch",
+      "item24": "gtmadvancedhatch:uv_1048576a_net_laser_target_hatch,gtmadvancedhatch:uv_4194304a_net_laser_target_hatch",
+      "item31": "gtmadvancedhatch:opv_256a_net_laser_target_hatch,gtmadvancedhatch:opv_1024a_net_laser_target_hatch",
+      "item32": "gtmadvancedhatch:opv_4096a_net_laser_target_hatch,gtmadvancedhatch:opv_16384a_net_laser_target_hatch",
+      "item33": "gtmadvancedhatch:opv_65536a_net_laser_target_hatch,gtmadvancedhatch:opv_262144a_net_laser_target_hatch,gtmadvancedhatch:opv_1048576a_net_laser_target_hatch,gtmadvancedhatch:opv_4194304a_net_laser_target_hatch",
+      "item34": "gtmadvancedhatch:opv_16777216a_net_laser_target_hatch,gtmadvancedhatch:opv_67108864a_net_laser_target_hatch,gtmadvancedhatch:opv_2147483647a_net_laser_target_hatch",
+      "item41": "gtmadvancedhatch:max_256a_net_laser_target_hatch,gtmadvancedhatch:max_1024a_net_laser_target_hatch",
+      "item42": "gtmadvancedhatch:max_4096a_net_laser_target_hatch,gtmadvancedhatch:max_16384a_net_laser_target_hatch",
+      "item43": "gtmadvancedhatch:max_65536a_net_laser_target_hatch,gtmadvancedhatch:max_262144a_net_laser_target_hatch,gtmadvancedhatch:max_1048576a_net_laser_target_hatch,gtmadvancedhatch:max_4194304a_net_laser_target_hatch",
+      "item44": "gtmadvancedhatch:max_16777216a_net_laser_target_hatch,gtmadvancedhatch:max_67108864a_net_laser_target_hatch,gtmadvancedhatch:max_2147483647a_net_laser_target_hatch"
+    },
+    {
+      "type": "4x4item_display",
+      "title": "一些电网激光源仓",
+      "item11": "gtmadvancedhatch:ev_256a_net_laser_source_hatch,gtmadvancedhatch:ev_1024a_net_laser_source_hatch",
+      "item12": "gtmadvancedhatch:ev_4096a_net_laser_source_hatch,gtmadvancedhatch:ev_16384a_net_laser_source_hatch",
+      "item13": "gtmadvancedhatch:ev_65536a_net_laser_source_hatch,gtmadvancedhatch:ev_262144a_net_laser_source_hatch",
+      "item14": "gtmadvancedhatch:ev_1048576a_net_laser_source_hatch,gtmadvancedhatch:ev_4194304a_net_laser_source_hatch",
+      "item21": "gtmadvancedhatch:uv_256a_net_laser_source_hatch,gtmadvancedhatch:uv_1024a_net_laser_source_hatch",
+      "item22": "gtmadvancedhatch:uv_4096a_net_laser_source_hatch,gtmadvancedhatch:uv_16384a_net_laser_source_hatch",
+      "item23": "gtmadvancedhatch:uv_65536a_net_laser_source_hatch,gtmadvancedhatch:uv_262144a_net_laser_source_hatch",
+      "item24": "gtmadvancedhatch:uv_1048576a_net_laser_source_hatch,gtmadvancedhatch:uv_4194304a_net_laser_source_hatch",
+      "item31": "gtmadvancedhatch:opv_256a_net_laser_source_hatch,gtmadvancedhatch:opv_1024a_net_laser_source_hatch",
+      "item32": "gtmadvancedhatch:opv_4096a_net_laser_source_hatch,gtmadvancedhatch:opv_16384a_net_laser_source_hatch",
+      "item33": "gtmadvancedhatch:opv_65536a_net_laser_source_hatch,gtmadvancedhatch:opv_262144a_net_laser_source_hatch,gtmadvancedhatch:opv_1048576a_net_laser_source_hatch,gtmadvancedhatch:opv_4194304a_net_laser_source_hatch",
+      "item34": "gtmadvancedhatch:opv_16777216a_net_laser_source_hatch,gtmadvancedhatch:opv_67108864a_net_laser_source_hatch,gtmadvancedhatch:opv_2147483647a_net_laser_source_hatch",
+      "item41": "gtmadvancedhatch:max_256a_net_laser_source_hatch,gtmadvancedhatch:max_1024a_net_laser_source_hatch",
+      "item42": "gtmadvancedhatch:max_4096a_net_laser_source_hatch,gtmadvancedhatch:max_16384a_net_laser_source_hatch",
+      "item43": "gtmadvancedhatch:max_65536a_net_laser_source_hatch,gtmadvancedhatch:max_262144a_net_laser_source_hatch,gtmadvancedhatch:max_1048576a_net_laser_source_hatch,gtmadvancedhatch:max_4194304a_net_laser_source_hatch",
+      "item44": "gtmadvancedhatch:max_16777216a_net_laser_source_hatch,gtmadvancedhatch:max_67108864a_net_laser_source_hatch,gtmadvancedhatch:max_2147483647a_net_laser_source_hatch"
+    }
+  ]
+}

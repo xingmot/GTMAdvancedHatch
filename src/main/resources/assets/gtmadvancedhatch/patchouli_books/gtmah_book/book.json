@@ -1,0 +1,29 @@
+{
+  "name": "book.gtmadvancedhatch.name",
+  "landing_text": "book.gtmadvancedhatch.landing_text",
+  "version": 1,
+  "creative_tab": "gtmadvancedhatch:base_tab",
+  "use_resource_pack": true,
+  "macros": {
+    "$(gtmah)": "$(#228)GTM Advanced Hatch$()",
+    "$(gtmah1)": "$(#228)GTM高级仓室$()",
+    "$(ttcolor)": "$(#880)",
+    "$(formula)": "$(#272)",
+    "$(_)":"$(n)",
+    "$(ulv)":"$(8)$(l)ULV$()",
+    "$(lv)":"$(7)$(l)LV$()",
+    "$(mv)":"$(b)$(l)MV$()",
+    "$(hv)":"$(6)$(l)HV$()",
+    "$(ev)":"$(5)$(l)EV$()",
+    "$(iv)":"$(9)$(l)IV$()",
+    "$(luv)":"$(d)$(l)LuV$()",
+    "$(zpm)":"$(c)$(l)ZPM$()",
+    "$(uv)":"$(3)$(l)UV$()",
+    "$(uhv)":"$(4)$(l)UHV$()",
+    "$(uev)":"$(a)$(l)UEV$()",
+    "$(uiv)":"$(2)$(l)UIV$()",
+    "$(uxv)":"$(e)$(l)UXV$()",
+    "$(opv)":"$(9)$(l)OpV$()",
+    "$(max)":"$(c)$(l)MAX$()"
+  }
+}

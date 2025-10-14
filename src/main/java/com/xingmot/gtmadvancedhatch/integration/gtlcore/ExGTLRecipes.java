@@ -19,8 +19,8 @@ import static com.gregtechceu.gtceu.api.GTValues.VN;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
 import static com.xingmot.gtmadvancedhatch.common.data.AHMachines.NET_HIGH_TIERS;
 import static com.xingmot.gtmadvancedhatch.common.data.AHMachines.NET_HIGH_TIERS2;
-import static com.xingmot.gtmadvancedhatch.common.data.AHRecipes.getTierTransformer;
-import static com.xingmot.gtmadvancedhatch.common.data.AHRecipes.getTierWorldAccelerator;
+import static com.xingmot.gtmadvancedhatch.common.data.recipe.AHRecipes.getTierTransformer;
+import static com.xingmot.gtmadvancedhatch.common.data.recipe.AHRecipes.getTierWorldAccelerator;
 import static com.xingmot.gtmadvancedhatch.integration.gtlcore.ExGTLMachines.HIGHEST_TIERS;
 
 public class ExGTLRecipes {
