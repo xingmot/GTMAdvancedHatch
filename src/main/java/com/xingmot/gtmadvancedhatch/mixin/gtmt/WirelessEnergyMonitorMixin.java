@@ -25,8 +25,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+import static com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.FormatUtil.formatBigDecimalNumberOrSicWithSign;
 import static com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.FormatUtil.formatWithConstantWidth;
-import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigDecimalNumberOrSic;
 import static com.xingmot.gtmadvancedhatch.util.NumberUtils.formatBigIntegerNumberOrSic;
 
 import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
@@ -92,14 +92,14 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.net_power"));
 
         BigDecimal avgMinute = stat.getMinuteAvg();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_minute", 200, Component.literal(formatBigDecimalNumberOrSic(avgMinute))).withStyle(ChatFormatting.AQUA));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_minute", 200, Component.literal(formatBigDecimalNumberOrSicWithSign(avgMinute))).withStyle(ChatFormatting.AQUA));
         BigDecimal avgHour = stat.getHourAvg();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_hour", 200, Component.literal(formatBigDecimalNumberOrSic(avgHour))).withStyle(ChatFormatting.YELLOW));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_hour", 200, Component.literal(formatBigDecimalNumberOrSicWithSign(avgHour))).withStyle(ChatFormatting.YELLOW));
         BigDecimal avgDay = stat.getDayAvg();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_day", 200, Component.literal(formatBigDecimalNumberOrSic(avgDay))).withStyle(ChatFormatting.GREEN));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.last_day", 200, Component.literal(formatBigDecimalNumberOrSicWithSign(avgDay))).withStyle(ChatFormatting.GREEN));
         // average useage
         BigDecimal avgEnergy = stat.getAvgEnergy();
-        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.now", 200, Component.literal(formatBigDecimalNumberOrSic(avgEnergy))).withStyle(ChatFormatting.LIGHT_PURPLE));
+        textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.now", 200, Component.literal(formatBigDecimalNumberOrSicWithSign(avgEnergy))).withStyle(ChatFormatting.LIGHT_PURPLE));
 
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.statistics").append(ComponentPanelWidget.withButton(this.all ? Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.all") : Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.team"), "all")));
 

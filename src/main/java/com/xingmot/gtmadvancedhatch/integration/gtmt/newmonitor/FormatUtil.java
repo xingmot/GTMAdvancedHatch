@@ -1,6 +1,7 @@
 package com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor;
 
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
+import com.xingmot.gtmadvancedhatch.util.FormattingUtil;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -73,6 +74,15 @@ public class FormatUtil {
 
     public static BigDecimal voltageAmperage(BigDecimal avgEnergy) {
         return avgEnergy.abs().divide(BigDecimal.valueOf(GTValues.VEX[GTUtil.getFloorTierByVoltage(avgEnergy.abs().longValue())]), 1, RoundingMode.FLOOR);
+    }
+
+    public static String formatBigDecimalNumberOrSicWithSign(BigDecimal number) {
+        if (number.compareTo(BigDecimal.ZERO) == 0) return "古井无波，山河依在";
+        else if (number.compareTo(BigDecimal.ZERO) > 0) {
+            return "+" + FormattingUtil.formatNumberReadable(number);
+        } else {
+            return FormattingUtil.formatNumberReadable(number);
+        }
     }
 
     private static int getComponentLength(Component component) {

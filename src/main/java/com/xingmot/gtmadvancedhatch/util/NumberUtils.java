@@ -7,9 +7,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 
-import static com.xingmot.gtmadvancedhatch.util.FormattingUtil.DECIMAL_FORMAT_SIC_2F;
-import static com.xingmot.gtmadvancedhatch.util.FormattingUtil.formatNumberReadable;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,11 +44,10 @@ public class NumberUtils {
     }
 
     public static String formatBigDecimalNumberOrSic(BigDecimal number) {
-        if (number.compareTo(BigDecimal.ZERO) == 0) return "古井无波，山河依在";
-        return number.abs().compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) > 0 ? number.compareTo(BigDecimal.ZERO) > 0 ? "+" + DECIMAL_FORMAT_SIC_2F.format(number) : DECIMAL_FORMAT_SIC_2F.format(number) : formatNumberReadable(number);
+        return FormattingUtil.formatNumberReadable(number);
     }
 
     public static String formatBigIntegerNumberOrSic(BigInteger number) {
-        return number.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0 ? DECIMAL_FORMAT_SIC_2F.format(number) : formatNumberReadable(new BigDecimal(number));
+        return FormattingUtil.formatNumberReadable(new BigDecimal(number));
     }
 }
