@@ -8,8 +8,9 @@ import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
+import com.lowdragmc.lowdraglib.LDLib;
+
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraftforge.fml.ModList;
 
 import java.util.function.Consumer;
 
@@ -32,7 +33,7 @@ public class GTMAHGTAddon implements IGTAddon {
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         AHRecipes.initRecipes(provider);
-        if (ModList.get().isLoaded("gtlcore")) {
+        if (LDLib.isModLoaded("gtlcore")) {
             ExGTLRecipes.initRecipes(provider);
         }
     }

@@ -107,14 +107,12 @@ public class NetEnergyHatchPartMachine extends WirelessEnergyHatchPartMachine {
             if (this.getLevel().isClientSide()) {
                 player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", new Object[] { TeamUtil.GetName(player) }));
             }
-
             this.updateEnergySubscription();
             return InteractionResult.SUCCESS;
         } else if (is.is(Items.STICK)) {
             if (this.io == IO.OUT && player.isCreative()) {
                 this.energyContainer.setEnergyStored(GTValues.V[this.tier] * 64L * (long) this.amperage);
             }
-
             return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;

@@ -122,7 +122,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
     }
 
     private void updateNet() {
-        if (this.frequency != 0L && this.net_uuid != null && !LDLib.isRemote()) {
+        if (this.frequency != 0L && this.net_uuid != null && !LDLib.isClient()) {
             this.adaptiveSlave.updateStatus();
         }
     }
@@ -167,21 +167,14 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
             if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
                 this.owner_uuid = player.getUUID();
                 this.energyContainer.owner_uuid = player.getUUID();
-                if (LDLib.isRemote()) player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", new Object[] { TeamUtil.GetName(player) }));
+                if (LDLib.isClient())
+                    player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", new Object[] { TeamUtil.GetName(player) }));
                 this.updateSubscription();
                 return InteractionResult.SUCCESS;
                 // 网络配置内存
             } else if (is.is(AHItems.TOOL_NET_DATA_STICK.asItem())) {
-                try {
-                    if (is.getTag() != null) {
-                        this.net_uuid = is.getTag().getUUID(TagConstants.ADAPTIVE_NET_UUID);
-                        this.name = is.getTag().getString(TagConstants.ADAPTIVE_NET_NAME);
-                        this.frequency = is.getTag().getLong(TagConstants.ADAPTIVE_NET_FREQUENCY);
-                    }
-                    setConnect(adaptiveSlave.setUUIDAndFrequency(this.net_uuid, this.frequency));
-                    if (LDLib.isRemote()) player.displayClientMessage(Component.translatable("gtmadvancedhatch.machine.adaptivee.export_data", name), true);
-                    return InteractionResult.SUCCESS;
-                } catch (Exception ignored) {}
+                bindNetUUID(is, player);
+                return InteractionResult.SUCCESS;
             }
         return InteractionResult.PASS;
     }
@@ -194,7 +187,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
         } else if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
             this.owner_uuid = null;
             this.energyContainer.owner_uuid = null;
-            if (LDLib.isRemote()) {
+            if (LDLib.isClient()) {
                 player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.unbind"));
             }
             this.updateSubscription();
@@ -202,9 +195,8 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
         } else if (is.is(AHItems.TOOL_NET_DATA_STICK.asItem())) {
             setNetUUID(MachinesConstants.UUID_ZERO);
             setFrequency(0L);
-            if (LDLib.isRemote()) {
+            if (LDLib.isClient())
                 player.sendSystemMessage(Component.translatable("gtmadvancedhatch.machine.adaptivee.clear_data"));
-            }
             return true;
         }
         return false;
@@ -230,6 +222,18 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
         }
     }
 
+    private void bindNetUUID(ItemStack is, LivingEntity player) {
+        if (is.hasTag()) {
+            assert is.getTag() != null; // 真的是无语idea的空指针检查
+            this.net_uuid = is.getTag().getUUID(TagConstants.ADAPTIVE_NET_UUID);
+            this.name = is.getTag().getString(TagConstants.ADAPTIVE_NET_NAME);
+            this.frequency = is.getTag().getLong(TagConstants.ADAPTIVE_NET_FREQUENCY);
+        }
+        setConnect(adaptiveSlave.setUUIDAndFrequency(this.net_uuid, this.frequency));
+        if (LDLib.isClient() && player instanceof Player p)
+            p.displayClientMessage(Component.translatable("gtmadvancedhatch.machine.adaptivee.export_data", name), true);
+    }
+
     // =============================== IMachineLife ==================================
     @Override
     public void onMachinePlaced(@Nullable LivingEntity player, ItemStack stack) {
@@ -237,6 +241,10 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
             UUID uuid = TeamUtil.getTeamUUID(player.getUUID());
             setUUID(uuid);
             energyContainer.setOwner_uuid(uuid);
+            // 若副手为网络配置闪存且数据不为空，则自动应用
+            ItemStack offhandItem = player.getOffhandItem();
+            if (offhandItem.is(AHItems.TOOL_NET_DATA_STICK.asItem()) && offhandItem.hasTag())
+                bindNetUUID(offhandItem, player);
             this.updateSubscription();
         }
     }

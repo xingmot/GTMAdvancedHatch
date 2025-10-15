@@ -128,15 +128,10 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
 
     public static class AdaptiveData {
 
-        @Persisted
         public long maxEnergy;
-        @Persisted
         public long voltage = 8L;
-        @Persisted
         public int amps = 1;
-        @Persisted
         public int setTier = 0;
-        @Persisted
         public IO io;
 
         public AdaptiveData(IO io, long voltage, int amps, int setTier) {
@@ -222,7 +217,7 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
 
     private void updateNet() {
         // 在服务端每1秒更新一次
-        if (!LDLib.isRemote() && Objects.requireNonNull(this.getServerLevel()).getServer().getTickCount() % 20 == 0) {
+        if (!LDLib.isClient() && Objects.requireNonNull(this.getServerLevel()).getServer().getTickCount() % 20 == 0) {
             if (!this.isSlave) {
                 this.updNet.unsubscribe();
                 this.updNet = null;
@@ -264,7 +259,7 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
             return InteractionResult.PASS;
         } else if (is.is(AHItems.TOOL_NET_DATA_STICK.asItem())) {
             this.setUUID(TeamUtil.getTeamUUID(uuid));
-            if (LDLib.isRemote())
+            if (LDLib.isClient())
                 player.displayClientMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", TeamUtil.GetName(player)), true);
             return InteractionResult.SUCCESS;
         } else if (is.is(Items.STICK) && player.isCreative()) {

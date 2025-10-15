@@ -12,7 +12,7 @@
       "title":"带数据的网络配置闪存",
       "item1":"gtmadvancedhatch:net_data_stick",
       "item2":"gtmadvancedhatch:net_data_stick{adaptive_net_name:\"Dev\",adaptive_net_frequency:4L,adaptive_net_uuid:[I;940439953,-167562164,-1601161573,-1389718966],display:{Name:\\'{\"translate\":\"gtmadvancedhatch.machine.adaptivee.data_stick.name\"}\\'}}",
-      "text": "如果需要复制网络配置闪存，只需将有带有数据的网络配置闪存放在副手，任意网络配置闪存放在主手，对着任意方块右击，即可将副手的数据复制到主手中。"
+      "text": "如果需要复制网络配置闪存，只需将有带有数据的网络配置闪存放在副手，任意网络配置闪存放在主手，对着任意方块右击，即可将副手的数据复制到主手中。$(p)副手手持带数据的网络配置闪存，放置的网络仓会自动绑定。"
     }
   ]
 }

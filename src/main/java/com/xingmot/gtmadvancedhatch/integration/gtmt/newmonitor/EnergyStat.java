@@ -21,7 +21,7 @@ public class EnergyStat {
     static boolean observed = false;
 
     public static EnergyStat createOrgetEnergyStat(UUID uuid) {
-        if (LDLib.isRemote()) return new EnergyStat(0);
+        if (LDLib.isClient()) return new EnergyStat(0);
         if (GlobalEnergyStat.get(TeamUtil.getTeamUUID(uuid)) == null) {
             EnergyStat energyStat = new EnergyStat(server.getTickCount());
             GlobalEnergyStat.put(TeamUtil.getTeamUUID(uuid), energyStat);

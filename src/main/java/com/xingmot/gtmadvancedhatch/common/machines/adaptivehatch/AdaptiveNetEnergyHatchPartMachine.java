@@ -1,7 +1,10 @@
 package com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch;
 
 import com.xingmot.gtmadvancedhatch.api.NoConsumeNotifiabbleEnergyContainer;
-import com.xingmot.gtmadvancedhatch.api.adaptivenet.*;
+import com.xingmot.gtmadvancedhatch.api.adaptivenet.AdaptiveConstants;
+import com.xingmot.gtmadvancedhatch.api.adaptivenet.AdaptiveSlave;
+import com.xingmot.gtmadvancedhatch.api.adaptivenet.IFrequency;
+import com.xingmot.gtmadvancedhatch.api.adaptivenet.INetEndpoint;
 import com.xingmot.gtmadvancedhatch.common.AHItems;
 import com.xingmot.gtmadvancedhatch.common.data.MachinesConstants;
 import com.xingmot.gtmadvancedhatch.common.data.TagConstants;
@@ -50,6 +53,8 @@ import lombok.Setter;
 public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine implements IFrequency, INetEndpoint {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AdaptiveNetEnergyHatchPartMachine.class, NetEnergyHatchPartMachine.MANAGED_FIELD_HOLDER);
+    @Persisted
+    public final NoConsumeNotifiabbleEnergyContainer energyContainer;
     // 判断是否可以连接
     @Persisted
     protected boolean isConnect;
@@ -74,9 +79,6 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
     private int amps = 1;
     @Persisted
     private int setTier = 0;
-    @Persisted
-    public final NoConsumeNotifiabbleEnergyContainer energyContainer;
-
     private TickableSubscription updEnergySubs;
     private TickableSubscription updNet;
 
@@ -119,7 +121,7 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
     }
 
     private void updateNet() {
-        if (this.frequency != 0L && this.net_uuid != null && !LDLib.isRemote()) {
+        if (this.frequency != 0L && this.net_uuid != null && !LDLib.isClient()) {
             this.adaptiveSlave.updateStatus();
         }
     }
@@ -156,7 +158,10 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
     }
 
     // =============================== IInteractedMachine ==================================
-    /** 内存与网络配置内存交互逻辑 */
+
+    /**
+     * 内存与网络配置内存交互逻辑
+     */
     @Override
     public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack is = player.getItemInHand(hand);
@@ -164,21 +169,14 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
             if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
                 this.owner_uuid = player.getUUID();
                 this.energyContainer.owner_uuid = player.getUUID();
-                if (LDLib.isRemote()) player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", new Object[] { TeamUtil.GetName(player) }));
+                if (LDLib.isClient())
+                    player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", TeamUtil.GetName(player)));
                 this.updateSubscription();
                 return InteractionResult.SUCCESS;
                 // 网络配置内存
             } else if (is.is(AHItems.TOOL_NET_DATA_STICK.asItem())) {
-                try {
-                    if (is.getTag() != null) {
-                        this.net_uuid = is.getTag().getUUID(TagConstants.ADAPTIVE_NET_UUID);
-                        this.name = is.getTag().getString(TagConstants.ADAPTIVE_NET_NAME);
-                        this.frequency = is.getTag().getLong(TagConstants.ADAPTIVE_NET_FREQUENCY);
-                    }
-                    setConnect(adaptiveSlave.setUUIDAndFrequency(this.net_uuid, this.frequency));
-                    if (LDLib.isRemote()) player.displayClientMessage(Component.translatable("gtmadvancedhatch.machine.adaptivee.export_data", name), true);
-                    return InteractionResult.SUCCESS;
-                } catch (Exception ignored) {}
+                bindNetUUID(is, player);
+                return InteractionResult.SUCCESS;
             }
         return InteractionResult.PASS;
     }
@@ -191,7 +189,7 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
         } else if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
             this.owner_uuid = null;
             this.energyContainer.owner_uuid = null;
-            if (LDLib.isRemote()) {
+            if (LDLib.isClient()) {
                 player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.unbind"));
             }
             this.updateSubscription();
@@ -199,9 +197,8 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
         } else if (is.is(AHItems.TOOL_NET_DATA_STICK.asItem())) {
             setNetUUID(MachinesConstants.UUID_ZERO);
             setFrequency(0L);
-            if (LDLib.isRemote()) {
+            if (LDLib.isClient())
                 player.sendSystemMessage(Component.translatable("gtmadvancedhatch.machine.adaptivee.clear_data"));
-            }
             return true;
         }
         return false;
@@ -227,6 +224,18 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
         }
     }
 
+    private void bindNetUUID(ItemStack is, LivingEntity player) {
+        if (is.hasTag()) {
+            assert is.getTag() != null; // 真的是无语idea的空指针检查
+            this.net_uuid = is.getTag().getUUID(TagConstants.ADAPTIVE_NET_UUID);
+            this.name = is.getTag().getString(TagConstants.ADAPTIVE_NET_NAME);
+            this.frequency = is.getTag().getLong(TagConstants.ADAPTIVE_NET_FREQUENCY);
+        }
+        setConnect(adaptiveSlave.setUUIDAndFrequency(this.net_uuid, this.frequency));
+        if (LDLib.isClient() && player instanceof Player p)
+            p.displayClientMessage(Component.translatable("gtmadvancedhatch.machine.adaptivee.export_data", name), true);
+    }
+
     // =============================== IMachineLife ==================================
     @Override
     public void onMachinePlaced(@Nullable LivingEntity player, ItemStack stack) {
@@ -234,6 +243,10 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
             UUID uuid = TeamUtil.getTeamUUID(player.getUUID());
             setUUID(uuid);
             energyContainer.setOwner_uuid(uuid);
+            // 若副手为网络配置闪存且数据不为空，则自动应用
+            ItemStack offhandItem = player.getOffhandItem();
+            if (offhandItem.is(AHItems.TOOL_NET_DATA_STICK.asItem()) && offhandItem.hasTag())
+                bindNetUUID(offhandItem, player);
             this.updateSubscription();
         }
     }

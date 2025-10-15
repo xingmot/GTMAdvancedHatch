@@ -29,8 +29,8 @@ public class BindUUIDFancyConfigurator implements IFancyConfigurator {
 
     IBindable bindable;
 
-    public BindUUIDFancyConfigurator(IBindable iFrequency) {
-        this.bindable = iFrequency;
+    public BindUUIDFancyConfigurator(IBindable bindable) {
+        this.bindable = bindable;
     }
 
     @Override

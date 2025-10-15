@@ -1,10 +1,11 @@
 package com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor;
 
-import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
 import com.xingmot.gtmadvancedhatch.util.FormattingUtil;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.utils.GTUtil;
+
+import com.lowdragmc.lowdraglib.LDLib;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -42,13 +43,16 @@ public class FormatUtil {
         var spaceLength = width - baseLength;
         if (spaceLength <= 0) return tmp;
 
-        // 获取字体实例
-        Font font = Minecraft.getInstance().font;
-        // 测量一个分隔符的宽度
-        int dotWidth = font.width(Component.literal("·").setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font"))));
-        // 测量一个空格的宽度
-        int spaceWidth = font.width(" ");
-
+        int dotWidth = 3; // 这俩是原版默认值
+        int spaceWidth = 4;
+        if (LDLib.isRemote()) { // 获取字体必须在客户端渲染线程
+            // 获取字体实例
+            Font font = Minecraft.getInstance().font;
+            // 测量一个分隔符的宽度
+            dotWidth = font.width(Component.literal("·").setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font"))));
+            // 测量一个空格的宽度
+            spaceWidth = font.width(" ");
+        }
         // 计算可以容纳的分隔符数量
         int totalSpacerWidth = spaceLength - spaceWidth; // 预留一个空格的宽度
         if (totalSpacerWidth <= 0) {
@@ -86,7 +90,7 @@ public class FormatUtil {
     }
 
     private static int getComponentLength(Component component) {
-        if (GTMAdvancedHatch.isClientSide()) {
+        if (LDLib.isRemote()) {
             return Minecraft.getInstance().font.width(component.getString());
         } else {
             return component.getString().length() * 9;
