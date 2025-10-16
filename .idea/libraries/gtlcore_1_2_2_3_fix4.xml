@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gtlcore-1.2.2.3-fix4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gradle/libs/gtlcore-1.2.2.3-fix4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gtladditions-2.2.1Custom-fix1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gradle/libs/gtladditions-2.2.1Custom-fix1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

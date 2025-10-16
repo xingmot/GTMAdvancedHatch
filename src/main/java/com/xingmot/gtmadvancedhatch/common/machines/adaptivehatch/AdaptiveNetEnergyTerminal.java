@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfiguratorButton;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
@@ -29,6 +30,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -51,6 +53,7 @@ import static com.xingmot.gtmadvancedhatch.common.data.MachinesConstants.getMaxC
 import com.hepdd.gtmthings.api.capability.IBindable;
 import com.hepdd.gtmthings.utils.TeamUtil;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -64,8 +67,14 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AdaptiveNetEnergyTerminal.class, MetaMachine.MANAGED_FIELD_HOLDER);
     // 是否被覆盖（当存在已经注册的终端时被覆盖）
+    @Getter
     @Persisted
     protected boolean isSlave = false;
+    // 是否迁移模式（启用时更改频道和uuid，同网络适配仓会自动迁移至新频道和uuid
+    @Getter
+    @Setter
+    @Persisted
+    protected boolean isAutoRebind = true;
     // 适配网络所属玩家/队伍的uuid，默认为公用
     @Persisted
     protected UUID uuid = MachinesConstants.UUID_ZERO;
@@ -217,14 +226,25 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
 
     private void updateNet() {
         // 在服务端每1秒更新一次
-        if (!LDLib.isClient() && Objects.requireNonNull(this.getServerLevel()).getServer().getTickCount() % 20 == 0) {
+        // 此处用isRemote()的原因：在tick方法中执行时，单人存档isClient()始终为false
+        if (!LDLib.isRemote() && Objects.requireNonNull(this.getServerLevel()).getServer().getTickCount() % 20 == 0) {
             if (!this.isSlave) {
                 this.updNet.unsubscribe();
                 this.updNet = null;
                 return;
             }
             if (this.frequency != 0L && this.uuid != null) {
+                // 更新状态，迁移或不迁移
                 this.adaptiveSlave.updateStatus();
+                // 当从端发现覆盖源端不存在时，自己成为主端
+                if (NetMasterRegistry.get(NET_TYPE_ENERGY, frequency, uuid) == null) {
+                    setSlave(!adaptiveMaster.setUUIDAndFrequency(this.uuid, this.frequency));
+                    // 此时发现成为主端，则取消订阅从端更新方法
+                    if (!this.isSlave) {
+                        this.updNet.unsubscribe();
+                        this.updNet = null;
+                    }
+                }
             }
         }
     }
@@ -359,6 +379,8 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
     @Override
     public Supplier<? extends CompoundTag> getData() {
         CompoundTag tag = new CompoundTag();
+        if (isAutoRebind)
+            tag.put("net_key", new NetKey(NET_TYPE_ENERGY, this.frequency, this.uuid).toTag());
         tag.put("data0", this.adaptiveData[0].toTag());
         tag.put("data1", this.adaptiveData[1].toTag());
         tag.put("data2", this.adaptiveData[2].toTag());
@@ -367,11 +389,19 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
     }
 
     @Override
-    public void encodeData(CompoundTag tag) {
+    public boolean encodeData(CompoundTag tag) {
+        boolean flag = false;
+        CompoundTag key = (CompoundTag) tag.get("net_key");
+        if (key != null && !key.isEmpty()) {
+            this.frequency = key.getLong(TagConstants.ADAPTIVE_NET_FREQUENCY);
+            this.uuid = key.getUUID(TagConstants.ADAPTIVE_NET_UUID);
+            flag = true;
+        }
         this.adaptiveData[0] = AdaptiveData.fromTag((CompoundTag) tag.get("data0"));
         this.adaptiveData[1] = AdaptiveData.fromTag((CompoundTag) tag.get("data1"));
         this.adaptiveData[2] = AdaptiveData.fromTag((CompoundTag) tag.get("data2"));
         this.adaptiveData[3] = AdaptiveData.fromTag((CompoundTag) tag.get("data3"));
+        return flag;
     }
 
     @Override
@@ -424,6 +454,15 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
     // 绑定侧页
     public void attachConfigurators(ConfiguratorPanel configuratorPanel) {
         IFancyUIMachine.super.attachConfigurators(configuratorPanel);
+        configuratorPanel.attachConfigurators(new IFancyConfiguratorButton.Toggle(
+                GuiTextures.BUTTON_WORKING_ENABLE.getSubTexture(0, 0.5, 1, 0.5),
+                GuiTextures.BUTTON_WORKING_ENABLE.getSubTexture(0, 0, 1, 0.5),
+                this::isAutoRebind, (clickData, pressed) -> setAutoRebind(pressed))
+                .setTooltipsSupplier(pressed -> List.of(
+                        Component.translatable("gtmadvancedhatch.gui.auto_rebind")
+                                .setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW))
+                                .append(Component.translatable(pressed ? "gtmadvancedhatch.gui.auto_rebind.yes" :
+                                        "gtmadvancedhatch.gui.auto_rebind.no")))));
         configuratorPanel.attachConfigurators(new NetHatchInvFancyConfigurator(this.netEnergyInventory[0].storage, this.netEnergyInventory[1].storage, this.netEnergyInventory[2].storage, this.netEnergyInventory[3].storage));
         configuratorPanel.attachConfigurators(new BindUUIDFancyConfigurator(this));
         configuratorPanel.attachConfigurators(new SetFrequencyFancyConfigurator(this));

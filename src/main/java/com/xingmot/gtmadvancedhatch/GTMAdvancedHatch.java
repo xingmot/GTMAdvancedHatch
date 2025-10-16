@@ -48,9 +48,9 @@ public class GTMAdvancedHatch {
     }
 
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        AHTabs.init();
         AHMachines.init();
-        AHItems.init();
         ExGTLMachines.init();
+        AHItems.init();
+        AHTabs.init();
     }
 }

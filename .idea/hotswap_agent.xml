@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="HotSwapAgentPluginSettingsProvider">
+    <option name="agentPath" value="C:\Users\xingmot\.jdks\jbr-17.0.14\lib\hotswap\hotswap-agent-2.0.1.jar" />
+    <option name="selectedRunConfigurations">
+      <set>
+        <option value="启动游戏（热加载）" />
+      </set>
+    </option>
+  </component>
+</project>

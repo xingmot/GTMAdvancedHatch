@@ -19,6 +19,10 @@ import com.gtladd.gtladditions.common.machine.GTLAddMachines;
 
 public class ExGTLMachines {
 
+    static {
+        AHRegistration.registrate.creativeModeTab(() -> AHTabs.BASE_TAB);
+    }
+
     // 1600万安培以上 仅限最高的两个电压
     public static final int[] HIGHEST_TIERS = GTCEuAPI.isHighTier() ? GTValues.tiersBetween(OpV, MAX) : GTValues.tiersBetween(ZPM, UV);
     // 电网仓（非激光
@@ -44,10 +48,6 @@ public class ExGTLMachines {
     public static MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_67108864A;
     public static MachineDefinition[] WIRELESS_ENERGY_OUTPUT_HATCH_16777216A;
     public static MachineDefinition[] WIRELESS_ENERGY_OUTPUT_HATCH_67108863A;
-
-    static {
-        AHRegistration.registrate.creativeModeTab(() -> AHTabs.BASE_TAB);
-    }
 
     public static void init() {
         if (!LDLib.isModLoaded("gtladditions")) {
