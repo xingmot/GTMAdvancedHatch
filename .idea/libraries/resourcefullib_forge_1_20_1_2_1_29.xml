@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="resourcefullib-forge-1.20.1-2.1.29">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gradle/libs/resourcefullib-forge-1.20.1-2.1.29.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

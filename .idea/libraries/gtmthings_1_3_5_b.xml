@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gtmthings-1.3.5.b">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gradle/libs/gtmthings-1.3.5.b.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

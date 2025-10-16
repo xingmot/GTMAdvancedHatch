@@ -42,6 +42,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class AHMachines {
 
+    static {
+        AHRegistration.registrate.creativeModeTab(() -> AHTabs.BASE_TAB);
+    }
+
     public static final int[] ALL_TIERS = GTValues.tiersBetween(ULV, GTCEuAPI.isHighTier() ? MAX : UV);
     public static final int[] NET_TIERS = GTValues.tiersBetween(LV, MAX);
     public static final int[] NET_HIGH_TIERS = GTValues.tiersBetween(EV, MAX); // 64A 电网能源仓 + 激光仓
@@ -156,10 +160,6 @@ public class AHMachines {
             .register();
     // endregion
 
-    static {
-        AHRegistration.registrate.creativeModeTab(() -> AHTabs.BASE_TAB);
-    }
-
     public static MachineDefinition[] registerTieredMachines(String name, BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory, BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder, int... tiers) {
         MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
         for (int tier : tiers) {
@@ -206,9 +206,11 @@ public class AHMachines {
                             Component.translatable(GTMThings.MOD_ID + ".machine.wireless_energy_hatch." + name + ".tooltip") };
                     if (amperage >= 16777216) {
                         if (LDLib.isModLoaded("gtlcore") && amperage == 2147483647)
-                            components = Stream.concat(Arrays.stream(new Component[] { Component.literal(TextUtil.full_color("干得好，你有新玩具了")) }), Arrays.stream(components)).toArray(Component[]::new);
+                            components = Stream.concat(Arrays.stream(new Component[] { Component.literal(TextUtil.full_color("干得好，你有新玩具了")) }), Arrays.stream(components))
+                                    .toArray(Component[]::new);
                         else if (!LDLib.isModLoaded("gtlcore") && AHConfig.INSTANCE.isDisplayNoFixCrashWarning)
-                            components = Stream.concat(Arrays.stream(components), Arrays.stream(new Component[] { Component.translatable(GTMAdvancedHatch.MODID + ".machine.no_fix_crash_warning") })).toArray(Component[]::new);
+                            components = Stream.concat(Arrays.stream(components), Arrays.stream(new Component[] { Component.translatable(GTMAdvancedHatch.MODID + ".machine.no_fix_crash_warning") }))
+                                    .toArray(Component[]::new);
                     }
                     return builder.langValue(VNF[tier] + " " + FormattingUtil.formatNumbers(amperage) + "A Laser " + FormattingUtil.toEnglishName(name) + " Hatch")
                             .rotationState(RotationState.ALL)
