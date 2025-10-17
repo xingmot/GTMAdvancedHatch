@@ -34,4 +34,8 @@ public class AHConfig {
             "能量槽显示的格式:",
     })
     public String energyJadeFormatPartern = "%s/%s";
+
+    @Configurable
+    @Configurable.Comment({ "无线电网监视器净功率为0时显示的文本，不要太长！！！" })
+    public String WirelessEnergyMonitorZeroFormat = "0";
 }

@@ -48,7 +48,7 @@ public class FormattingUtil {
         }
 
         sb.append(fmt.format(number));
-        if (exp > 0) sb.append("kMGTPEZYB".charAt(exp - 1));
+        if (exp > 0) sb.append("KMGTPEZYB".charAt(exp - 1));
         else if (milli && number.compareTo(zero) != 0) sb.append('m');
 
         if (unit != null) sb.append(unit);
