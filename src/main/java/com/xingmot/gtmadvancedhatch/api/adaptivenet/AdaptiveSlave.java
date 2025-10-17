@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class AdaptiveSlave {
 
     private final INetEndpoint host;
+    private INetEndpoint master;
     @Getter
     private long frequency; // 0 未设置
     @Nullable
@@ -52,12 +53,22 @@ public class AdaptiveSlave {
      */
     public void updateStatus() {
         if (host.isEndpointRemoved() || frequency == 0) return;
-        // placerId可以为null（公共收发器模式）
-        INetEndpoint master = NetMasterRegistry.get(type, frequency, uuid);
+        // 执行一次同步，返回值为true表示是迁移模式，此时不会重复执行同步操作。
+        // 否则表示普通模式，会正常搜寻主网。
+        if (!syncData()) {
+            // placerId可以为null（公共收发器模式）
+            this.master = NetMasterRegistry.get(type, frequency, uuid);
+            syncData();
+        }
+    }
+
+    private boolean syncData() {
+        boolean flag = false;
         shutdown = false;
         // 无主或主端不可用
         shutdown = master == null || master.isEndpointRemoved();
         if (!shutdown)
-            this.host.encodeData(master.getData().get());
+            flag = this.host.encodeData(master.getData().get());
+        return flag;
     }
 }

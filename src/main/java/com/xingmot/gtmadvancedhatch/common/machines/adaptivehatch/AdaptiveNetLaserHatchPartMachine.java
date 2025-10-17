@@ -37,6 +37,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -122,7 +123,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
     }
 
     private void updateNet() {
-        if (this.frequency != 0L && this.net_uuid != null && !LDLib.isClient()) {
+        if (this.frequency != 0L && this.net_uuid != null && !LDLib.isRemote() && Objects.requireNonNull(this.getServerLevel()).getServer().getTickCount() % 10 == 0) {
             this.adaptiveSlave.updateStatus();
         }
     }
@@ -283,7 +284,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
     }
 
     public void setConnect(boolean connect) {
-        this.isConnect = connect;
+        this.isConnect = connect && adaptiveSlave.isConnected();
         if (isConnect) {
             updateMultiMachine();
             this.updateSubscription();
@@ -313,7 +314,14 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
 
     /** 能源仓是第二个槽位的数据 */
     @Override
-    public void encodeData(CompoundTag tag) {
+    public boolean encodeData(CompoundTag tag) {
+        boolean flag = false;
+        CompoundTag key = (CompoundTag) tag.get("net_key");
+        if (key != null && !key.isEmpty()) {
+            this.frequency = key.getLong(TagConstants.ADAPTIVE_NET_FREQUENCY);
+            this.net_uuid = key.getUUID(TagConstants.ADAPTIVE_NET_UUID);
+            flag = true;
+        }
         String s_tag = io == IO.OUT ? "data2" : "data3";
         AdaptiveNetEnergyTerminal.AdaptiveData adaptiveData = AdaptiveNetEnergyTerminal.AdaptiveData.fromTag((CompoundTag) tag.get(s_tag));
         if (this.maxEnergy != adaptiveData.maxEnergy || this.amps != adaptiveData.amps ||
@@ -325,6 +333,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
             this.energyContainer.resetBasicInfo(this.maxEnergy, this.voltage, this.amps, 0L, 0L);
             updateMultiMachine();
         }
+        return flag;
     }
 
     @Override

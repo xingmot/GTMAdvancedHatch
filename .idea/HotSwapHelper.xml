@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="HotSwapHelperPluginSettingsProvider">
+    <option name="agentPath" value="C:\Users\xingmot\.jdks\jbr-17.0.14\lib\hotswap\hotswap-agent-2.0.1.jar" />
+    <option name="disabledPlugins">
+      <set>
+        <option value="" />
+      </set>
+    </option>
+    <option name="useExternalHotSwapAgentFile" value="true" />
+  </component>
+</project>

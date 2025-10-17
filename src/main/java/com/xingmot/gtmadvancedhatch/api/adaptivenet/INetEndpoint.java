@@ -23,7 +23,8 @@ public interface INetEndpoint {
     /** 数据 */
     Supplier<? extends CompoundTag> getData();
 
-    void encodeData(CompoundTag tag);
+    /** @return 是否存在回调数据 */
+    boolean encodeData(CompoundTag tag);
 
     /** 是否已移除/销毁（端点视角），用于在卸载或破坏时停止连接 */
     boolean isEndpointRemoved();

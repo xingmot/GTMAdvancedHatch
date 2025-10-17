@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <option name="defaultObfuscationEnv" value="searge" />
+        <option name="mappingTypes" value="tsrg" />
+        <option name="outRefMapFile" value="C:\Users\xingmot\IdeaProjects\AdvancedHatch\build\mixin\gtmadvancedhatch.refmap.json" />
+        <option name="outTsrgFile" value="C:\Users\xingmot\IdeaProjects\AdvancedHatch\build\mixin\gtmadvancedhatch.refmap.json.mappings.tsrg" />
+        <option name="pluginVersion" value="0.7" />
+        <option name="reobfTsrgFile" value="C:\Users\xingmot\IdeaProjects\AdvancedHatch\build\moddev\artifacts\namedToIntermediate.tsrg" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.llamalad7/mixinextras-common/0.2.0/3f26dd587b7c6d803647a4ad3b66ce5cea1835e6/mixinextras-common-0.2.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.7/3d051c66329d162a52fc062f7da912c37904a6a0/mixin-0.8.7-processor.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="gtmadvancedhatch.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="gtmadvancedhatch.test" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="17" />
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:-processing -Xlint:-deprecation -Xlint:-removal" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gtmadvancedhatch.main" options="-Xlint:-processing -Xlint:-deprecation -Xlint:-removal -AreobfTsrgFile=C:\Users\xingmot\IdeaProjects\AdvancedHatch\build\moddev\artifacts\namedToIntermediate.tsrg -AoutTsrgFile=C:\Users\xingmot\IdeaProjects\AdvancedHatch\build\mixin\gtmadvancedhatch.refmap.json.mappings.tsrg -AoutRefMapFile=C:\Users\xingmot\IdeaProjects\AdvancedHatch\build\mixin\gtmadvancedhatch.refmap.json -AmappingTypes=tsrg -ApluginVersion=0.7 -AdefaultObfuscationEnv=searge" />
+    </option>
+  </component>
+</project>

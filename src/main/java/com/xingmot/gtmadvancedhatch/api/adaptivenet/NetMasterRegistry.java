@@ -10,9 +10,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import static com.xingmot.gtmadvancedhatch.api.adaptivenet.AdaptiveConstants.NET_TYPE_EMPTY;
-
-import joptsimple.internal.Strings;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,88 +20,81 @@ public final class NetMasterRegistry {
 
     private NetMasterRegistry() {}
 
-    private static final Map<Key, WeakReference<INetEndpoint>> MASTERS = new HashMap<>();
-    private static final Map<Key, Long> MASTERS_COUNT = new HashMap<>();
+    // 反向映射，用于处理迁移操作
+    private static final Map<NetKey, WeakReference<INetEndpoint>> MASTERS = new HashMap<>();
+    private static final Map<NetKey, Long> MASTERS_COUNT = new HashMap<>();
 
     public static synchronized boolean register(@Nonnull String type, long frequency, @Nullable UUID uuid, INetEndpoint endpoint) {
         if (frequency == 0) return false;
-        final Key key = new Key(type, frequency, uuid);
+        final NetKey netKey = new NetKey(type, frequency, uuid);
 
-        cleanupIfCleared(key);
-        var existing = MASTERS.get(key);
+        cleanupIfCleared(netKey);
+        var existing = MASTERS.get(netKey);
         var existingVal = existing == null ? null : existing.get();
         if (existingVal != null && !existingVal.isEndpointRemoved()) {
             // 同维度同频率同所有者已经有主端
             return false;
         }
-        MASTERS.put(key, new WeakReference<>(endpoint));
-        MASTERS_COUNT.put(key, 0L);
+        MASTERS.put(netKey, new WeakReference<>(endpoint));
+        MASTERS_COUNT.put(netKey, 0L);
         return true;
     }
 
     public static synchronized void unregister(@Nonnull String type, long frequency, @Nullable UUID uuid, INetEndpoint endpoint) {
         if (frequency == 0) return;
-        final Key key = new Key(type, frequency, uuid);
+        final NetKey netKey = new NetKey(type, frequency, uuid);
 
-        var ref = MASTERS.get(key);
+        var ref = MASTERS.get(netKey);
         if (ref != null) {
             var cur = ref.get();
             if (cur == null || cur == endpoint) {
-                MASTERS.remove(key);
-                MASTERS_COUNT.remove(key);
+                MASTERS.remove(netKey);
+                MASTERS_COUNT.remove(netKey);
             }
         }
     }
 
     public static synchronized INetEndpoint get(@Nonnull String type, long frequency, @Nullable UUID uuid) {
         if (frequency == 0) return null;
-        final Key key = new Key(type, frequency, uuid);
+        final NetKey netKey = new NetKey(type, frequency, uuid);
 
-        cleanupIfCleared(key);
-        var ref = MASTERS.get(key);
+        cleanupIfCleared(netKey);
+        var ref = MASTERS.get(netKey);
         return ref == null ? null : ref.get();
     }
 
     public static synchronized Long getCount(@Nonnull String type, long frequency, @Nullable UUID uuid) {
         if (frequency == 0) return 0L;
-        final Key key = new Key(type, frequency, uuid);
+        final NetKey netKey = new NetKey(type, frequency, uuid);
 
-        cleanupIfCleared(key);
-        return MASTERS_COUNT.get(key);
+        cleanupIfCleared(netKey);
+        return MASTERS_COUNT.get(netKey);
     }
 
     public static synchronized void addCount(@Nonnull String type, long frequency, @Nullable UUID uuid, int i) {
         if (frequency == 0) return;
-        final Key key = new Key(type, frequency, uuid);
+        final NetKey netKey = new NetKey(type, frequency, uuid);
 
-        cleanupIfCleared(key);
-        MASTERS_COUNT.put(key, MASTERS_COUNT.get(key) + i);
+        cleanupIfCleared(netKey);
+        MASTERS_COUNT.put(netKey, MASTERS_COUNT.get(netKey) + i);
     }
 
     /** 主要是方便终端和适配仓一起用 */
     public static synchronized CompoundTag getData(@Nonnull String type, long frequency, @Nullable UUID uuid) {
         if (frequency == 0) return null;
-        final Key key = new Key(type, frequency, uuid);
+        final NetKey netKey = new NetKey(type, frequency, uuid);
 
-        cleanupIfCleared(key);
-        if (MASTERS.get(key).get() != null)
-            return Objects.requireNonNull(MASTERS.get(key).get()).getData().get();
+        cleanupIfCleared(netKey);
+        if (MASTERS.get(netKey).get() != null)
+            return Objects.requireNonNull(MASTERS.get(netKey).get()).getData().get();
         return null;
     }
 
-    private static void cleanupIfCleared(Key key) {
-        var ref = MASTERS.get(key);
+    private static void cleanupIfCleared(NetKey netKey) {
+        var ref = MASTERS.get(netKey);
         if (ref != null && ref.get() == null) {
-            MASTERS.remove(key);
-            MASTERS_COUNT.remove(key);
-        }
-    }
-
-    private record Key(@Nullable String type, long freq, UUID owner) {
-
-        @Override
-        public String toString() {
-            return (Strings.isNullOrEmpty(type) ? NET_TYPE_EMPTY : type) + "#" + freq + "@" + owner;
+            MASTERS.remove(netKey);
+            MASTERS_COUNT.remove(netKey);
         }
     }
 }

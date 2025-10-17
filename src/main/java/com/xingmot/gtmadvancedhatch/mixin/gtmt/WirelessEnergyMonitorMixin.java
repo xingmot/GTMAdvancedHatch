@@ -3,6 +3,8 @@ package com.xingmot.gtmadvancedhatch.mixin.gtmt;
 import com.xingmot.gtmadvancedhatch.api.util.SortedEntriesStorage;
 import com.xingmot.gtmadvancedhatch.api.util.VoltageLevelLookup;
 import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
+import com.xingmot.gtmadvancedhatch.util.AHUtil;
+import com.xingmot.gtmadvancedhatch.util.NumberUtils;
 
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -96,8 +98,8 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
     @Inject(remap = false, method = "addDisplayText", at = @At("HEAD"), cancellable = true)
     private void addDisplayTextMixin(@NotNull List<Component> textList, CallbackInfo ci) {
         BigInteger energyTotal = WirelessEnergyManager.getUserEU(this.userid);
-        textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", TeamUtil.GetName(this.holder.level(), this.userid))
-                .withStyle(ChatFormatting.AQUA));
+        Component name = AHUtil.getTeamName(this.holder.level(), this.userid);
+        textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", name).withStyle(ChatFormatting.AQUA));
         textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.1", 200, Component.literal(formatBigIntegerNumberOrSic(energyTotal))).withStyle(ChatFormatting.GOLD));
 
         var stat = EnergyStat.createOrgetEnergyStat(this.userid);

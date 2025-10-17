@@ -16,8 +16,10 @@ public class AHItems {
     static {
         AHRegistration.registrate.creativeModeTab(() -> AHTabs.BASE_TAB);
     }
+
     public static ItemEntry<ComponentItem> TOOL_NET_DATA_STICK = AHRegistration.registrate.item("net_data_stick", ComponentItem::create)
-            .lang("Net Data Stick").onRegister(attach(new NetDataItemBehavior()))
+            .lang("Net Data Stick")
+            .onRegister(attach(new NetDataItemBehavior()))
             .onRegister(compassNode(GTCompassSections.COMPONENTS))
             .register();
 
