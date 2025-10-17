@@ -2,6 +2,7 @@ package com.xingmot.gtmadvancedhatch.mixin.gtmt;
 
 import com.xingmot.gtmadvancedhatch.api.util.SortedEntriesStorage;
 import com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.EnergyStat;
+import com.xingmot.gtmadvancedhatch.util.AHUtil;
 import com.xingmot.gtmadvancedhatch.util.NumberUtils;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -85,7 +86,8 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
     @Inject(remap = false, method = "addDisplayText", at = @At("HEAD"), cancellable = true)
     private void addDisplayTextMixin(@NotNull List<Component> textList, CallbackInfo ci) {
         BigInteger energyTotal = WirelessEnergyManager.getUserEU(this.userid);
-        textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", TeamUtil.GetName(this.holder.level(), this.userid)).withStyle(ChatFormatting.AQUA));
+        Component name = AHUtil.getTeamName(this.holder.level(), this.userid);
+        textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", name).withStyle(ChatFormatting.AQUA));
         textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.1", 200, Component.literal(formatBigIntegerNumberOrSic(energyTotal))).withStyle(ChatFormatting.GOLD));
 
         var stat = EnergyStat.createOrgetEnergyStat(this.userid);
@@ -119,7 +121,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 BigDecimal eut = m.getValue();
                 String pos = machine.getPos().toShortString();
                 boolean isOverLong = eut.abs().compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) > 0;
-                MutableComponent component = Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[] { Objects.requireNonNull(machine.getLevel()).dimension().location() }).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", TeamUtil.GetName(this.holder.level(), uuid)))))).append(" ");
+                MutableComponent component = Component.translatable(machine.getBlockState().getBlock().getDescriptionId()).withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", new Object[] { Objects.requireNonNull(machine.getLevel()).dimension().location() }).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", name))))).append(" ");
                 Component overMax = Component.literal("MAX+N").withStyle(ChatFormatting.RED);
                 if (eut.compareTo(BigDecimal.ZERO) > 0) {
                     component.append(Component.translatable(NumberUtils.formatBigDecimalNumberOrSic(eut)).withStyle(ChatFormatting.GREEN)).append(" EU/t (");

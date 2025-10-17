@@ -1,11 +1,11 @@
 package com.xingmot.gtmadvancedhatch.api.adaptivenet;
 
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
 
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.misc.ItemStackTransfer;
 
@@ -41,7 +41,8 @@ public class NetHatchInvFancyConfigurator implements IFancyConfigurator {
 
     @Override
     public IGuiTexture getIcon() {
-        return new GuiTextureGroup(new ResourceTexture("gtceu:textures/gui/widget/energy_bar_overlay.png"));
+        // return new GuiTextureGroup(new ResourceTexture("gtceu:textures/gui/widget/energy_bar_overlay.png"));
+        return new GuiTextureGroup(GuiTextures.INFO_ICON);
     }
 
     @Override
