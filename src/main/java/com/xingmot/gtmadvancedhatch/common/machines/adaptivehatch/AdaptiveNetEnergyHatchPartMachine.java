@@ -239,8 +239,8 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
 
     // =============================== IMachineLife ==================================
     @Override
-    public void onMachinePlaced(@Nullable LivingEntity player, ItemStack stack) {
-        if (player != null) {
+    public void onMachinePlaced(@Nullable LivingEntity placer, ItemStack stack) {
+        if (placer instanceof Player player) {
             UUID uuid = TeamUtil.getTeamUUID(player.getUUID());
             setUUID(uuid);
             energyContainer.setOwner_uuid(uuid);

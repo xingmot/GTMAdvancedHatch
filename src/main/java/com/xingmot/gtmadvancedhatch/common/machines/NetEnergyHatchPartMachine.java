@@ -137,8 +137,8 @@ public class NetEnergyHatchPartMachine extends WirelessEnergyHatchPartMachine {
         }
     }
 
-    public void onMachinePlaced(@Nullable LivingEntity player, ItemStack stack) {
-        if (player != null) {
+    public void onMachinePlaced(@Nullable LivingEntity placer, ItemStack stack) {
+        if (placer instanceof Player player) {
             this.owner_uuid = player.getUUID();
             energyContainer.setOwner_uuid(player.getUUID());
             this.updateEnergySubscription();
