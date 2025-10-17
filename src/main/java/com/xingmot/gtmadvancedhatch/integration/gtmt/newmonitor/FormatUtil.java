@@ -1,5 +1,6 @@
 package com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor;
 
+import com.xingmot.gtmadvancedhatch.config.AHConfig;
 import com.xingmot.gtmadvancedhatch.util.FormattingUtil;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -16,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 public class FormatUtil {
 
@@ -45,11 +47,12 @@ public class FormatUtil {
 
         int dotWidth = 3; // 这俩是原版默认值
         int spaceWidth = 4;
-        if (LDLib.isRemote()) { // 获取字体必须在客户端渲染线程
+        if (LDLib.isClient()) { // 获取字体必须在客户端渲染线程
             // 获取字体实例
             Font font = Minecraft.getInstance().font;
             // 测量一个分隔符的宽度
-            dotWidth = font.width(Component.literal("·").setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font"))));
+            dotWidth = font.width(Component.literal("·")
+                    .setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font"))));
             // 测量一个空格的宽度
             spaceWidth = font.width(" ");
         }
@@ -66,22 +69,32 @@ public class FormatUtil {
             return Component.translatable(labelKey, (Object[]) a);
         }
 
-        var separatorComponent = Component.literal("·".repeat(spacerCount)).setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font")));
-        var spacerComponent = Component.literal("").append(separatorComponent).append(Component.literal("  "));
+        var separatorComponent = Component.literal("·".repeat(spacerCount))
+                .setStyle(Style.EMPTY.withFont(new ResourceLocation("gtmadvancedhatch", "separator_font")));
+        var spacerComponent = Component.literal("")
+                .append(separatorComponent)
+                .append(Component.literal("  "));
         a[0] = spacerComponent.append(body);
         return Component.translatable(labelKey, (Object[]) a);
     }
 
     public static Component voltageName(BigDecimal avgEnergy) {
-        return Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(avgEnergy.abs().longValue())]);
+        return Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(avgEnergy.abs()
+                .longValue())]);
     }
 
     public static BigDecimal voltageAmperage(BigDecimal avgEnergy) {
-        return avgEnergy.abs().divide(BigDecimal.valueOf(GTValues.VEX[GTUtil.getFloorTierByVoltage(avgEnergy.abs().longValue())]), 1, RoundingMode.FLOOR);
+        return avgEnergy.abs()
+                .divide(BigDecimal.valueOf(GTValues.VEX[GTUtil.getFloorTierByVoltage(avgEnergy.abs()
+                        .longValue())]), 1, RoundingMode.FLOOR);
     }
 
-    public static String formatBigDecimalNumberOrSicWithSign(BigDecimal number) {
-        if (number.compareTo(BigDecimal.ZERO) == 0) return "古井无波，山河依在";
+    public static String formatBigDecimalNumberOrSicWithSign(BigDecimal number, boolean isScientificNotation) {
+        if (isScientificNotation) {
+            String result = new DecimalFormat("0.00E0").format(number);
+            return number.compareTo(BigDecimal.ZERO) > 0 ? "+" + result : result;
+        }
+        if (number.compareTo(BigDecimal.ZERO) == 0) return AHConfig.INSTANCE.WirelessEnergyMonitorZeroFormat;
         else if (number.compareTo(BigDecimal.ZERO) > 0) {
             return "+" + FormattingUtil.formatNumberReadable(number);
         } else {
@@ -90,10 +103,11 @@ public class FormatUtil {
     }
 
     private static int getComponentLength(Component component) {
-        if (LDLib.isRemote()) {
+        if (LDLib.isClient()) {
             return Minecraft.getInstance().font.width(component.getString());
         } else {
-            return component.getString().length() * 9;
+            return component.getString()
+                    .length() * 9;
         }
     }
 }
