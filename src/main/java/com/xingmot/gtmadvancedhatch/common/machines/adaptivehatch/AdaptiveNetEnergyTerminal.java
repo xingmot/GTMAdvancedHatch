@@ -4,6 +4,7 @@ import com.xingmot.gtmadvancedhatch.api.adaptivenet.*;
 import com.xingmot.gtmadvancedhatch.common.AHItems;
 import com.xingmot.gtmadvancedhatch.common.data.MachinesConstants;
 import com.xingmot.gtmadvancedhatch.common.data.TagConstants;
+import com.xingmot.gtmadvancedhatch.util.AHUtil;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -315,7 +316,7 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
         tag.putUUID(TagConstants.ADAPTIVE_NET_UUID, this.uuid);
         // UUID为公共UUID时传入everyone
         if (this.uuid.equals(MachinesConstants.UUID_ZERO)) tag.putString(TagConstants.ADAPTIVE_NET_NAME, "everyone");
-        else tag.putString(TagConstants.ADAPTIVE_NET_NAME, TeamUtil.GetName(this.holder.level(), this.uuid).getString());
+        else tag.putString(TagConstants.ADAPTIVE_NET_NAME, AHUtil.getTeamName(this.holder.level(), this.uuid).getString());
         tag.putLong(TagConstants.ADAPTIVE_NET_FREQUENCY, this.frequency);
         return tag;
     }

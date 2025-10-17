@@ -34,6 +34,7 @@
   "gtmadvancedhatch.gui.auto_rebind.yes": "自动迁移",
   "gtmadvancedhatch.machine.adaptivee.fail": "当前频段重复，配置已被覆盖！",
   "gtmadvancedhatch.machine.adaptivee.player": "玩家/队伍: ",
+  "gtmadvancedhatch.machine.unknow_player": "未知玩家",
   "gtmadvancedhatch.machine.adaptivee.frequency": "频率: ",
   "gtmadvancedhatch.machine.adaptivee.frequency.off": "未启用",
   "gtmadvancedhatch.machine.adaptivee.data_stick.name": "电网适配调频",

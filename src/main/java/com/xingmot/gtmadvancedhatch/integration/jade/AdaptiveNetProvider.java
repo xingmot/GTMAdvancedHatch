@@ -6,6 +6,7 @@ import com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch.AdaptiveNetEne
 import com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch.AdaptiveNetEnergyTerminal;
 import com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch.AdaptiveNetLaserHatchPartMachine;
 import com.xingmot.gtmadvancedhatch.integration.jade.caps.IAdaptiveNetCap;
+import com.xingmot.gtmadvancedhatch.util.AHUtil;
 
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.integration.jade.provider.CapabilityBlockProvider;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.UUID;
 
-import com.hepdd.gtmthings.utils.TeamUtil;
 import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
@@ -60,7 +60,7 @@ public class AdaptiveNetProvider extends CapabilityBlockProvider<IAdaptiveNetCap
                     public String getName() {
                         if (an.getUUID().equals(MachinesConstants.UUID_ZERO))
                             return "everyone";
-                        return TeamUtil.GetName(level, an.getUUID()).getString();
+                        return AHUtil.getTeamName(level, an.getUUID()).getString();
                     }
 
                     @Override
@@ -80,7 +80,7 @@ public class AdaptiveNetProvider extends CapabilityBlockProvider<IAdaptiveNetCap
                     public String getName() {
                         if (a.getNet_uuid().equals(MachinesConstants.UUID_ZERO))
                             return "everyone";
-                        return TeamUtil.GetName(level, a.getNet_uuid()).getString();
+                        return AHUtil.getTeamName(level, a.getUUID()).getString();
                     }
 
                     @Override
@@ -100,7 +100,7 @@ public class AdaptiveNetProvider extends CapabilityBlockProvider<IAdaptiveNetCap
                     public String getName() {
                         if (a.getNet_uuid().equals(MachinesConstants.UUID_ZERO))
                             return "everyone";
-                        return TeamUtil.GetName(level, a.getNet_uuid()).getString();
+                        return AHUtil.getTeamName(level, a.getUUID()).getString();
                     }
 
                     @Override
