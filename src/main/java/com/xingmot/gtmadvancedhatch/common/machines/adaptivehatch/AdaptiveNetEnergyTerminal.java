@@ -436,7 +436,7 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
         if (this.uuid.equals(MachinesConstants.UUID_ZERO))
             textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", Component.translatable("gtmadvancedhatch.gui.binduuid.everyone")).withStyle(ChatFormatting.AQUA));
         else
-            textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", TeamUtil.GetName(this.holder.level(), this.uuid)).withStyle(ChatFormatting.AQUA));
+            textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", AHUtil.getTeamName(this.holder.level(), this.uuid)).withStyle(ChatFormatting.AQUA));
         textList.add(Component.literal("动力仓：----------------------"));
         textList.add(Component.literal(adaptiveData[0].amps + "A  " + GTValues.VNF[adaptiveData[0].setTier] + " (" + adaptiveData[0].voltage + ")"));
         textList.add(Component.literal("已加载：???个"));
