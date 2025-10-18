@@ -31,7 +31,7 @@ public class AHConfig {
     // TODO 能量槽科学计数法
     @Configurable
     @Configurable.Comment({
-            "能量槽显示的格式:",
+            "能量槽显示的格式",
     })
     public String energyJadeFormatPartern = "%s/%s";
 

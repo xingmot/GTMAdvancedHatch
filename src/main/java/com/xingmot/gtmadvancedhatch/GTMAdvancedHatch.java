@@ -1,10 +1,13 @@
 package com.xingmot.gtmadvancedhatch;
 
+import com.lowdragmc.lowdraglib.LDLib;
 import com.xingmot.gtmadvancedhatch.common.AHItems;
 import com.xingmot.gtmadvancedhatch.common.AHRegistration;
 import com.xingmot.gtmadvancedhatch.common.data.AHMachines;
 import com.xingmot.gtmadvancedhatch.common.data.AHTabs;
 import com.xingmot.gtmadvancedhatch.config.AHConfig;
+import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.BuildingGadgetConfig;
+import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.BuildingGadgetRegistration;
 import com.xingmot.gtmadvancedhatch.integration.gtlcore.ExGTLMachines;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -38,8 +41,12 @@ public class GTMAdvancedHatch {
         AHRegistration.registrate.registerEventListeners(bus);
         // 注册GT机器
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
+        // 物品
+        AHItems.init();
+        // 标签
+        AHTabs.init();
         // 注册配置
-        AHConfig.init();
+        initConfig();
         bus.register(this);
     }
 
@@ -50,7 +57,13 @@ public class GTMAdvancedHatch {
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         AHMachines.init();
         ExGTLMachines.init();
-        AHItems.init();
-        AHTabs.init();
+        if(LDLib.isModLoaded("buildinggadgets2"))
+            BuildingGadgetRegistration.init();
+    }
+
+    private void initConfig() {
+        AHConfig.init();
+        if(LDLib.isModLoaded("buildinggadgets2"))
+            BuildingGadgetConfig.init();
     }
 }
