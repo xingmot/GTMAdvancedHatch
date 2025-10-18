@@ -38,4 +38,9 @@ public class AHConfig {
     @Configurable
     @Configurable.Comment({ "无线电网监视器净功率为0时显示的文本，不要太长！！！" })
     public String WirelessEnergyMonitorZeroFormat = "0";
+
+    @Configurable
+    @Configurable.Range(min = 100, max = Integer.MAX_VALUE)
+    @Configurable.Comment({ "默认是一般复制工具的100倍容量:100M" })
+    public int buildingGadgetMaxPower = 100000000;
 }

@@ -1,6 +1,5 @@
 package com.xingmot.gtmadvancedhatch.api.adaptivenet;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
 
@@ -42,7 +41,7 @@ public class NetHatchInvFancyConfigurator implements IFancyConfigurator {
 
     @Override
     public IGuiTexture getIcon() {
-         return new GuiTextureGroup(new ResourceTexture("gtceu:textures/gui/widget/energy_bar_overlay.png"));
+        return new GuiTextureGroup(new ResourceTexture("gtceu:textures/gui/widget/energy_bar_overlay.png"));
     }
 
     @Override

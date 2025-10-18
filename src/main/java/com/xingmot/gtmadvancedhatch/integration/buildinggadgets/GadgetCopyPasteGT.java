@@ -1,18 +1,11 @@
 package com.xingmot.gtmadvancedhatch.integration.buildinggadgets;
 
-import com.direwolf20.buildinggadgets2.api.gadgets.GadgetTarget;
-import com.direwolf20.buildinggadgets2.common.items.GadgetCopyPaste;
-import com.direwolf20.buildinggadgets2.common.worlddata.BG2Data;
-import com.direwolf20.buildinggadgets2.util.GadgetNBT;
-import com.direwolf20.buildinggadgets2.util.VectorHelper;
-import com.direwolf20.buildinggadgets2.util.context.ItemActionContext;
-import com.direwolf20.buildinggadgets2.util.datatypes.StatePos;
-import com.direwolf20.buildinggadgets2.util.datatypes.TagPos;
-import com.direwolf20.buildinggadgets2.util.modes.BaseMode;
-import com.direwolf20.buildinggadgets2.util.modes.Copy;
-import com.direwolf20.buildinggadgets2.util.modes.Paste;
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
+import com.xingmot.gtmadvancedhatch.config.AHConfig;
 import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util.AdjusteTagUtil;
+
+import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -30,10 +23,23 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.direwolf20.buildinggadgets2.api.gadgets.GadgetTarget;
+import com.direwolf20.buildinggadgets2.common.items.GadgetCopyPaste;
+import com.direwolf20.buildinggadgets2.common.worlddata.BG2Data;
+import com.direwolf20.buildinggadgets2.util.GadgetNBT;
+import com.direwolf20.buildinggadgets2.util.VectorHelper;
+import com.direwolf20.buildinggadgets2.util.context.ItemActionContext;
+import com.direwolf20.buildinggadgets2.util.datatypes.StatePos;
+import com.direwolf20.buildinggadgets2.util.datatypes.TagPos;
+import com.direwolf20.buildinggadgets2.util.modes.BaseMode;
+import com.direwolf20.buildinggadgets2.util.modes.Copy;
+import com.direwolf20.buildinggadgets2.util.modes.Paste;
+
 public class GadgetCopyPasteGT extends GadgetCopyPaste {
+
     @Override
     public int getEnergyMax() {
-        return BuildingGadgetConfig.INSTANCE.buildingGadgetMaxPower;
+        return AHConfig.INSTANCE.buildingGadgetMaxPower;
     }
 
     InteractionResultHolder<ItemStack> onAction(ItemActionContext context) {
@@ -47,9 +53,9 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
         } else if (mode.getId().getPath().equals("paste")) {
             UUID uuid = GadgetNBT.getUUID(gadget);
             BG2Data bg2Data = BG2Data.get(Objects.requireNonNull(context.player().level().getServer()).overworld());
-            ArrayList<StatePos> buildList = bg2Data.getCopyPasteList(uuid, false); //Don't remove the data just yet
+            ArrayList<StatePos> buildList = bg2Data.getCopyPasteList(uuid, false); // Don't remove the data just yet
             ArrayList<TagPos> tagList = bg2Data.peekTEMap(uuid);
-            BuildingUtilsGT.buildWithTileData(context.level(), context.player(), buildList, getHitPos(context).above().offset(GadgetNBT.getRelativePaste(gadget)), tagList, gadget,true,false);
+            BuildingUtilsGT.buildWithTileData(context.level(), context.player(), buildList, getHitPos(context).above().offset(GadgetNBT.getRelativePaste(gadget)), tagList, gadget, true, false);
             return InteractionResultHolder.success(gadget);
         } else {
             return InteractionResultHolder.pass(gadget);
@@ -76,7 +82,7 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
         ArrayList<StatePos> buildList = (new Copy()).collect(context.hitResult().getDirection(), context.player(), context.pos(), Blocks.AIR.defaultBlockState());
         UUID uuid = GadgetNBT.getUUID(gadget);
         GadgetNBT.setCopyUUID(gadget);
-        BG2Data bg2Data = BG2Data.get(((MinecraftServer)Objects.requireNonNull(context.player().level().getServer())).overworld());
+        BG2Data bg2Data = BG2Data.get(((MinecraftServer) Objects.requireNonNull(context.player().level().getServer())).overworld());
         bg2Data.addToCopyPaste(uuid, buildList);
         ArrayList<TagPos> teData = new ArrayList<>();
         Level level = context.level();
@@ -85,14 +91,19 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity != null) {
                 CompoundTag blockTag = blockEntity.saveWithFullMetadata();
-                blockTag = AdjusteTagUtil.getEmptyStorageTag(blockTag);
-                GTMAdvancedHatch.LOGGER.info("blockTag: {}", blockTag);
-                TagPos tagPos = new TagPos(blockTag, blockPos.subtract(GadgetNBT.getCopyStartPos(gadget)));
-                teData.add(tagPos);
+                if (!AdjusteTagUtil.isModBlackList(blockEntity)) {
+                    if (blockEntity instanceof MetaMachineBlockEntity)
+                        blockTag = AdjusteTagUtil.gtEmptyTagContent(blockTag);
+                    blockTag = AdjusteTagUtil.getEmptyStorageTag(blockTag);
+                    GTMAdvancedHatch.LOGGER.info("blockTag: {}", blockTag);
+                    TagPos tagPos = new TagPos(blockTag, blockPos.subtract(GadgetNBT.getCopyStartPos(gadget)));
+                    teData.add(tagPos);
+                }
+
             }
         }
-        bg2Data.addToTEMap(uuid,teData);
-        context.player().displayClientMessage(Component.translatable("buildinggadgets2.messages.copyblocks", new Object[]{buildList.size()}), true);
+        bg2Data.addToTEMap(uuid, teData);
+        context.player().displayClientMessage(Component.translatable("buildinggadgets2.messages.copyblocks", new Object[] { buildList.size() }), true);
     }
 
     public GadgetTarget gadgetTarget() {
@@ -103,7 +114,7 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack gadget = player.getItemInHand(hand);
 
-        if (level.isClientSide()) //No client
+        if (level.isClientSide()) // No client
             return InteractionResultHolder.success(gadget);
 
         BlockHitResult lookingAt = VectorHelper.getLookingAt(player, gadget);
@@ -114,7 +125,7 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
         if (player.isShiftKeyDown()) {
             if (GadgetNBT.getSetting(gadget, "bind")) {
                 if (bindToInventory(level, player, gadget, lookingAt)) {
-                    GadgetNBT.toggleSetting(gadget, "bind"); //Turn off bind
+                    GadgetNBT.toggleSetting(gadget, "bind"); // Turn off bind
                     return InteractionResultHolder.success(gadget);
                 } else {
                     return InteractionResultHolder.fail(gadget);

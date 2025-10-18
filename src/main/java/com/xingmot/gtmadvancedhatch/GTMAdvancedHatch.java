@@ -1,18 +1,18 @@
 package com.xingmot.gtmadvancedhatch;
 
-import com.lowdragmc.lowdraglib.LDLib;
 import com.xingmot.gtmadvancedhatch.common.AHItems;
 import com.xingmot.gtmadvancedhatch.common.AHRegistration;
 import com.xingmot.gtmadvancedhatch.common.data.AHMachines;
 import com.xingmot.gtmadvancedhatch.common.data.AHTabs;
 import com.xingmot.gtmadvancedhatch.config.AHConfig;
-import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.BuildingGadgetConfig;
 import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.BuildingGadgetRegistration;
 import com.xingmot.gtmadvancedhatch.integration.gtlcore.ExGTLMachines;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
+import com.lowdragmc.lowdraglib.LDLib;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -41,12 +41,8 @@ public class GTMAdvancedHatch {
         AHRegistration.registrate.registerEventListeners(bus);
         // 注册GT机器
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
-        // 物品
-        AHItems.init();
-        // 标签
-        AHTabs.init();
         // 注册配置
-        initConfig();
+        AHConfig.init();
         bus.register(this);
     }
 
@@ -56,14 +52,10 @@ public class GTMAdvancedHatch {
 
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         AHMachines.init();
+        AHItems.init();
+        AHTabs.init();
         ExGTLMachines.init();
-        if(LDLib.isModLoaded("buildinggadgets2"))
+        if (LDLib.isModLoaded("buildinggadgets2"))
             BuildingGadgetRegistration.init();
-    }
-
-    private void initConfig() {
-        AHConfig.init();
-        if(LDLib.isModLoaded("buildinggadgets2"))
-            BuildingGadgetConfig.init();
     }
 }

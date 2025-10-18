@@ -123,6 +123,7 @@ public class AHMachines {
             .rotationState(RotationState.ALL)
             .renderer(() -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/energy_hatch.input")))
             .abilities(PartAbility.INPUT_ENERGY)
+            .tooltips(Component.translatable("block.gtmadvancedhatch.adaptive_net_laser_target_hatch.warn"))
             .compassNode("energy_hatch")
             .tier(14)
             .register();
