@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ServerBuildList.class)
+@Mixin(value = ServerBuildList.class, remap = false)
 public class ServerBuildListMixin {
 
     @Shadow
