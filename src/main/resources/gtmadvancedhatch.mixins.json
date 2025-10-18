@@ -4,6 +4,7 @@
   "package": "com.xingmot.gtmadvancedhatch.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "gtlcore.PerformanceMonitorMachineMixin",
     "gtm.GTUtilMixin",
     "gtmt.WirelessEnergyManagerMixin",
     "gtmt.WirelessEnergyMonitorMixin",

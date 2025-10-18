@@ -45,8 +45,13 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
-
-    tasks.register('cleanOutputsLibs', Delete) {
-        delete fileTree(dir: layout.buildDirectory.dir("libs").get().asFile, includes: ['*.jar', '*.zip'])
+}
+tasks.register('cleanOutputsLibs', Delete) {
+    delete fileTree(dir: layout.buildDirectory.dir("libs").get().asFile, includes: ['*.jar', '*.zip'])
+}
+repositories {
+    mavenLocal()
+    flatDir {
+        dir 'libs'
     }
 }
