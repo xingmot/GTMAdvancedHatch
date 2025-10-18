@@ -7,7 +7,7 @@ import java.util.List;
 public class AdjusteTagUtil {
     public static CompoundTag getEmptyStorageTag(CompoundTag tag){
         emptyTagContent(tag,"storage",List.of("circuitInventory"));
-        return emptyTagContent(tag,"Items",List.of("circuitInventory"));
+        return emptyTagContent(tag,"Items", null);
     }
 
     public static CompoundTag emptyEnergy(CompoundTag tag,String name){
@@ -18,7 +18,7 @@ public class AdjusteTagUtil {
             tag.put(name, new CompoundTag());
         }else if(!tag.getAllKeys().isEmpty()){
             for (String key : tag.getAllKeys()) {
-                if(tag.getTagType(key)== CompoundTag.TAG_COMPOUND && !except.contains(key))
+                if(tag.getTagType(key)== CompoundTag.TAG_COMPOUND && except != null &&!except.contains(key))
                     emptyTagContent(tag.getCompound(key),name,except);
             }
         }
