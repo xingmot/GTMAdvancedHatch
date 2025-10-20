@@ -43,4 +43,8 @@ public class AHConfig {
     @Configurable.Range(min = 100, max = Integer.MAX_VALUE)
     @Configurable.Comment({ "默认是一般复制工具的100倍容量:100M" })
     public int buildingGadgetMaxPower = 100000000;
+
+    @Configurable
+    @Configurable.Comment({ "复制工具是否能建造AE线缆、终端等原先不能复制的东西（技术问题只能无消耗）" })
+    public boolean buildingGadgetBuildAE2 = false;
 }

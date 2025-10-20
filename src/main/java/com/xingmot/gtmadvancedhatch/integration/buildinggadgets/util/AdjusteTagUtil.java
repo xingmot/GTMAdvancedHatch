@@ -1,13 +1,13 @@
 package com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util;
 
-import appeng.me.helpers.IGridConnectedBlockEntity;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
+
+import appeng.me.helpers.IGridConnectedBlockEntity;
 
 /**
  * 复制机tag加工工具类
@@ -59,9 +59,9 @@ public class AdjusteTagUtil {
     public static CompoundTag defaultEmptyTagContent(CompoundTag tag) {
         emptyTagInv(tag, "inv");
         // 清除熔炉燃烧时间
-        toZeroTag(tag,"BurnTime");
-        toZeroTag(tag,"CookTime");
-        toZeroTag(tag,"CookTimeTotal");
+        toZeroTag(tag, "BurnTime");
+        toZeroTag(tag, "CookTime");
+        toZeroTag(tag, "CookTimeTotal");
         return emptyTagInvExcept(tag, "Items", List.of("circuitInventory", "creativeStorage"));
     }
 
@@ -81,7 +81,8 @@ public class AdjusteTagUtil {
     /** gt清除存储 */
     public static CompoundTag gtEmptyTagContent(CompoundTag tag) {
         // 清空机器配方
-        emptyTagInv(tag,"recipeLogic");
+        emptyTagInv(tag, "recipeLogic");
+        emptyTagInv(tag, "cover");
         // 清空超级缸超级箱
         emptyTagFluidOnly(tag, "storages", List.of("cache"));
         emptyTagFluid(tag, "stored");
@@ -187,13 +188,13 @@ public class AdjusteTagUtil {
         return toZeroTagExcept(tag, name, null);
     }
 
-    public static CompoundTag toZeroTagExcept(CompoundTag tag, String name,List<String> except) {
+    public static CompoundTag toZeroTagExcept(CompoundTag tag, String name, List<String> except) {
         if (tag.contains(name)) {
-            if(tag.getTagType(name) == CompoundTag.TAG_BYTE) tag.putByte(name, (byte)0);
-            if(tag.getTagType(name) == CompoundTag.TAG_SHORT) tag.putShort(name, (short) 0);
-            if(tag.getTagType(name) == CompoundTag.TAG_INT) tag.putInt(name, 0);
-            if(tag.getTagType(name) == CompoundTag.TAG_LONG) tag.putLong(name, 0L);
-        }else if (!tag.getAllKeys().isEmpty()) {
+            if (tag.getTagType(name) == CompoundTag.TAG_BYTE) tag.putByte(name, (byte) 0);
+            if (tag.getTagType(name) == CompoundTag.TAG_SHORT) tag.putShort(name, (short) 0);
+            if (tag.getTagType(name) == CompoundTag.TAG_INT) tag.putInt(name, 0);
+            if (tag.getTagType(name) == CompoundTag.TAG_LONG) tag.putLong(name, 0L);
+        } else if (!tag.getAllKeys().isEmpty()) {
             for (String key : tag.getAllKeys()) {
                 if (except != null && except.contains(key)) continue;
                 if (tag.getTagType(key) == CompoundTag.TAG_COMPOUND)

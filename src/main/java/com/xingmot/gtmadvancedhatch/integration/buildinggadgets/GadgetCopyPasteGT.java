@@ -3,6 +3,7 @@ package com.xingmot.gtmadvancedhatch.integration.buildinggadgets;
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
 import com.xingmot.gtmadvancedhatch.config.AHConfig;
 import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util.AdjusteTagUtil;
+import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util.BuildingUtilsGT;
 
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;

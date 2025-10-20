@@ -1,4 +1,6 @@
-package com.xingmot.gtmadvancedhatch.integration.buildinggadgets;
+package com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util;
+
+import com.xingmot.gtmadvancedhatch.config.AHConfig;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import appeng.block.networking.CableBusBlock;
 import com.direwolf20.buildinggadgets2.common.events.ServerBuildList;
 import com.direwolf20.buildinggadgets2.common.events.ServerTickHandler;
 import com.direwolf20.buildinggadgets2.common.items.GadgetBuilding;
@@ -42,7 +45,8 @@ public class BuildingUtilsGT extends BuildingUtils {
                     if (pos.state.getFluidState().isEmpty()) {
                         List<ItemStack> neededItems = GadgetUtils.getDropsForBlockState((ServerLevel) level, blockPos.offset(lookingAt), pos.state, player);
                         if (!player.isCreative() && needItems && !removeStacksFromInventory(player, neededItems, true, boundPos, direction)) {
-                            continue;
+                            if (!(pos.state.getBlock() instanceof CableBusBlock) || !AHConfig.INSTANCE.buildingGadgetBuildAE2)
+                                continue;
                         }
                     } else {
                         FluidState fluidState = pos.state.getFluidState();
@@ -50,7 +54,8 @@ public class BuildingUtilsGT extends BuildingUtils {
                             Fluid fluid = fluidState.getType();
                             FluidStack fluidStack = new FluidStack(fluid, 1000);
                             if (!player.isCreative() && needItems && !removeFluidStacksFromInventory(player, fluidStack, true, boundPos, direction)) {
-                                continue;
+                                if (!(pos.state.getBlock() instanceof CableBusBlock) || !AHConfig.INSTANCE.buildingGadgetBuildAE2)
+                                    continue;
                             }
                         }
                     }

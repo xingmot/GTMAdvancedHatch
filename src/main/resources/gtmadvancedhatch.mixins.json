@@ -5,10 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "com.xingmot.gtmadvancedhatch.mixin.MixinConfigPlugin",
   "mixins": [
-    "gtlcore.PerformanceMonitorMachineMixin",
+    "buildinggadgets.BuildingUtilsMixin",
     "buildinggadgets.RenderBlockBEMixin",
     "buildinggadgets.ServerBuildListMixin",
     "buildinggadgets.ServerTickHandlerMixin",
+    "gtlcore.PerformanceMonitorMachineMixin",
     "gtm.GTUtilMixin",
     "gtmt.WirelessEnergyManagerMixin",
     "gtmt.WirelessEnergyMonitorMixin",
