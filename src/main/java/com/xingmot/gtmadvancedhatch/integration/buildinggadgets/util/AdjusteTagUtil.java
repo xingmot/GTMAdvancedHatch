@@ -1,6 +1,6 @@
 package com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util;
 
-import com.lowdragmc.lowdraglib.LDLib;
+import appeng.me.helpers.IGridConnectedBlockEntity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -8,10 +8,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
-
-import appeng.block.AEBaseEntityBlock;
-import appeng.blockentity.AEBaseBlockEntity;
-import com.extendedae_plus.content.wireless.WirelessTransceiverBlockEntity;
 
 /**
  * 复制机tag加工工具类
@@ -62,24 +58,30 @@ public class AdjusteTagUtil {
     /** 默认清除存储 */
     public static CompoundTag defaultEmptyTagContent(CompoundTag tag) {
         emptyTagInv(tag, "inv");
+        // 清除熔炉燃烧时间
+        toZeroTag(tag,"BurnTime");
+        toZeroTag(tag,"CookTime");
+        toZeroTag(tag,"CookTimeTotal");
         return emptyTagInvExcept(tag, "Items", List.of("circuitInventory", "creativeStorage"));
     }
 
     /** 默认复制方块tag的模组黑名单 */
     public static boolean defaultIsModBlackListTag(BlockEntity blockEntity) {
         if (blockEntity == null) return false;
-        if (LDLib.isModLoaded("extendedae_plus") && blockEntity instanceof WirelessTransceiverBlockEntity) return false;
-        return blockEntity instanceof AEBaseBlockEntity;
+        return blockEntity instanceof IGridConnectedBlockEntity;
     }
 
     /** 默认复制方块的模组黑名单 */
+    // 暂时还没有要直接禁止nbt载入的东西
     public static boolean defaultIsModBlackListBlock(BlockState block) {
         if (block == null) return false;
-        return block.getBlock() instanceof AEBaseEntityBlock;
+        return false;
     }
 
     /** gt清除存储 */
     public static CompoundTag gtEmptyTagContent(CompoundTag tag) {
+        // 清空机器配方
+        emptyTagInv(tag,"recipeLogic");
         // 清空超级缸超级箱
         emptyTagFluidOnly(tag, "storages", List.of("cache"));
         emptyTagFluid(tag, "stored");
@@ -174,6 +176,30 @@ public class AdjusteTagUtil {
                 for (String key : tag.getAllKeys()) {
                     if (tag.getTagType(key) == CompoundTag.TAG_COMPOUND)
                         emptyTagInvOnly(tag.getCompound(key), name, only);
+                }
+            }
+        }
+        return tag;
+    }
+
+    /** 将name的值清0 */
+    public static CompoundTag toZeroTag(CompoundTag tag, String name) {
+        return toZeroTagExcept(tag, name, null);
+    }
+
+    public static CompoundTag toZeroTagExcept(CompoundTag tag, String name,List<String> except) {
+        if (tag.contains(name)) {
+            if(tag.getTagType(name) == CompoundTag.TAG_BYTE) tag.putByte(name, (byte)0);
+            if(tag.getTagType(name) == CompoundTag.TAG_SHORT) tag.putShort(name, (short) 0);
+            if(tag.getTagType(name) == CompoundTag.TAG_INT) tag.putInt(name, 0);
+            if(tag.getTagType(name) == CompoundTag.TAG_LONG) tag.putLong(name, 0L);
+        }else if (!tag.getAllKeys().isEmpty()) {
+            for (String key : tag.getAllKeys()) {
+                if (except != null && except.contains(key)) continue;
+                if (tag.getTagType(key) == CompoundTag.TAG_COMPOUND)
+                    emptyTagInvExcept(tag.getCompound(key), name, except);
+                else if (tag.getTagType(key) == CompoundTag.TAG_LIST) {
+                    tag.getList(key, CompoundTag.TAG_COMPOUND).forEach(i -> emptyTagInvExcept((CompoundTag) i, name, except));
                 }
             }
         }

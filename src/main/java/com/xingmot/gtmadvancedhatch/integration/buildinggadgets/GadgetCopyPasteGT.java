@@ -89,11 +89,11 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
         Level level = context.level();
         for (StatePos statePos : buildList) {
             BlockPos blockPos = statePos.pos.offset(GadgetNBT.getCopyStartPos(gadget));
-            if (AdjusteTagUtil.isModBlackListBlock(statePos.state)) {
+            BlockEntity blockEntity = level.getBlockEntity(blockPos);
+            if (AdjusteTagUtil.isModBlackListBlock(statePos.state) || AdjusteTagUtil.isModBlackListTag(blockEntity)) {
                 statePos.state = Blocks.AIR.defaultBlockState();
                 continue;
             }
-            BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity != null) {
                 CompoundTag blockTag = blockEntity.saveWithFullMetadata();
                 GTMAdvancedHatch.LOGGER.info("blockTag: {}", blockTag);
