@@ -7,10 +7,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.direwolf20.buildinggadgets2.common.blockentities.RenderBlockBE;
 import com.direwolf20.buildinggadgets2.setup.Registration;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Pseudo
 @Mixin(value = RenderBlockBE.class, remap = false, priority = 900)
 public class RenderBlockBEMixin extends BlockEntity {
 

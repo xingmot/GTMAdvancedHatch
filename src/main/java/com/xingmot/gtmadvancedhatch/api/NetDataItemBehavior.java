@@ -35,7 +35,7 @@ public class NetDataItemBehavior implements IInteractionItem, IAddInformation {
         }
         if (tag.contains(TagConstants.ADAPTIVE_NET_FREQUENCY)) {
             long frequency = tag.getLong("adaptive_net_frequency");
-            tooltipComponents.add(Component.translatable("gtmadvancedhatch.machine.adaptivee.frequency").withStyle(ChatFormatting.GRAY).append(Component.literal("" + frequency)).withStyle(ChatFormatting.AQUA));
+            tooltipComponents.add(Component.translatable("gtmadvancedhatch.machine.adaptivee.frequency").withStyle(ChatFormatting.GRAY).append(Component.literal("" + frequency).withStyle(ChatFormatting.AQUA)));
         }
     }
 

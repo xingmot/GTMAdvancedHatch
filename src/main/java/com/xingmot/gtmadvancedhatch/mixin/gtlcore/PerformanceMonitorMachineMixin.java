@@ -31,11 +31,13 @@ import static org.gtlcore.gtlcore.api.machine.PerformanceMonitorMachine.*;
 import com.glodblock.github.extendedae.client.render.EAEHighlightHandler;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Pseudo
 @Mixin(PerformanceMonitorMachine.class)
 public class PerformanceMonitorMachineMixin extends MetaMachine implements IFancyUIMachine {
 

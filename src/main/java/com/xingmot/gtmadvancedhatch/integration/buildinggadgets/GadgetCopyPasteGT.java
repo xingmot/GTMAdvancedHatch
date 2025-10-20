@@ -4,6 +4,7 @@ import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
 import com.xingmot.gtmadvancedhatch.config.AHConfig;
 import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util.AdjusteTagUtil;
 
+import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 
 import net.minecraft.core.BlockPos;
@@ -88,14 +89,19 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
         Level level = context.level();
         for (StatePos statePos : buildList) {
             BlockPos blockPos = statePos.pos.offset(GadgetNBT.getCopyStartPos(gadget));
+            if (AdjusteTagUtil.isModBlackListBlock(statePos.state)) {
+                statePos.state = Blocks.AIR.defaultBlockState();
+                continue;
+            }
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity != null) {
                 CompoundTag blockTag = blockEntity.saveWithFullMetadata();
-                if (!AdjusteTagUtil.isModBlackList(blockEntity)) {
-                    if (blockEntity instanceof MetaMachineBlockEntity)
+                GTMAdvancedHatch.LOGGER.info("blockTag: {}", blockTag);
+                if (!AdjusteTagUtil.isModBlackListTag(blockEntity)) {
+                    if (blockEntity instanceof MetaMachineBlockEntity || statePos.state.getBlock() instanceof MetaMachineBlock)
                         blockTag = AdjusteTagUtil.gtEmptyTagContent(blockTag);
                     blockTag = AdjusteTagUtil.getEmptyStorageTag(blockTag);
-                    GTMAdvancedHatch.LOGGER.info("blockTag: {}", blockTag);
+                    GTMAdvancedHatch.LOGGER.info("after blockTag: {}", blockTag);
                     TagPos tagPos = new TagPos(blockTag, blockPos.subtract(GadgetNBT.getCopyStartPos(gadget)));
                     teData.add(tagPos);
                 }

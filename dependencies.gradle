@@ -28,7 +28,7 @@ dependencies {
     modRuntimeOnly("dev:guideme-20.1.12")
     modImplementation('dev:appliedenergistics2-forge-15.4.8')
     modImplementation('dev:ExtendedAE-1.20-1.4.0-forge')
-    modRuntimeOnly('dev:extendedae_plus-1.4.4-beta-gtl')
+    modImplementation('dev:extendedae_plus-1.4.4-beta-gtl')
 
     modImplementation("dev.toma.configuration:configuration-forge-$project.minecraft_version:$project.configuration_version")
 //
