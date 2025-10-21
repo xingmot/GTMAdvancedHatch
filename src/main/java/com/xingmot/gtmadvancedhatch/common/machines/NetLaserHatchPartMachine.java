@@ -8,7 +8,6 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.common.data.GTItems;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.BlockPos;
@@ -35,13 +34,10 @@ import org.jetbrains.annotations.Nullable;
 public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NetLaserHatchPartMachine.class, WirelessLaserHatchPartMachine.MANAGED_FIELD_HOLDER);
-    @Persisted
-    public final NoConsumeNotifiabbleLaserContainer energyContainer;
     private TickableSubscription updEnergySubs;
 
     public NetLaserHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, int amperage, Object... args) {
         super(holder, tier, io, amperage, args);
-        this.energyContainer = this.createEnergyContainer(args);
     }
 
     @Override
@@ -81,8 +77,8 @@ public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
 
     private void updateEnergy() {
         if (super.owner_uuid != null) {
-            if (this.energyContainer.owner_uuid == null) {
-                this.energyContainer.owner_uuid = this.owner_uuid;
+            if (((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid == null) {
+                ((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid = this.owner_uuid;
             }
             if (this.io == IO.IN) {
                 this.useEnergy();
@@ -106,7 +102,7 @@ public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
             return InteractionResult.PASS;
         } else if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
             this.owner_uuid = player.getUUID();
-            this.energyContainer.owner_uuid = player.getUUID();
+            ((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid = player.getUUID();
             if (this.getLevel().isClientSide()) {
                 player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", new Object[] { TeamUtil.GetName(player) }));
             }
@@ -130,7 +126,7 @@ public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
             return false;
         } else if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
             this.owner_uuid = null;
-            this.energyContainer.owner_uuid = null;
+            ((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid = null;
             if (this.getLevel().isClientSide()) {
                 player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.unbind"));
             }
@@ -145,7 +141,7 @@ public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
     public void onMachinePlaced(@Nullable LivingEntity placer, ItemStack stack) {
         if (placer instanceof Player player) {
             this.owner_uuid = player.getUUID();
-            energyContainer.setOwner_uuid(player.getUUID());
+            ((NoConsumeNotifiabbleLaserContainer) energyContainer).setOwner_uuid(player.getUUID());
             this.updateEnergySubscription();
         }
     }

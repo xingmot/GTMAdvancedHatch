@@ -3,9 +3,11 @@ package com.xingmot.gtmadvancedhatch.api;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +19,8 @@ import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 public class NoConsumeNotifiabbleEnergyContainer extends NotifiableEnergyContainer {
+
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NoConsumeNotifiabbleEnergyContainer.class, NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
 
     @Setter
     @Getter
@@ -33,6 +37,11 @@ public class NoConsumeNotifiabbleEnergyContainer extends NotifiableEnergyContain
 
     public static NoConsumeNotifiabbleEnergyContainer receiverContainer(MetaMachine machine, long maxCapacity, long maxInputVoltage, long maxInputAmperage) {
         return new NoConsumeNotifiabbleEnergyContainer(machine, maxCapacity, maxInputVoltage, maxInputAmperage, 0L, 0L);
+    }
+
+    @Override
+    public ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
     }
 
     // 把实际操作能量的部分改为操作电网
