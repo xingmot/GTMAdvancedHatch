@@ -257,7 +257,7 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
         try {
             ItemStack itemstack = netEnergyInventory[index].storage.getStackInSlot(0);
             // TODO 魔改支持适配终端中所需数量的修改
-            if (itemstack.getCount() != 64 && !AdaptiveTerminalBehaviour.isAnyTag(itemstack)) {
+            if (itemstack.getCount() < 64 && !AdaptiveTerminalBehaviour.isAnyTag(itemstack)) {
                 resetAdaptiveData(index);
                 return;
             }

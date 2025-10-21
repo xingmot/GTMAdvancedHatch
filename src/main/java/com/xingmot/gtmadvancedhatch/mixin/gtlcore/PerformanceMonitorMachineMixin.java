@@ -46,9 +46,6 @@ public class PerformanceMonitorMachineMixin extends MetaMachine implements IFanc
     @Unique
     private static Player gtmadvancedhatch$player;
 
-    @Unique
-    private static Component gtmadvancedhatch$machineNameComponent;
-
     public PerformanceMonitorMachineMixin(IMachineBlockEntity holder) {
         super(holder);
     }
@@ -61,7 +58,7 @@ public class PerformanceMonitorMachineMixin extends MetaMachine implements IFanc
             EAEHighlightHandler.highlight(pos, getDimensionKey(new ResourceLocation(parts[3])), System.currentTimeMillis() + 15000L);
             if (gtmadvancedhatch$player != null) {
                 Component message = MessageUtil.createEnhancedHighlightMessage(gtmadvancedhatch$player, pos, gtmadvancedhatch$player.level()
-                        .dimension(), gtmadvancedhatch$machineNameComponent, "gtmthings.machine.highlight");
+                        .dimension(), Component.translatable(parts[4]), "gtmthings.machine.highlight");
                 gtmadvancedhatch$player.displayClientMessage(message, false);
             }
         }
@@ -85,7 +82,6 @@ public class PerformanceMonitorMachineMixin extends MetaMachine implements IFanc
                 String machineName = machine.getBlockState()
                         .getBlock()
                         .getDescriptionId();
-                gtmadvancedhatch$machineNameComponent = Component.translatable(machineName);
                 Level level = machine.getLevel();
                 if (level == null) continue;
                 gtmadvancedhatch$textListCache.add(Component.translatable(machineName)
@@ -98,7 +94,7 @@ public class PerformanceMonitorMachineMixin extends MetaMachine implements IFanc
                         .append(Component.translatable("tooltip.jade.delay", entry.getValue())
                                 .append(" μs"))
                         .append(ComponentPanelWidget.withButton(Component.literal(" [ ] "), pos + ", " + level.dimension()
-                                .location())));
+                                .location() + ", " + machineName)));
             }
         }
         textList.addAll(gtmadvancedhatch$textListCache);

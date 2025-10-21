@@ -95,9 +95,6 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
         return ResourceKey.create(Registries.DIMENSION, resourceLocation);
     }
 
-    @Unique
-    private Component gtmadvancedhatch$machineNameComponent;
-
     @Inject(remap = false, method = "handleDisplayClick", at = @At(value = "HEAD"), cancellable = true)
     private void handleDisplayClickMixin(String componentData, ClickData clickData, CallbackInfo ci) {
         if (!clickData.isRemote) {
@@ -117,7 +114,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                     // 扩展ae无线收发器同款定位
                     if (this.gtmadvancedhatch$player != null) {
                         Component message = MessageUtil.createEnhancedHighlightMessage(this.gtmadvancedhatch$player, pos, this.gtmadvancedhatch$player.level()
-                                .dimension(), this.gtmadvancedhatch$machineNameComponent, "gtmthings.machine.highlight");
+                                .dimension(), Component.translatable(parts[4]), "gtmthings.machine.highlight");
                         this.gtmadvancedhatch$player.displayClientMessage(message, false);
                     }
                 }
@@ -207,7 +204,6 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 String machineName = machine.getBlockState()
                         .getBlock()
                         .getDescriptionId();
-                this.gtmadvancedhatch$machineNameComponent = Component.translatable(machineName);
                 MutableComponent component = Component.translatable(machineName)
                         .withStyle(Style.EMPTY.withHoverEvent(
                                 new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -231,7 +227,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 }
                 component.append(ComponentPanelWidget.withButton(Component.literal(VoltageLevelLookup.findVoltageLevel(eut.abs())),
                         pos + ", " + level.dimension()
-                                .location()))
+                                .location() + ", " + machineName))
                         .append(")");
                 if (gtmadvancedhatch$netPower == 1 && eut.compareTo(BigDecimal.ZERO) > 0)
                     textList.add(component);
