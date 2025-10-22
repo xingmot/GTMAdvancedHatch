@@ -91,6 +91,8 @@ public class AdjusteTagUtil {
         emptyTagFluidOnly(tag, "storages", List.of("tank", "shareTank"));
         // 清空ME输入仓的流体(库存的虽然也清了，但是不影响
         emptyTagInvExcept(tag, "stock", List.of("circuitInventory"));
+        // 清空ME输出总线、仓
+        emptyTagInvExcept(tag, "internalBuffer", List.of("circuitInventory"));
         // 清空物品存储，排除电路槽位、超级箱缓存
         return emptyTagInvExcept(tag, "storage", List.of("circuitInventory", "cache"));
     }

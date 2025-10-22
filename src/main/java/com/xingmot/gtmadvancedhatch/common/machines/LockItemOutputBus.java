@@ -1,6 +1,5 @@
 package com.xingmot.gtmadvancedhatch.common.machines;
 
-import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
 import com.xingmot.gtmadvancedhatch.api.LockStackSlotWidget;
 import com.xingmot.gtmadvancedhatch.api.LockStackTransfer;
 
@@ -42,7 +41,6 @@ import static com.xingmot.gtmadvancedhatch.common.data.MachinesConstants.*;
 
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
-import snownee.jade.impl.WailaClientRegistration;
 
 /**
  * 留存输出总线
@@ -232,82 +230,16 @@ public class LockItemOutputBus extends TieredIOPartMachine implements IDistinctP
         }
         updateAutoIO();
         if (changed) {
-            GTMAdvancedHatch.LOGGER.info(String.format("oldUpdateStorage: %d", oldUpdateStorage));
-            String s = String.format("内存的 [%s] 进行更新，分别是 [%s] 个", String.join(",", changedSlots), String.join(",", changedSlotsCount));
-            GTMAdvancedHatch.LOGGER.info(s);
+            // GTMAdvancedHatch.LOGGER.info(String.format("oldUpdateStorage: %d", oldUpdateStorage));
+            // String s = String.format("内存的 [%s] 进行更新，分别是 [%s] 个", String.join(",", changedSlots), String.join(",",
+            // changedSlotsCount));
+            // GTMAdvancedHatch.LOGGER.info(s);
             oldUpdateStorage = 0;
             getOuterInventory().notifyListeners();
         }
-        GTMAdvancedHatch.LOGGER.info(String.format("registed map: %s", WailaClientRegistration.INSTANCE.tooltipCollectedCallback));
+        // GTMAdvancedHatch.LOGGER.info(String.format("registed map: %s",
+        // WailaClientRegistration.INSTANCE.tooltipCollectedCallback));
     }
-    //
-    // protected void updateAutoIO() {
-    // //auto io
-    // if (isWorkingEnabled() && ((io == IO.OUT && !isEmpty(getInventory())) || io == IO.IN) &&
-    // ItemTransferHelper.getItemTransfer(getLevel(), getPos().relative(getFrontFacing()),
-    // getFrontFacing().getOpposite()) != null) {
-    // autoIOSubs = subscribeServerTick(autoIOSubs, this::autoIO);
-    // } else if (autoIOSubs != null) {
-    // autoIOSubs.unsubscribe();
-    // autoIOSubs = null;
-    // }
-    // }
-    //
-    // private void updateTrueInventorySubscription() {
-    // // 外存变化，更新内存中物品数量逻辑
-    // boolean changed = false;
-    // List<String> changedSlots = new ArrayList<>();
-    // List<String> changedSlotsCount = new ArrayList<>();
-    // for (int index = 0; index < getInventory().getSlots(); index++) {
-    // ItemStack true_stack = getTrueInventory().getStackInSlot(index);
-    // ItemStack stack = getInventory().getStackInSlot(index);
-    // if((true_stack.isEmpty()||true_stack.getCount()==1)) {
-    // if(!stack.isEmpty()){
-    // getInventory().getStackInSlot(index).setCount(0);
-    // changed = true;
-    //
-    // changedSlots.add(String.valueOf(index));
-    // changedSlotsCount.add("0");
-    // }
-    // } else if(!(stack.getItem()==true_stack.getItem()&&stack.getCount()==true_stack.getCount()-1)) {
-    // getInventory().setStackInSlot(index, true_stack.copyWithCount(true_stack.getCount()-1));
-    // changed = true;
-    //
-    // changedSlots.add(String.valueOf(index));
-    // changedSlotsCount.add(String.valueOf(true_stack.getCount()-1));
-    // }
-    // }
-    // if (changed){
-    // GTMAdvancedHatch.LOGGER.info(String.format("oldUpdateStorage: %d",oldUpdateStorage));
-    // String s = String.format("外存的 [%s] 进行更新，分别是 [%s] 个", String.join(",", changedSlots),String.join(",",
-    // changedSlotsCount));
-    // GTMAdvancedHatch.LOGGER.info(s);
-    // oldUpdateStorage = 1;
-    // getInventory().notifyListeners();
-    // }
-    // }
-
-    // protected void updateInventorySubscription(){
-    // // 内存变化，更新外存中物品数量逻辑
-    // boolean changed = false;
-    // for (int index = 0; index < getInventory().getSlots(); index++) {
-    // ItemStack stack = getInventory().getStackInSlot(index);
-    // ItemStack trueStack = getOuterInventory().getStackInSlot(index);
-    // if(stack.isEmpty()){
-    // if(!trueStack.isEmpty() && trueStack.getCount()>1) {
-    // trueStack.setCount(1);
-    // changed=true;
-    // }
-    // } else if(trueStack.getCount()!=stack.getCount()+1){
-    // getOuterInventory().getStackInSlot(index).setCount(stack.getCount()+1);
-    // changed=true;
-    // }
-    // }
-    // updateAutoIO();
-    // if (changed){
-    // getOuterInventory().notifyListeners();
-    // }
-    // }
 
     protected void updateAutoIO() {
         // auto io

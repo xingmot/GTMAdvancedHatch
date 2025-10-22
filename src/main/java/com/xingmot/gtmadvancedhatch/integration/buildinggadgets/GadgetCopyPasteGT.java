@@ -8,6 +8,9 @@ import com.xingmot.gtmadvancedhatch.integration.buildinggadgets.util.BuildingUti
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,21 +18,27 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
+import javax.annotation.Nullable;
+
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.GenericStack;
+import appeng.core.definitions.AEItems;
 import com.direwolf20.buildinggadgets2.api.gadgets.GadgetTarget;
 import com.direwolf20.buildinggadgets2.common.items.GadgetCopyPaste;
 import com.direwolf20.buildinggadgets2.common.worlddata.BG2Data;
-import com.direwolf20.buildinggadgets2.util.GadgetNBT;
-import com.direwolf20.buildinggadgets2.util.VectorHelper;
+import com.direwolf20.buildinggadgets2.util.*;
 import com.direwolf20.buildinggadgets2.util.context.ItemActionContext;
 import com.direwolf20.buildinggadgets2.util.datatypes.StatePos;
 import com.direwolf20.buildinggadgets2.util.datatypes.TagPos;
@@ -38,6 +47,27 @@ import com.direwolf20.buildinggadgets2.util.modes.Copy;
 import com.direwolf20.buildinggadgets2.util.modes.Paste;
 
 public class GadgetCopyPasteGT extends GadgetCopyPaste {
+
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        Minecraft mc = Minecraft.getInstance();
+        if (level != null && mc.player != null) {
+            tooltip.add(Component.translatable("item.buildinggadgets2.partern_copy_tooltip").withStyle(ChatFormatting.GOLD));
+            if (GadgetNBT.getPasteReplace(stack)) {
+                tooltip.add(Component.translatable("buildinggadgets2.voidwarning").withStyle(ChatFormatting.RED));
+            }
+
+            String templateName = GadgetNBT.getTemplateName(stack);
+            if (!templateName.isEmpty()) {
+                tooltip.add(Component.translatable("buildinggadgets2.templatename", new Object[] { templateName }).withStyle(ChatFormatting.AQUA));
+            }
+
+            boolean sneakPressed = Screen.hasShiftDown();
+            if (sneakPressed) {}
+
+        }
+    }
 
     @Override
     public int getEnergyMax() {
@@ -131,16 +161,61 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
 
         if (player.isShiftKeyDown()) {
             if (GadgetNBT.getSetting(gadget, "bind")) {
-                if (bindToInventory(level, player, gadget, lookingAt)) {
-                    GadgetNBT.toggleSetting(gadget, "bind"); // Turn off bind
+                ItemStack offhandItem = player.getOffhandItem();
+                if (offhandItem.is(AEItems.BLANK_PATTERN.asItem()) || offhandItem.is(AEItems.PROCESSING_PATTERN.asItem()) || offhandItem.is(AEItems.CRAFTING_PATTERN.asItem()) || offhandItem.is(AEItems.SMITHING_TABLE_PATTERN.asItem()) || offhandItem.is(AEItems.STONECUTTING_PATTERN.asItem())) {
+                    GenericStack[] materialList = getMaterialList(level, gadget);
+                    // GTMAdvancedHatch.LOGGER.info(String.format("material list: %s", Arrays.toString(materialList)));
+
+                    if (materialList.length > 0) {
+                        if (offhandItem.hasTag()) {
+                            // GTMAdvancedHatch.LOGGER.info(String.format("offhandItem: %s",
+                            // offhandItem.getTag().toString()));
+                        } else GTMAdvancedHatch.LOGGER.info(offhandItem.toString());
+                        GenericStack out = Arrays.stream(materialList)
+                                .filter(a -> a.what() instanceof AEItemKey)
+                                .findAny().orElse(null);
+                        if (out == null) out = GenericStack.fromItemStack(new ItemStack(gadget.getItem()).setHoverName(Component.translatable("item.buildinggadgets2.partern")));
+                        else out = GenericStack.fromItemStack(((AEItemKey) out.what()).toStack().setHoverName(Component.translatable("item.buildinggadgets2.partern")));
+                        ItemStack is = AEItems.PROCESSING_PATTERN.asItem()
+                                .encode(materialList, new GenericStack[] { out });
+                        is.getOrCreateTag().putString("encodePlayer", player.getName().getString());
+                        player.setItemInHand(InteractionHand.OFF_HAND, is);
+                    }
                     return InteractionResultHolder.success(gadget);
                 } else {
-                    return InteractionResultHolder.fail(gadget);
+                    if (bindToInventory(level, player, gadget, lookingAt)) {
+                        GadgetNBT.toggleSetting(gadget, "bind"); // Turn off bind
+                        return InteractionResultHolder.success(gadget);
+                    } else {
+                        return InteractionResultHolder.fail(gadget);
+                    }
                 }
             }
             return this.onShiftAction(context);
         }
 
         return this.onAction(context);
+    }
+
+    public GenericStack[] getMaterialList(Level level, ItemStack gadget) {
+        BG2Data bg2Data = BG2Data.get(Objects.requireNonNull(level.getServer()).overworld());
+        UUID uuid = GadgetNBT.getUUID(gadget);
+        ArrayList<StatePos> list = bg2Data.getCopyPasteList(uuid, false);
+        HashMap<Item, GenericStack> itemList = new HashMap<>();
+
+        if (list != null && !list.isEmpty()) {
+            for (StatePos statePos : list) {
+                ItemStack is = GadgetUtils.getItemForBlock(statePos.state, Minecraft.getInstance().level, BlockPos.ZERO, Minecraft.getInstance().player);
+                if (is == null || is.isEmpty()) continue;
+                if (!itemList.containsKey(is.getItem())) {
+                    itemList.put(is.getItem(), GenericStack.fromItemStack(is));
+                } else {
+                    itemList.put(is.getItem(), GenericStack.sum(itemList.get(is.getItem()), Objects.requireNonNull(GenericStack.fromItemStack(is))));
+                }
+            }
+            return itemList.values().toArray(new GenericStack[0]);
+        } else {
+            return itemList.values().toArray(new GenericStack[0]);
+        }
     }
 }
