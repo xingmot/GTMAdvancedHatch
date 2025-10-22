@@ -54,8 +54,6 @@ import lombok.Setter;
 public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine implements IFrequency, INetEndpoint {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AdaptiveNetEnergyHatchPartMachine.class, NetEnergyHatchPartMachine.MANAGED_FIELD_HOLDER);
-    @Persisted
-    public final NoConsumeNotifiabbleEnergyContainer energyContainer;
     // 判断是否可以连接
     @Persisted
     protected boolean isConnect;
@@ -86,11 +84,18 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
     public AdaptiveNetEnergyHatchPartMachine(IMachineBlockEntity holder, IO io) {
         super(holder, 0, io, 1);
         this.adaptiveSlave = new AdaptiveSlave(this, AdaptiveConstants.NET_TYPE_ENERGY);
-        if (io == IO.OUT) {
-            this.energyContainer = NoConsumeNotifiabbleEnergyContainer.emitterContainer(this, this.maxEnergy, this.voltage, this.amps);
+    }
+
+    @Override
+    protected NoConsumeNotifiabbleEnergyContainer createEnergyContainer(Object... args) {
+        NoConsumeNotifiabbleEnergyContainer container;
+        if (this.io == IO.OUT) {
+            container = NoConsumeNotifiabbleEnergyContainer.emitterContainer(this, this.maxEnergy, this.voltage, this.amps);
         } else {
-            this.energyContainer = NoConsumeNotifiabbleEnergyContainer.receiverContainer(this, this.maxEnergy, this.voltage, this.amps);
+            container = NoConsumeNotifiabbleEnergyContainer.receiverContainer(this, this.maxEnergy, this.voltage, this.amps);
         }
+
+        return container;
     }
 
     protected void reset() {
@@ -147,8 +152,8 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
 
     private void updateEnergy() {
         if (super.owner_uuid != null) {
-            if (this.energyContainer.owner_uuid == null) {
-                this.energyContainer.owner_uuid = this.owner_uuid;
+            if (((NoConsumeNotifiabbleEnergyContainer) this.energyContainer).owner_uuid == null) {
+                ((NoConsumeNotifiabbleEnergyContainer) this.energyContainer).owner_uuid = this.owner_uuid;
             }
             if (this.io == IO.IN) {
                 this.useEnergy();
@@ -169,7 +174,7 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
         if (!is.isEmpty())
             if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
                 this.owner_uuid = player.getUUID();
-                this.energyContainer.owner_uuid = player.getUUID();
+                ((NoConsumeNotifiabbleEnergyContainer) this.energyContainer).owner_uuid = player.getUUID();
                 if (LDLib.isClient())
                     player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", TeamUtil.GetName(player)));
                 this.updateSubscription();
@@ -189,7 +194,7 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
             return false;
         } else if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
             this.owner_uuid = null;
-            this.energyContainer.owner_uuid = null;
+            ((NoConsumeNotifiabbleEnergyContainer) this.energyContainer).owner_uuid = null;
             if (LDLib.isClient()) {
                 player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.unbind"));
             }
@@ -243,7 +248,7 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
         if (placer instanceof Player player) {
             UUID uuid = TeamUtil.getTeamUUID(player.getUUID());
             setUUID(uuid);
-            energyContainer.setOwner_uuid(uuid);
+            ((NoConsumeNotifiabbleEnergyContainer) this.energyContainer).setOwner_uuid(uuid);
             // 若副手为网络配置闪存且数据不为空，则自动应用
             ItemStack offhandItem = player.getOffhandItem();
             if (offhandItem.is(AHItems.TOOL_NET_DATA_STICK.asItem()) && offhandItem.hasTag())

@@ -1,6 +1,6 @@
 package com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch;
 
-import com.xingmot.gtmadvancedhatch.api.NoConsumeNotifiabbleEnergyContainer;
+import com.xingmot.gtmadvancedhatch.api.NoConsumeNotifiabbleLaserContainer;
 import com.xingmot.gtmadvancedhatch.api.adaptivenet.AdaptiveConstants;
 import com.xingmot.gtmadvancedhatch.api.adaptivenet.AdaptiveSlave;
 import com.xingmot.gtmadvancedhatch.api.adaptivenet.IFrequency;
@@ -78,8 +78,6 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
     private int amps = 1;
     @Persisted
     private int setTier = 0;
-    @Persisted
-    public final NoConsumeNotifiabbleEnergyContainer energyContainer;
 
     private TickableSubscription updEnergySubs;
     private TickableSubscription updNet;
@@ -87,11 +85,18 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
     public AdaptiveNetLaserHatchPartMachine(IMachineBlockEntity holder, IO io) {
         super(holder, 0, io, 1);
         this.adaptiveSlave = new AdaptiveSlave(this, AdaptiveConstants.NET_TYPE_ENERGY);
-        if (io == IO.OUT) {
-            this.energyContainer = NoConsumeNotifiabbleEnergyContainer.emitterContainer(this, this.maxEnergy, this.voltage, this.amps);
+    }
+
+    @Override
+    protected NoConsumeNotifiabbleLaserContainer createEnergyContainer(Object... args) {
+        NoConsumeNotifiabbleLaserContainer container;
+        if (this.io == IO.OUT) {
+            container = NoConsumeNotifiabbleLaserContainer.emitterContainer(this, this.maxEnergy, this.voltage, this.amps);
         } else {
-            this.energyContainer = NoConsumeNotifiabbleEnergyContainer.receiverContainer(this, this.maxEnergy, this.voltage, this.amps);
+            container = NoConsumeNotifiabbleLaserContainer.receiverContainer(this, this.maxEnergy, this.voltage, this.amps);
         }
+
+        return container;
     }
 
     protected void reset() {
@@ -148,8 +153,8 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
 
     private void updateEnergy() {
         if (super.owner_uuid != null) {
-            if (this.energyContainer.owner_uuid == null) {
-                this.energyContainer.owner_uuid = this.owner_uuid;
+            if (((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid == null) {
+                ((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid = this.owner_uuid;
             }
             if (this.io == IO.IN) {
                 this.useEnergy();
@@ -167,7 +172,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
         if (!is.isEmpty())
             if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
                 this.owner_uuid = player.getUUID();
-                this.energyContainer.owner_uuid = player.getUUID();
+                ((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid = player.getUUID();
                 if (LDLib.isClient())
                     player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.bind", new Object[] { TeamUtil.GetName(player) }));
                 this.updateSubscription();
@@ -187,7 +192,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
             return false;
         } else if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
             this.owner_uuid = null;
-            this.energyContainer.owner_uuid = null;
+            ((NoConsumeNotifiabbleLaserContainer) this.energyContainer).owner_uuid = null;
             if (LDLib.isClient()) {
                 player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.unbind"));
             }
@@ -241,7 +246,7 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
         if (placer instanceof Player player) {
             UUID uuid = TeamUtil.getTeamUUID(player.getUUID());
             setUUID(uuid);
-            energyContainer.setOwner_uuid(uuid);
+            ((NoConsumeNotifiabbleLaserContainer) this.energyContainer).setOwner_uuid(uuid);
             // 若副手为网络配置闪存且数据不为空，则自动应用
             ItemStack offhandItem = player.getOffhandItem();
             if (offhandItem.is(AHItems.TOOL_NET_DATA_STICK.asItem()) && offhandItem.hasTag())
