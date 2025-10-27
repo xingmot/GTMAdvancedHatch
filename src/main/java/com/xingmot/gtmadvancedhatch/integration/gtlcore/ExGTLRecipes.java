@@ -97,7 +97,7 @@ public class ExGTLRecipes {
             // endregion
         }
         for (int tier : HIGHEST_TIERS) {
-            if (!gtladd_is_on) {
+            if (gtladd_is_on) {
                 // region 16777216A激光仓配方
                 ASSEMBLER_RECIPES.recipeBuilder(GTMAdvancedHatch.id("net_laser_input_hatch_" + VN[tier].toLowerCase() + "_16777216a"))
                         .outputItems(ExGTLMachines.WIRELESS_ENERGY_INPUT_HATCH_16777216A[tier].asStack())

@@ -246,17 +246,19 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
         super.onAddFancyInformationTooltip(tooltips);
         tooltips.add(Component.literal("格式化词头对应量级")
                 .withStyle(style -> style.withColor(TooltipHelper.RAINBOW_SLOW.getCurrent())));
-        tooltips.add(Component.literal("T----1E12")
+        tooltips.add(Component.literal("T(太)----1E12")
                 .withStyle(ChatFormatting.GOLD));
-        tooltips.add(Component.literal("P----1E15")
+        tooltips.add(Component.literal("P(拍)----1E15")
                 .withStyle(ChatFormatting.RED));
-        tooltips.add(Component.literal("E----1E18")
+        tooltips.add(Component.literal("E(艾)----1E18")
                 .withStyle(ChatFormatting.YELLOW));
-        tooltips.add(Component.literal("Z----1E21")
+        tooltips.add(Component.literal("Z(泽)----1E21")
                 .withStyle(ChatFormatting.GREEN));
-        tooltips.add(Component.literal("Y----1E24")
+        tooltips.add(Component.literal("Y(尧)----1E24")
                 .withStyle(ChatFormatting.AQUA));
-        tooltips.add(Component.literal("B----1E27")
+        tooltips.add(Component.literal("R(容)----1E27")
                 .withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltips.add(Component.literal("Q(昆)----1E30")
+                .withStyle(ChatFormatting.DARK_AQUA));
     }
 }

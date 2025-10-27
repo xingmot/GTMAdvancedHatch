@@ -43,12 +43,12 @@ public class FormattingUtil {
         int exp = 0;
         if (number.compareTo(oneThousand) >= 0) {
             exp = (int) (Math.log10(number.doubleValue()) / 3);
-            if (exp > 9) return DECIMAL_FORMAT_SIC_2F.format(number);
+            if (exp > 10) return DECIMAL_FORMAT_SIC_2F.format(number);
             if (exp > 0) number = number.divide(BigDecimal.valueOf(Math.pow(1000, exp)), MathContext.DECIMAL128);
         }
 
         sb.append(fmt.format(number));
-        if (exp > 0) sb.append("KMGTPEZYB".charAt(exp - 1));
+        if (exp > 0) sb.append("KMGTPEZYRQ".charAt(exp - 1));
         else if (milli && number.compareTo(zero) != 0) sb.append('m');
 
         if (unit != null) sb.append(unit);
