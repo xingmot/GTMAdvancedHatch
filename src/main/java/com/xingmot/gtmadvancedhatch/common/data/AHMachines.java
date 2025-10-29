@@ -123,7 +123,6 @@ public class AHMachines {
             .rotationState(RotationState.ALL)
             .renderer(() -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/energy_hatch.input")))
             .abilities(PartAbility.INPUT_ENERGY)
-            .tooltips(Component.translatable("block.gtmadvancedhatch.adaptive_net_laser_target_hatch.warn"))
             .compassNode("energy_hatch")
             .tier(14)
             .register();
@@ -133,7 +132,6 @@ public class AHMachines {
             .renderer(
                     () -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/energy_hatch.output")))
             .abilities(PartAbility.OUTPUT_ENERGY)
-            .tooltips(Component.translatable("block.gtmadvancedhatch.adaptive_net_laser_target_hatch.warn"))
             .compassNode("energy_hatch")
             .tier(14)
             .register();
@@ -142,7 +140,6 @@ public class AHMachines {
             .rotationState(RotationState.ALL)
             .renderer(() -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/laser_hatch.target")))
             .abilities(PartAbility.INPUT_LASER)
-            .tooltips(Component.translatable("block.gtmadvancedhatch.adaptive_net_laser_target_hatch.warn"))
             .compassNode("energy_hatch")
             .tier(14)
             .register();
@@ -151,7 +148,6 @@ public class AHMachines {
             .rotationState(RotationState.ALL)
             .renderer(() -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/laser_hatch.target")))
             .abilities(PartAbility.OUTPUT_LASER)
-            .tooltips(Component.translatable("block.gtmadvancedhatch.adaptive_net_laser_target_hatch.warn"))
             .compassNode("energy_hatch")
             .tier(14)
             .register();

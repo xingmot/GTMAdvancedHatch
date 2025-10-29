@@ -335,7 +335,8 @@ public class AdaptiveNetLaserHatchPartMachine extends NetLaserHatchPartMachine i
             this.amps = adaptiveData.amps;
             this.voltage = adaptiveData.voltage;
             this.setTier = adaptiveData.setTier;
-            this.energyContainer.resetBasicInfo(this.maxEnergy, this.voltage, this.amps, 0L, 0L);
+            if (io == IO.OUT) this.energyContainer.resetBasicInfo(this.maxEnergy, 0L, 0L, this.voltage, this.amps);
+            else this.energyContainer.resetBasicInfo(this.maxEnergy, this.voltage, this.amps, 0L, 0L);
             updateMultiMachine();
         }
         return flag;
