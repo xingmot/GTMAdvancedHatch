@@ -30,26 +30,27 @@ public class FormattingUtil {
         StringBuilder sb = new StringBuilder();
         BigDecimal zero = BigDecimal.ZERO;
         BigDecimal oneThousand = new BigDecimal(1000);
-        if (number.compareTo(zero) < 0) {
-            number = number.abs();
+        BigDecimal numberTemp = number;
+        if (numberTemp.compareTo(zero) < 0) {
+            numberTemp = numberTemp.abs();
             sb.append('-');
         }
 
-        if (milli && number.compareTo(oneThousand) >= 0) {
+        if (milli && numberTemp.compareTo(oneThousand) >= 0) {
             milli = false;
-            number = number.divide(oneThousand, MathContext.DECIMAL128);
+            numberTemp = numberTemp.divide(oneThousand, MathContext.DECIMAL128);
         }
 
         int exp = 0;
-        if (number.compareTo(oneThousand) >= 0) {
-            exp = (int) (Math.log10(number.doubleValue()) / 3);
+        if (numberTemp.compareTo(oneThousand) >= 0) {
+            exp = (int) (Math.log10(numberTemp.doubleValue()) / 3);
             if (exp > 10) return DECIMAL_FORMAT_SIC_2F.format(number);
-            if (exp > 0) number = number.divide(BigDecimal.valueOf(Math.pow(1000, exp)), MathContext.DECIMAL128);
+            if (exp > 0) numberTemp = numberTemp.divide(BigDecimal.valueOf(Math.pow(1000, exp)), MathContext.DECIMAL128);
         }
 
-        sb.append(fmt.format(number));
+        sb.append(fmt.format(numberTemp));
         if (exp > 0) sb.append("KMGTPEZYRQ".charAt(exp - 1));
-        else if (milli && number.compareTo(zero) != 0) sb.append('m');
+        else if (milli && numberTemp.compareTo(zero) != 0) sb.append('m');
 
         if (unit != null) sb.append(unit);
         return sb.toString();
