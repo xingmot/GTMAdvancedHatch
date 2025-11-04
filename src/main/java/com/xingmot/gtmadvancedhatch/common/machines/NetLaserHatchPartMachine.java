@@ -1,5 +1,6 @@
 package com.xingmot.gtmadvancedhatch.common.machines;
 
+import com.xingmot.gtmadvancedhatch.api.IBatchable;
 import com.xingmot.gtmadvancedhatch.api.NoConsumeNotifiabbleLaserContainer;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -8,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.common.data.GTItems;
 
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.BlockPos;
@@ -31,10 +33,12 @@ import com.hepdd.gtmthings.utils.TeamUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
+public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine implements IBatchable {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NetLaserHatchPartMachine.class, WirelessLaserHatchPartMachine.MANAGED_FIELD_HOLDER);
     private TickableSubscription updEnergySubs;
+    @Persisted
+    public boolean isBatchEnable;
 
     public NetLaserHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, int amperage, Object... args) {
         super(holder, tier, io, amperage, args);
@@ -153,5 +157,19 @@ public class NetLaserHatchPartMachine extends WirelessLaserHatchPartMachine {
             this.updEnergySubs.unsubscribe();
             this.updEnergySubs = null;
         }
+    }
+
+    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
+        return true;
+    }
+
+    @Override
+    public boolean isBatchEnable() {
+        return this.isBatchEnable;
+    }
+
+    @Override
+    public void setBatchEnable(boolean isBatchEnable) {
+        this.isBatchEnable = isBatchEnable;
     }
 }

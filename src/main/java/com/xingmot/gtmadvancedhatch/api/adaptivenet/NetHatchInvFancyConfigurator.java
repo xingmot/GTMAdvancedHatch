@@ -9,8 +9,10 @@ import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.misc.ItemStackTransfer;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +38,7 @@ public class NetHatchInvFancyConfigurator implements IFancyConfigurator {
 
     @Override
     public Component getTitle() {
-        return Component.translatable("gtmadvancedhatch.gui.adaptive.title");
+        return Component.translatable("gtmadvancedhatch.gui.adaptive.title").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
     }
 
     @Override

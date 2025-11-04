@@ -9,6 +9,7 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class SetFrequencyFancyConfigurator implements IFancyConfigurator {
 
     @Override
     public Component getTitle() {
-        return Component.translatable("gtmadvancedhatch.gui.set_frequency.title");
+        return Component.translatable("gtmadvancedhatch.gui.set_frequency.title").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
     }
 
     @Override

@@ -10,8 +10,10 @@ import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ public class BindUUIDFancyConfigurator implements IFancyConfigurator {
 
     @Override
     public Component getTitle() {
-        return Component.translatable("gtmadvancedhatch.gui.binduuid.title");
+        return Component.translatable("gtmadvancedhatch.gui.binduuid.title").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
     }
 
     @Override

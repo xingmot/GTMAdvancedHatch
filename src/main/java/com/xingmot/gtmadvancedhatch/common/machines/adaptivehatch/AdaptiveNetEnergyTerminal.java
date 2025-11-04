@@ -463,7 +463,9 @@ public class AdaptiveNetEnergyTerminal extends MetaMachine implements IFancyUIMa
                         Component.translatable("gtmadvancedhatch.gui.auto_rebind")
                                 .setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW))
                                 .append(Component.translatable(pressed ? "gtmadvancedhatch.gui.auto_rebind.yes" :
-                                        "gtmadvancedhatch.gui.auto_rebind.no")))));
+                                        "gtmadvancedhatch.gui.auto_rebind.no")),
+                        Component.translatable("gtmadvancedhatch.gui.auto_rebind.info"),
+                        Component.translatable("gtmadvancedhatch.gui.auto_rebind.info2"))));
         configuratorPanel.attachConfigurators(new NetHatchInvFancyConfigurator(this.netEnergyInventory[0].storage, this.netEnergyInventory[1].storage, this.netEnergyInventory[2].storage, this.netEnergyInventory[3].storage));
         configuratorPanel.attachConfigurators(new BindUUIDFancyConfigurator(this));
         configuratorPanel.attachConfigurators(new SetFrequencyFancyConfigurator(this));
