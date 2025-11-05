@@ -48,9 +48,13 @@ import com.direwolf20.buildinggadgets2.util.modes.Paste;
 
 public class GadgetCopyPasteGT extends GadgetCopyPaste {
 
+    public GadgetCopyPasteGT() {
+        super();
+    }
+
     @OnlyIn(Dist.CLIENT)
+    @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
         Minecraft mc = Minecraft.getInstance();
         if (level != null && mc.player != null) {
             tooltip.add(Component.translatable("item.buildinggadgets2.partern_copy_tooltip").withStyle(ChatFormatting.GOLD));
@@ -163,7 +167,7 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
             if (GadgetNBT.getSetting(gadget, "bind")) {
                 ItemStack offhandItem = player.getOffhandItem();
                 if (offhandItem.is(AEItems.BLANK_PATTERN.asItem()) || offhandItem.is(AEItems.PROCESSING_PATTERN.asItem()) || offhandItem.is(AEItems.CRAFTING_PATTERN.asItem()) || offhandItem.is(AEItems.SMITHING_TABLE_PATTERN.asItem()) || offhandItem.is(AEItems.STONECUTTING_PATTERN.asItem())) {
-                    GenericStack[] materialList = getMaterialList(level, gadget);
+                    GenericStack[] materialList = getMaterialList(level, player, gadget);
                     // GTMAdvancedHatch.LOGGER.info(String.format("material list: %s", Arrays.toString(materialList)));
 
                     if (materialList.length > 0) {
@@ -197,7 +201,7 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
         return this.onAction(context);
     }
 
-    public GenericStack[] getMaterialList(Level level, ItemStack gadget) {
+    public GenericStack[] getMaterialList(Level level, Player player, ItemStack gadget) {
         BG2Data bg2Data = BG2Data.get(Objects.requireNonNull(level.getServer()).overworld());
         UUID uuid = GadgetNBT.getUUID(gadget);
         ArrayList<StatePos> list = bg2Data.getCopyPasteList(uuid, false);
@@ -205,7 +209,7 @@ public class GadgetCopyPasteGT extends GadgetCopyPaste {
 
         if (list != null && !list.isEmpty()) {
             for (StatePos statePos : list) {
-                ItemStack is = GadgetUtils.getItemForBlock(statePos.state, Minecraft.getInstance().level, BlockPos.ZERO, Minecraft.getInstance().player);
+                ItemStack is = GadgetUtils.getItemForBlock(statePos.state, level, BlockPos.ZERO, player);
                 if (is == null || is.isEmpty()) continue;
                 if (!itemList.containsKey(is.getItem())) {
                     itemList.put(is.getItem(), GenericStack.fromItemStack(is));

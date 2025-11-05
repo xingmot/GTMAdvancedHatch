@@ -41,6 +41,9 @@ public class GTMAdvancedHatch {
         AHRegistration.registrate.registerEventListeners(bus);
         // 注册GT机器
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
+        // building gadget
+        if (LDLib.isModLoaded("buildinggadgets2"))
+            BuildingGadgetRegistration.init();
         // 注册配置
         AHConfig.init();
         bus.register(this);
@@ -55,7 +58,5 @@ public class GTMAdvancedHatch {
         AHItems.init();
         AHTabs.init();
         ExGTLMachines.init();
-        if (LDLib.isModLoaded("buildinggadgets2"))
-            BuildingGadgetRegistration.init();
     }
 }
