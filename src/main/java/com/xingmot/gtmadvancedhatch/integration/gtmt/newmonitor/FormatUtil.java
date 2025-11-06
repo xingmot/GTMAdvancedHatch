@@ -1,23 +1,30 @@
 package com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor;
 
 import com.xingmot.gtmadvancedhatch.config.AHConfig;
-import com.xingmot.gtmadvancedhatch.util.FormattingUtil;
+import com.xingmot.gtmadvancedhatch.util.copy.FormattingUtil;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import com.lowdragmc.lowdraglib.LDLib;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.FormatUtil.formatWithConstantWidth;
 
 public class FormatUtil {
 
@@ -31,6 +38,28 @@ public class FormatUtil {
         } else {
             return String.format("%.2fG", number / 1_000_000_000.0);
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static List<Component> getLastText(List<Component> old) {
+        List<Component> newList = new ArrayList<>();
+        for (int i = 0; i < old.size(); ++i) {
+            Component textComponent = old.get(i);
+            if (textComponent.getString().startsWith("formatWidth,")) {
+                String[] strings = textComponent.getString().split(",");
+                String key = strings[1];
+                int width = Integer.parseInt(strings[2]);
+                ChatFormatting color = strings[3].equals("GOLD") ? ChatFormatting.GOLD :
+                        strings[3].equals("AQUA") ? ChatFormatting.AQUA :
+                                strings[3].equals("YELLOW") ? ChatFormatting.YELLOW :
+                                        strings[3].equals("GREEN") ? ChatFormatting.GREEN :
+                                                strings[3].equals("LIGHT_PURPLE") ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE;
+                newList.add(formatWithConstantWidth(key, width, old.get(++i)).withStyle(color));
+                continue;
+            }
+            newList.add(textComponent);
+        }
+        return newList;
     }
 
     public static MutableComponent formatWithConstantWidth(String labelKey, int width, Component body, Component... appends) {

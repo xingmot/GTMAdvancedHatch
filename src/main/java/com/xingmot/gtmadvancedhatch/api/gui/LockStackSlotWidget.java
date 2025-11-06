@@ -1,4 +1,4 @@
-package com.xingmot.gtmadvancedhatch.api;
+package com.xingmot.gtmadvancedhatch.api.gui;
 
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;

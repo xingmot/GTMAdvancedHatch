@@ -1,7 +1,7 @@
 package com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch;
 
 import com.xingmot.gtmadvancedhatch.api.adaptivenet.*;
-import com.xingmot.gtmadvancedhatch.common.AHItems;
+import com.xingmot.gtmadvancedhatch.common.data.AHItems;
 import com.xingmot.gtmadvancedhatch.common.data.MachinesConstants;
 import com.xingmot.gtmadvancedhatch.common.data.TagConstants;
 import com.xingmot.gtmadvancedhatch.util.AHUtil;

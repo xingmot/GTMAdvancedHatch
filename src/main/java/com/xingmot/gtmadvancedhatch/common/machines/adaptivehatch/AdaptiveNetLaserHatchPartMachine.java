@@ -5,7 +5,7 @@ import com.xingmot.gtmadvancedhatch.api.adaptivenet.AdaptiveConstants;
 import com.xingmot.gtmadvancedhatch.api.adaptivenet.AdaptiveSlave;
 import com.xingmot.gtmadvancedhatch.api.adaptivenet.IFrequency;
 import com.xingmot.gtmadvancedhatch.api.adaptivenet.INetEndpoint;
-import com.xingmot.gtmadvancedhatch.common.AHItems;
+import com.xingmot.gtmadvancedhatch.common.data.AHItems;
 import com.xingmot.gtmadvancedhatch.common.data.MachinesConstants;
 import com.xingmot.gtmadvancedhatch.common.data.TagConstants;
 import com.xingmot.gtmadvancedhatch.common.machines.NetLaserHatchPartMachine;

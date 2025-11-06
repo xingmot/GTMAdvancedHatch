@@ -1,4 +1,4 @@
-package com.xingmot.gtmadvancedhatch.util;
+package com.xingmot.gtmadvancedhatch.util.copy;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

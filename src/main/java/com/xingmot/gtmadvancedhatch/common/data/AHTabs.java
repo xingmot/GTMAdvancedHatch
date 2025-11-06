@@ -1,7 +1,6 @@
 package com.xingmot.gtmadvancedhatch.common.data;
 
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
-import com.xingmot.gtmadvancedhatch.common.AHItems;
 import com.xingmot.gtmadvancedhatch.common.AHRegistration;
 
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;

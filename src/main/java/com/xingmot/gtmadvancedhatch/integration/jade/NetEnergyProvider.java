@@ -3,7 +3,7 @@ package com.xingmot.gtmadvancedhatch.integration.jade;
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
 import com.xingmot.gtmadvancedhatch.common.machines.NetEnergyHatchPartMachine;
 import com.xingmot.gtmadvancedhatch.common.machines.NetLaserHatchPartMachine;
-import com.xingmot.gtmadvancedhatch.util.NumberUtils;
+import com.xingmot.gtmadvancedhatch.util.copy.NumberUtils;
 
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.integration.jade.provider.CapabilityBlockProvider;

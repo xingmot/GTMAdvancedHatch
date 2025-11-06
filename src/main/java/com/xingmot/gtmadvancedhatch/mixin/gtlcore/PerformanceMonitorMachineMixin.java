@@ -1,6 +1,6 @@
 package com.xingmot.gtmadvancedhatch.mixin.gtlcore;
 
-import com.xingmot.gtmadvancedhatch.util.MessageUtil;
+import com.xingmot.gtmadvancedhatch.util.copy.MessageUtil;
 
 import org.gtlcore.gtlcore.api.machine.PerformanceMonitorMachine;
 

@@ -1,4 +1,4 @@
-package com.xingmot.gtmadvancedhatch.util;
+package com.xingmot.gtmadvancedhatch.util.copy;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

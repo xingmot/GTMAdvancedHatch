@@ -1,7 +1,7 @@
-package com.xingmot.gtmadvancedhatch.common;
+package com.xingmot.gtmadvancedhatch.common.data;
 
 import com.xingmot.gtmadvancedhatch.api.NetDataItemBehavior;
-import com.xingmot.gtmadvancedhatch.common.data.AHTabs;
+import com.xingmot.gtmadvancedhatch.common.AHRegistration;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.common.data.GTCompassSections;

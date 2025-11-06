@@ -1,7 +1,7 @@
 package com.xingmot.gtmadvancedhatch.common.data.recipe;
 
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
-import com.xingmot.gtmadvancedhatch.common.AHItems;
+import com.xingmot.gtmadvancedhatch.common.data.AHItems;
 import com.xingmot.gtmadvancedhatch.common.data.AHMachines;
 import com.xingmot.gtmadvancedhatch.common.data.MachinesConstants;
 

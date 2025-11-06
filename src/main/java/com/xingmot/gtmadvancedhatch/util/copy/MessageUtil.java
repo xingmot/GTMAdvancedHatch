@@ -1,4 +1,4 @@
-package com.xingmot.gtmadvancedhatch.util;
+package com.xingmot.gtmadvancedhatch.util.copy;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

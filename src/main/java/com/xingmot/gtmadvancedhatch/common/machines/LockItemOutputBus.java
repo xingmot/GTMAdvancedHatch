@@ -1,7 +1,7 @@
 package com.xingmot.gtmadvancedhatch.common.machines;
 
-import com.xingmot.gtmadvancedhatch.api.LockStackSlotWidget;
 import com.xingmot.gtmadvancedhatch.api.LockStackTransfer;
+import com.xingmot.gtmadvancedhatch.api.gui.LockStackSlotWidget;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;

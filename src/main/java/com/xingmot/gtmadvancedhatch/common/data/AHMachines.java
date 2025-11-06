@@ -2,6 +2,7 @@ package com.xingmot.gtmadvancedhatch.common.data;
 
 import com.xingmot.gtmadvancedhatch.GTMAdvancedHatch;
 import com.xingmot.gtmadvancedhatch.common.AHRegistration;
+import com.xingmot.gtmadvancedhatch.common.machines.ConfigurableFluidHatchPartMachine;
 import com.xingmot.gtmadvancedhatch.common.machines.LockItemOutputBus;
 import com.xingmot.gtmadvancedhatch.common.machines.NetEnergyHatchPartMachine;
 import com.xingmot.gtmadvancedhatch.common.machines.NetLaserHatchPartMachine;
@@ -24,6 +25,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.OverlayTieredMachineRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableTieredHullMachineRenderer;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.LDLib;
@@ -67,9 +69,30 @@ public class AHMachines {
                     .compassNode("item_bus")
                     .register(),
             GTValues.tiersBetween(ULV, GTCEuAPI.isHighTier() ? MAX : UV));
+    // endregion
+    // region 》流体仓室
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_1X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 1,
+            ALL_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_1X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_4X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
+            NET_HIGH_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_4X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_9X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_9X, 9,
+            NET_HIGH_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_9X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_1X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 1,
+            ALL_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_1X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_4X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
+            NET_HIGH_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_4X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_9X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_9X, 9,
+            NET_HIGH_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_9X);
+
+    // endregion
     // region 》能源仓室
     public static final Set<MachineDefinition> ALL_NET_ENERGY_OUTPUT_HATCH = new HashSet<>();
-    // endregion
     public static final Set<MachineDefinition> ALL_NET_ENERGY_INPUT_HATCH = new HashSet<>();
     public static final Set<MachineDefinition> ALL_NET_LASER_OUTPUT_HATCH = new HashSet<>();
     public static final Set<MachineDefinition> ALL_NET_LASER_INPUT_HATCH = new HashSet<>();
@@ -169,6 +192,37 @@ public class AHMachines {
             definitions[tier] = builder.apply(tier, register);
         }
         return definitions;
+    }
+
+    // TODO 修改tooltips
+    public static MachineDefinition[] registerConfigurableFluidHatches(String name, IO io, long initialCapacity, int slots,
+                                                                       int[] tiers, PartAbility... abilities) {
+        var multi = (slots == 1 ? "" : "_%dx".formatted(slots));
+        var renderPath = "block/machine/part/fluid_hatch." + (io == IO.IN ? "import" : "export") + multi;
+        return registerTieredMachines(name + (io == IO.IN ? "_input" : "_output") + multi,
+                (holder, tier) -> new ConfigurableFluidHatchPartMachine(holder, tier, io, initialCapacity, slots),
+                (tier, builder) -> {
+                    builder.rotationState(RotationState.ALL)
+                            .renderer(() -> new OverlayTieredMachineRenderer(tier, GTCEu.id(renderPath)))
+                            .abilities(abilities)
+                            .compassNode("fluid_hatch")
+                            .tooltips(
+                                    Component.translatable("gtceu.machine.fluid_hatch." + (io == IO.IN ? "import" : "export") + ".tooltip"),
+                                    Component.translatable(GTMAdvancedHatch.MODID + ".machine." + name + ".tooltip"));
+
+                    if (slots == 1) {
+                        builder.tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
+                                FormattingUtil
+                                        .formatNumbers(FluidHatchPartMachine.getTankCapacity(initialCapacity, tier))));
+                    } else {
+                        builder.tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity_mult",
+                                slots, FormattingUtil
+                                        .formatNumbers(FluidHatchPartMachine.getTankCapacity(initialCapacity, tier))));
+                    }
+
+                    return builder.register();
+                },
+                tiers);
     }
 
     public static MachineDefinition[] registerNetEnergyHatch(IO io, int amperage, PartAbility ability, int[] tiers) {
