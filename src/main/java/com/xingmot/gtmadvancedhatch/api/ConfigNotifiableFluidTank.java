@@ -75,15 +75,20 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
     public void resetOneBasicInfo(int index, long capacity) {
         capacity = Math.max(capacity, 0);
         // 容量小于流体量时进行截断
-        if (!this.getFluidInTank(index).isEmpty() && capacity < this.getFluidInTank(index).getAmount())
+        if (isTruncateFluid(index, capacity))
             this.getFluidInTank(index).setAmount(capacity);
         this.getStorages()[index].setCapacity(capacity);
         lockedFluids[index].setCapacity(capacity);
     }
 
+    @Override
+    public boolean isTruncateFluid(int index, long capacity) {
+        return !this.getFluidInTank(index).isEmpty() && capacity < this.getFluidInTank(index).getAmount();
+    }
+
     public boolean test(FluidIngredient ingredient) {
         if (ingredient.isEmpty()) return false;
-        boolean result = true;
+        boolean result = false;
         for (int i = 0; i < this.getSize(); i++) {
             result = !isLocked(i) || ingredient.test(this.getFluidInTank(i));
             if (result)

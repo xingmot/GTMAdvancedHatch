@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="extendedae_plus-1.4.4-beta-gtl">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gradle/libs/extendedae_plus-1.4.4-beta-gtl.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

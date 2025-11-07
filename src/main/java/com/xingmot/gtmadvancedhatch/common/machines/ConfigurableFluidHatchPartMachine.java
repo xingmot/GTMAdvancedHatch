@@ -1,6 +1,7 @@
 package com.xingmot.gtmadvancedhatch.common.machines;
 
 import com.xingmot.gtmadvancedhatch.api.ConfigNotifiableFluidTank;
+import com.xingmot.gtmadvancedhatch.api.gui.HugeTankWidget;
 import com.xingmot.gtmadvancedhatch.api.gui.PhantomFluidCapacityWidget;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -282,7 +283,7 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
         if (this.tank instanceof ConfigNotifiableFluidTank ctank) {
             for (int y = 0; y < colSize; ++y) {
                 for (int x = 0; x < rowSize; ++x) {
-                    container.addWidget(new TankWidget(ctank.getStorages()[index], 4 + x * 18, 4 + y * 36 + 18, true, this.io.support(IO.IN)).setBackground(GuiTextures.FLUID_SLOT));
+                    container.addWidget(new HugeTankWidget(ctank.getStorages()[index], 4 + x * 18, 4 + y * 36 + 18, true, this.io.support(IO.IN)).setBackground(GuiTextures.FLUID_SLOT));
                     int finalIndex = index;
                     container.addWidget((new PhantomFluidCapacityWidget(ctank, ctank.getLockedFluids()[index], index++, 4 + x * 18, 4 + y * 36, 18, 18,
                             () -> ctank.getLockedFluids()[finalIndex].getFluid(), (f) -> {

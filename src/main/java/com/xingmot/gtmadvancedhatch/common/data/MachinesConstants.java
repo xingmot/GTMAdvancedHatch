@@ -13,8 +13,17 @@ public final class MachinesConstants {
 
     private MachinesConstants() {}
 
+    // region 调试用开关
+    public static final boolean debugGUI = false;
+    // endregion
+
     // region 常量
     public static final UUID UUID_ZERO = new UUID(0, 0);
+    // 自用gui动作id，方便区分
+    public static final int MOUSE_LEFT_CLICK_ACTION_ID = 1;
+    public static final int MOUSE_RIGHT_CLICK_ACTION_ID = 2;
+    public static final int MOUSE_MIDDLE_CLICK_ACTION_ID = 3;
+    public static final int SCROLL_ACTION_ID = 65537;
     // endregion
 
     // region 公式方法
@@ -45,8 +54,8 @@ public final class MachinesConstants {
         }
         return capacity;
     }
-
     // endregion
+
     // region GTMThings
     public static List<ItemEntry<ComponentItem>> WIRELESS_ENERGY_RECEIVE_COVER = List.of(
             CustomItems.WIRELESS_ENERGY_RECEIVE_COVER_LV,
