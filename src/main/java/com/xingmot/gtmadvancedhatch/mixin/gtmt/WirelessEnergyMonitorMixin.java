@@ -105,6 +105,9 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                     if (gtmadvancedhatch$netPower > 2) gtmadvancedhatch$netPower = 0;
                 }
                 case "all" -> all = !all;
+                case "reset" -> {
+                    WirelessEnergyManager.setUserEU(this.userid, BigInteger.ZERO);
+                }
                 default -> {
                     // 如果extendedae加载，则显示高亮
                     String[] parts = componentData.split(", ");
@@ -216,6 +219,10 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
         int compare = avgEnergy.compareTo(BigDecimal.valueOf(0));
         if (compare > 0) {
             textList.add(Component.translatable("gtceu.multiblock.power_substation.time_to_fill", Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.time_to_fill"))
+                    .append(Component.literal(" "))
+                    .append(ComponentPanelWidget.withButton(
+                            Component.literal("清空电网"),
+                            "reset", Objects.requireNonNull(ChatFormatting.DARK_RED.getColor())))
                     .withStyle(ChatFormatting.GRAY));
         } else if (compare < 0) {
             textList.add(Component.translatable("gtceu.multiblock.power_substation.time_to_drain", getTimeToFillDrainText(energyTotal.divide(avgEnergy.abs()
