@@ -23,7 +23,7 @@ public class SortedEntriesStorage {
             WeakHashMap<Pair<UUID, MetaMachine>, BigDecimal> machineData = MachineDataStorage.getConvertedData();
             sortedEntries = machineData.entrySet()
                     .stream()
-                    .sorted(Map.Entry.comparingByValue())
+                    .sorted(Map.Entry.<Pair<UUID, MetaMachine>, BigDecimal>comparingByValue().reversed())
                     .toList();
             machineData.clear();
         }
