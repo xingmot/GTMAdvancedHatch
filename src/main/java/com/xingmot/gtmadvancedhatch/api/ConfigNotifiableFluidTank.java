@@ -134,9 +134,9 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
             if (locked && !fluidStack.isEmpty()) {
                 this.lockedFluids[tank].setFluid(fluidStack.copy());
                 this.lockedFluids[tank].getFluid()
-                        .setAmount(1L);
+                        .setAmount(FluidHelper.getBucket());
                 this.onContentsChanged();
-                this.setFilter(tank, (stack) -> stack.isFluidEqual(this.lockedFluid.getFluid()));
+                this.setFilter(tank, (stack) -> stack.isFluidEqual(this.lockedFluids[tank].getFluid()));
             } else {
                 this.lockedFluids[tank].setFluid(FluidStack.empty());
                 this.setFilter(tank, (stack) -> true);
@@ -153,7 +153,7 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
                 this.lockedFluids[tank].getFluid()
                         .setAmount(FluidHelper.getBucket());
                 this.onContentsChanged();
-                this.setFilter(tank, (stack) -> stack.isFluidEqual(this.lockedFluid.getFluid()));
+                this.setFilter(tank, (stack) -> stack.isFluidEqual(this.lockedFluids[tank].getFluid()));
             } else {
                 this.lockedFluids[tank].setFluid(FluidStack.empty());
                 this.setFilter(tank, (stack) -> true);

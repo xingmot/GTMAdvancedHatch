@@ -10,8 +10,7 @@ import com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch.AdaptiveNetEne
 import com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch.AdaptiveNetEnergyTerminal;
 import com.xingmot.gtmadvancedhatch.common.machines.adaptivehatch.AdaptiveNetLaserHatchPartMachine;
 import com.xingmot.gtmadvancedhatch.config.AHConfig;
-
-import org.gtlcore.gtlcore.utils.TextUtil;
+import com.xingmot.gtmadvancedhatch.util.AHFormattingUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -30,11 +29,11 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.LDLib;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.xingmot.gtmadvancedhatch.common.data.MachinesConstants.getLockItemOutputBusSlot;
@@ -74,21 +73,21 @@ public class AHMachines {
     public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_1X = registerConfigurableFluidHatches("configurable_fluid_hatch",
             IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 1,
             ALL_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_1X);
-    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_4X = registerConfigurableFluidHatches("configurable_fluid_hatch",
-            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
-            NET_HIGH_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_4X);
-    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_9X = registerConfigurableFluidHatches("configurable_fluid_hatch",
-            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_9X, 9,
-            NET_HIGH_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_9X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_8X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 8,
+            NET_HIGH_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_1X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_IMPORT_16X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 16,
+            NET_HIGH_TIERS, PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_1X);
     public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_1X = registerConfigurableFluidHatches("configurable_fluid_hatch",
             IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 1,
             ALL_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_1X);
-    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_4X = registerConfigurableFluidHatches("configurable_fluid_hatch",
-            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
-            NET_HIGH_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_4X);
-    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_9X = registerConfigurableFluidHatches("configurable_fluid_hatch",
-            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_9X, 9,
-            NET_HIGH_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_9X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_8X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 8,
+            NET_HIGH_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_1X);
+    public static final MachineDefinition[] CONFIGURABLE_FLUID_HATCH_EXPORT_16X = registerConfigurableFluidHatches("configurable_fluid_hatch",
+            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_1X, 16,
+            NET_HIGH_TIERS, PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_1X);
 
     // endregion
     // region 》能源仓室
@@ -96,52 +95,52 @@ public class AHMachines {
     public static final Set<MachineDefinition> ALL_NET_ENERGY_INPUT_HATCH = new HashSet<>();
     public static final Set<MachineDefinition> ALL_NET_LASER_OUTPUT_HATCH = new HashSet<>();
     public static final Set<MachineDefinition> ALL_NET_LASER_INPUT_HATCH = new HashSet<>();
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH = registerNetEnergyHatch(IO.IN, 2,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH = registerNetEnergyHatch(IO.IN, 2,
             PartAbility.INPUT_ENERGY, NET_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_4A = registerNetEnergyHatch(IO.IN, 4,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_4A = registerNetEnergyHatch(IO.IN, 4,
             PartAbility.INPUT_ENERGY, NET_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_16A = registerNetEnergyHatch(IO.IN, 16,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_16A = registerNetEnergyHatch(IO.IN, 16,
             PartAbility.INPUT_ENERGY, NET_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_64A = registerNetEnergyHatch(IO.IN, 64,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_64A = registerNetEnergyHatch(IO.IN, 64,
             PartAbility.INPUT_ENERGY, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH = registerNetEnergyHatch(IO.OUT, 2,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH = registerNetEnergyHatch(IO.OUT, 2,
             PartAbility.OUTPUT_ENERGY, NET_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_4A = registerNetEnergyHatch(IO.OUT, 4,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_4A = registerNetEnergyHatch(IO.OUT, 4,
             PartAbility.OUTPUT_ENERGY, NET_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_16A = registerNetEnergyHatch(IO.OUT, 16,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_16A = registerNetEnergyHatch(IO.OUT, 16,
             PartAbility.OUTPUT_ENERGY, NET_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_64A = registerNetEnergyHatch(IO.OUT, 64,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_64A = registerNetEnergyHatch(IO.OUT, 64,
             PartAbility.OUTPUT_ENERGY, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_16384A = registerNetEnergyHatch(IO.IN, 16384,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_16384A = registerNetEnergyHatch(IO.IN, 16384,
             PartAbility.INPUT_ENERGY, NET_HIGH_TIERS2);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_65536A = registerNetEnergyHatch(IO.IN, 65536,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_65536A = registerNetEnergyHatch(IO.IN, 65536,
             PartAbility.INPUT_ENERGY, NET_HIGH_TIERS2);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_16384A = registerNetEnergyHatch(IO.OUT, 16384,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_16384A = registerNetEnergyHatch(IO.OUT, 16384,
             PartAbility.OUTPUT_ENERGY, NET_HIGH_TIERS2);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_65536A = registerNetEnergyHatch(IO.OUT, 65536,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_65536A = registerNetEnergyHatch(IO.OUT, 65536,
             PartAbility.OUTPUT_ENERGY, NET_HIGH_TIERS2);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_256A = registerNetLaserHatch(IO.IN, 256,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_256A = registerNetLaserHatch(IO.IN, 256,
             PartAbility.INPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_1024A = registerNetLaserHatch(IO.IN, 1024,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_1024A = registerNetLaserHatch(IO.IN, 1024,
             PartAbility.INPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_INPUT_HATCH_4096A = registerNetLaserHatch(IO.IN, 4096,
+    public static MachineDefinition[] NET_ENERGY_INPUT_HATCH_4096A = registerNetLaserHatch(IO.IN, 4096,
             PartAbility.INPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_LASER_INPUT_HATCH_16384A = registerNetLaserHatch(IO.IN, 16384,
+    public static MachineDefinition[] NET_LASER_INPUT_HATCH_16384A = registerNetLaserHatch(IO.IN, 16384,
             PartAbility.INPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_LASER_INPUT_HATCH_65536A = registerNetLaserHatch(IO.IN, 65536,
+    public static MachineDefinition[] NET_LASER_INPUT_HATCH_65536A = registerNetLaserHatch(IO.IN, 65536,
             PartAbility.INPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_256A = registerNetLaserHatch(IO.OUT, 256,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_256A = registerNetLaserHatch(IO.OUT, 256,
             PartAbility.OUTPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_1024A = registerNetLaserHatch(IO.OUT, 1024,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_1024A = registerNetLaserHatch(IO.OUT, 1024,
             PartAbility.OUTPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_4096A = registerNetLaserHatch(IO.OUT, 4096,
+    public static MachineDefinition[] NET_ENERGY_OUTPUT_HATCH_4096A = registerNetLaserHatch(IO.OUT, 4096,
             PartAbility.OUTPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_LASER_OUTPUT_HATCH_16384A = registerNetLaserHatch(IO.OUT, 16384,
+    public static MachineDefinition[] NET_LASER_OUTPUT_HATCH_16384A = registerNetLaserHatch(IO.OUT, 16384,
             PartAbility.OUTPUT_LASER, NET_HIGH_TIERS);
-    public static final MachineDefinition[] NET_LASER_OUTPUT_HATCH_65536A = registerNetLaserHatch(IO.OUT, 65536,
+    public static MachineDefinition[] NET_LASER_OUTPUT_HATCH_65536A = registerNetLaserHatch(IO.OUT, 65536,
             PartAbility.OUTPUT_LASER, NET_HIGH_TIERS);
     // region 电网适配系统
-    public static final MachineDefinition ADAPTIVE_NET_ENERGY_INPUT_HATCH = AHRegistration.registrate.machine(
+    public static MachineDefinition ADAPTIVE_NET_ENERGY_INPUT_HATCH = AHRegistration.registrate.machine(
             "adaptive_net_energy_input_hatch", holder -> new AdaptiveNetEnergyHatchPartMachine(holder, IO.IN))
             .rotationState(RotationState.ALL)
             .renderer(() -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/energy_hatch.input")))
@@ -149,7 +148,7 @@ public class AHMachines {
             .compassNode("energy_hatch")
             .tier(14)
             .register();
-    public static final MachineDefinition ADAPTIVE_NET_ENERGY_OUTPUT_HATCH = AHRegistration.registrate.machine(
+    public static MachineDefinition ADAPTIVE_NET_ENERGY_OUTPUT_HATCH = AHRegistration.registrate.machine(
             "adaptive_net_energy_output_hatch", holder -> new AdaptiveNetEnergyHatchPartMachine(holder, IO.OUT))
             .rotationState(RotationState.ALL)
             .renderer(
@@ -158,7 +157,7 @@ public class AHMachines {
             .compassNode("energy_hatch")
             .tier(14)
             .register();
-    public static final MachineDefinition ADAPTIVE_NET_LASER_INPUT_HATCH = AHRegistration.registrate.machine(
+    public static MachineDefinition ADAPTIVE_NET_LASER_INPUT_HATCH = AHRegistration.registrate.machine(
             "adaptive_net_laser_target_hatch", holder -> new AdaptiveNetLaserHatchPartMachine(holder, IO.IN))
             .rotationState(RotationState.ALL)
             .renderer(() -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/laser_hatch.target")))
@@ -166,7 +165,7 @@ public class AHMachines {
             .compassNode("energy_hatch")
             .tier(14)
             .register();
-    public static final MachineDefinition ADAPTIVE_NET_LASER_OUTPUT_HATCH = AHRegistration.registrate.machine(
+    public static MachineDefinition ADAPTIVE_NET_LASER_OUTPUT_HATCH = AHRegistration.registrate.machine(
             "adaptive_net_laser_source_hatch", holder -> new AdaptiveNetLaserHatchPartMachine(holder, IO.OUT))
             .rotationState(RotationState.ALL)
             .renderer(() -> new OverlayTieredMachineRenderer(14, GTMThings.id("block/machine/part/laser_hatch.target")))
@@ -174,7 +173,7 @@ public class AHMachines {
             .compassNode("energy_hatch")
             .tier(14)
             .register();
-    public static final MachineDefinition ADAPTIVE_NET_ENERGY_TERMINAL = AHRegistration.registrate.machine(
+    public static MachineDefinition ADAPTIVE_NET_ENERGY_TERMINAL = AHRegistration.registrate.machine(
             "adaptive_net_energy_terminal", AdaptiveNetEnergyTerminal::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .renderer(() -> new WorkableTieredHullMachineRenderer(14, GTMThings.id("block/machines/wireless_energy_monitor")))
@@ -198,7 +197,8 @@ public class AHMachines {
     public static MachineDefinition[] registerConfigurableFluidHatches(String name, IO io, long initialCapacity, int slots,
                                                                        int[] tiers, PartAbility... abilities) {
         var multi = (slots == 1 ? "" : "_%dx".formatted(slots));
-        var renderPath = "block/machine/part/fluid_hatch." + (io == IO.IN ? "import" : "export") + multi;
+        var render_multi = (slots == 1 ? "" : slots == 8 ? "_4x" : slots == 16 ? "_9x" : "_%dx".formatted(slots));
+        var renderPath = "block/machine/part/fluid_hatch." + (io == IO.IN ? "import" : "export") + render_multi;
         return registerTieredMachines(name + (io == IO.IN ? "_input" : "_output") + multi,
                 (holder, tier) -> new ConfigurableFluidHatchPartMachine(holder, tier, io, initialCapacity, slots),
                 (tier, builder) -> {
@@ -211,13 +211,11 @@ public class AHMachines {
                                     Component.translatable(GTMAdvancedHatch.MODID + ".machine." + name + ".tooltip"));
 
                     if (slots == 1) {
-                        builder.tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
-                                FormattingUtil
-                                        .formatNumbers(FluidHatchPartMachine.getTankCapacity(initialCapacity, tier))));
+                        builder.tooltips(Component.translatable("gtmadvancedhatch.machine.fluid_storage_capacity.tooltip",
+                                AHFormattingUtil.formatLongBucketsToShort(ConfigurableFluidHatchPartMachine.getTankCapacity(initialCapacity, tier), 1024000)));
                     } else {
-                        builder.tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity_mult",
-                                slots, FormattingUtil
-                                        .formatNumbers(FluidHatchPartMachine.getTankCapacity(initialCapacity, tier))));
+                        builder.tooltips(Component.translatable("gtmadvancedhatch.machine.fluid_storage_capacity_mult.tooltip",
+                                slots, AHFormattingUtil.formatLongBucketsToShort(ConfigurableFluidHatchPartMachine.getTankCapacity(initialCapacity, tier), 1024000)));
                     }
 
                     return builder.register();
@@ -254,25 +252,27 @@ public class AHMachines {
         String finalRender = getRender(amperage);
         MachineDefinition[] laserHatches = registerTieredMachines(amperage + "a_net_laser_" + name + "_hatch",
                 (holder, tier) -> new NetLaserHatchPartMachine(holder, tier, io, amperage), (tier, builder) -> {
-                    Component[] components = {
-                            Component.translatable(GTMAdvancedHatch.MODID + ".machine.net_energy_hatch." + name + ".tooltip"),
-                            Component.translatable(GTMThings.MOD_ID + ".machine.energy_hatch." + name + ".tooltip"),
-                            Component.translatable(GTMThings.MOD_ID + ".machine.wireless_energy_hatch." + name + ".tooltip") };
-                    if (amperage >= 16777216) {
-                        if (LDLib.isModLoaded("gtlcore") && amperage == 2147483647)
-                            components = Stream.concat(Arrays.stream(new Component[] { Component.literal(TextUtil.full_color("干得好，你有新玩具了")) }), Arrays.stream(components))
-                                    .toArray(Component[]::new);
-                        else if (!LDLib.isModLoaded("gtlcore") && AHConfig.INSTANCE.isDisplayNoFixCrashWarning)
-                            components = Stream.concat(Arrays.stream(components), Arrays.stream(new Component[] { Component.translatable(GTMAdvancedHatch.MODID + ".machine.no_fix_crash_warning") }))
-                                    .toArray(Component[]::new);
-                    }
-                    return builder.langValue(VNF[tier] + " " + FormattingUtil.formatNumbers(amperage) + "A Laser " + FormattingUtil.toEnglishName(name) + " Hatch")
+                    MachineBuilder<MachineDefinition> machineBuilder = builder.langValue(VNF[tier] + " " + FormattingUtil.formatNumbers(amperage) + "A Laser " + FormattingUtil.toEnglishName(name) + " Hatch")
                             .rotationState(RotationState.ALL)
                             .abilities(ability)
-                            .tooltips(components)
                             .renderer(() -> new OverlayTieredMachineRenderer(tier, GTMThings.id("block/machine/part/" + finalRender)))
                             .compassNode("laser_hatch." + name)
-                            .register();
+                            /* 彩色滚动字参考这里 */
+                            .tooltipBuilder(
+                                    (itemStack, components) -> {
+                                        if (amperage == 2147483647) {
+                                            components.add(AHFormattingUtil.getRainbowScrollComponent(Component.translatable("gtmadvancedhatch.machine.greatjob.tooltip")
+                                                    .getString(), AHFormattingUtil.RainbowSpeed.FAST2, false)
+                                                    .withStyle(ChatFormatting.BOLD));
+                                        }
+                                        components.addAll(List.of(
+                                                Component.translatable(GTMAdvancedHatch.MODID + ".machine.net_energy_hatch." + name + ".tooltip"),
+                                                Component.translatable(GTMThings.MOD_ID + ".machine.energy_hatch." + name + ".tooltip"),
+                                                Component.translatable(GTMThings.MOD_ID + ".machine.wireless_energy_hatch." + name + ".tooltip")));
+                                        if (amperage >= 16777216 && !LDLib.isModLoaded("gtlcore") && AHConfig.INSTANCE.isDisplayNoFixCrashWarning)
+                                            components.add(Component.translatable(GTMAdvancedHatch.MODID + ".machine.no_fix_crash_warning.tooltip"));
+                                    });
+                    return machineBuilder.register();
                 }, tiers);
         if (io == IO.IN) {
             Collections.addAll(ALL_NET_LASER_INPUT_HATCH, laserHatches);

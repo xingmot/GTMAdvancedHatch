@@ -16,6 +16,7 @@ import com.lowdragmc.lowdraglib.LDLib;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -53,7 +54,8 @@ public class GTMAdvancedHatch {
         return FMLEnvironment.dist.isClient();
     }
 
-    private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
+    @SubscribeEvent
+    public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         AHMachines.init();
         AHItems.init();
         AHTabs.init();

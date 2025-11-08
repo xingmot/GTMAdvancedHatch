@@ -52,9 +52,11 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
 
     private final Supplier<FluidStack> phantomFluidGetter;
     private final Consumer<FluidStack> phantomFluidSetter;
+    FluidStack currentJEIRenderedIngredient;
     @Setter
     private IGuiTexture lockTexture = new GuiTextureGroup(GuiTextures.BUTTON_LOCK.scale(0.65F));
-    FluidStack currentJEIRenderedIngredient;
+    @Setter
+    protected Long maxCapacity;
     /** 锁定滚动，每次打开gui时会自动锁定全部槽位 */
     @Setter
     protected boolean lockScrool = true;
@@ -65,10 +67,10 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
     @Getter
     private IConfigFluidTransfer icFluidTank;
 
-    public PhantomFluidCapacityWidget(@Nullable IConfigFluidTransfer icFluidTank, @Nullable IFluidTransfer fluidTank, int tank, int x, int y, int width, int height, Supplier<FluidStack> phantomFluidGetter, Consumer<FluidStack> phantomFluidSetter) {
+    public PhantomFluidCapacityWidget(@Nullable IConfigFluidTransfer icFluidTank, long maxCapacity, @Nullable IFluidTransfer fluidTank, int tank, int x, int y, int width, int height, Supplier<FluidStack> phantomFluidGetter, Consumer<FluidStack> phantomFluidSetter) {
         super(fluidTank, tank, x, y, width, height, phantomFluidGetter, phantomFluidSetter);
         this.icFluidTank = icFluidTank;
-        this.showAmount = false;
+        this.maxCapacity = maxCapacity;
         this.phantomFluidGetter = phantomFluidGetter;
         this.phantomFluidSetter = phantomFluidSetter;
     }
@@ -109,7 +111,7 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
             if (GTUtil.isAltDown()) {
                 multi *= 1000;
             }
-            return wheel > 0 ? AHUtil.multiplyWithBounds(this.getAmount(), multi) : AHUtil.divWithBounds(this.getAmount(), multi);
+            return wheel > 0 ? Math.min(maxCapacity, AHUtil.multiplyWithBounds(this.getAmount(), multi)) : AHUtil.divWithBounds(this.getAmount(), multi);
         }
         long add = wheel;
         if (GTUtil.isShiftDown()) {
@@ -122,7 +124,26 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
         if (!GTUtil.isAltDown()) {
             add *= 1000;
         }
-        return AHUtil.addWithBounds(this.getAmount(), add);
+        return Math.min(maxCapacity, AHUtil.addWithBounds(this.getAmount(), add));
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (isMouseOverElement(mouseX, mouseY)) {
+            if (isClientSideWidget) {
+                handlePhantomClick();
+            } else {
+                if (button == 0)
+                    writeClientAction(MachinesConstants.MOUSE_LEFT_CLICK_ACTION_ID, buffer -> {});
+                else if (button == 1)
+                    writeClientAction(MachinesConstants.MOUSE_RIGHT_CLICK_ACTION_ID, buffer -> {});
+                else if (button == 2)
+                    writeClientAction(MachinesConstants.MOUSE_MIDDLE_CLICK_ACTION_ID, buffer -> {});
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -130,7 +151,7 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
         switch (id) {
             case MachinesConstants.SCROLL_ACTION_ID -> this.handleScrollAction(buffer.readLong());
             case MachinesConstants.MOUSE_LEFT_CLICK_ACTION_ID -> this.handlePhantomClick();
-            case MachinesConstants.MOUSE_MIDDLE_CLICK_ACTION_ID -> this.reverseLockScrool();
+            case MachinesConstants.MOUSE_MIDDLE_CLICK_ACTION_ID -> this.handleMidleClick();
             default -> super.handleClientAction(id, buffer);
         }
 
@@ -146,6 +167,21 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
                 setWarnedAndWrite(false);
                 icFluidTank.newTankCapacity(this.tank, Math.max(newAmount, 0));
             }
+    }
+
+    private void handleMidleClick() {
+        if (!isShiftDown() || lockScrool) {
+            reverseLockScrool();
+        } else {
+            if (this.getFluidTank() != null)
+                if (icFluidTank.isTruncateFluid(this.tank, 0) && !isWarned) {
+                    setWarnedAndWrite(true);
+                    reverseLockScrool();
+                } else {
+                    setWarnedAndWrite(false);
+                    icFluidTank.newTankCapacity(this.tank, 0);
+                }
+        }
     }
 
     private void setWarnedAndWrite(boolean setTo) {
@@ -168,25 +204,6 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
             case 7 -> this.isWarned = buffer.readBoolean();
             default -> super.readUpdateInfo(id, buffer);
         }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (isMouseOverElement(mouseX, mouseY)) {
-            if (isClientSideWidget) {
-                handlePhantomClick();
-            } else {
-                if (button == 0)
-                    writeClientAction(MachinesConstants.MOUSE_LEFT_CLICK_ACTION_ID, buffer -> {});
-                else if (button == 1)
-                    writeClientAction(MachinesConstants.MOUSE_RIGHT_CLICK_ACTION_ID, buffer -> {});
-                else if (button == 2)
-                    writeClientAction(MachinesConstants.MOUSE_MIDDLE_CLICK_ACTION_ID, buffer -> {});
-            }
-            return true;
-        }
-        return false;
     }
 
     private void handlePhantomClick() {

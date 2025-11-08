@@ -37,7 +37,6 @@ import java.math.BigInteger;
 import java.util.*;
 
 import static com.xingmot.gtmadvancedhatch.integration.gtmt.newmonitor.FormatUtil.formatBigDecimalNumberOrSicWithSign;
-import static com.xingmot.gtmadvancedhatch.util.copy.NumberUtils.formatBigIntegerNumberOrSic;
 
 import com.glodblock.github.extendedae.client.render.EAEHighlightHandler;
 import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
@@ -164,7 +163,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", name)
                 .withStyle(ChatFormatting.AQUA));
         textList.add(Component.literal("formatWidth,gtmthings.machine.wireless_energy_monitor.tooltip.1,200,GOLD"));
-        textList.add(Component.literal(formatBigIntegerNumberOrSic(energyTotal)));
+        textList.add(Component.literal(formatBigDecimalNumberOrSicWithSign(new BigDecimal(energyTotal), gtmadvancedhatch$isScientificNotation)));
         // textList.add(formatWithConstantWidth("gtmthings.machine.wireless_energy_monitor.tooltip.1", 200,
         // Component.literal(formatBigIntegerNumberOrSic(energyTotal))).withStyle(ChatFormatting.GOLD));
 
