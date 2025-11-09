@@ -99,8 +99,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
     private void handleDisplayClickMixin(String componentData, ClickData clickData, CallbackInfo ci) {
         if (!clickData.isRemote) {
             switch (componentData) {
-                case "isScientificNotation" ->
-                        gtmadvancedhatch$isScientificNotation = !gtmadvancedhatch$isScientificNotation;
+                case "isScientificNotation" -> gtmadvancedhatch$isScientificNotation = !gtmadvancedhatch$isScientificNotation;
                 case "netPower" -> {
                     gtmadvancedhatch$netPower += 1;
                     if (gtmadvancedhatch$netPower > 2) gtmadvancedhatch$netPower = 0;
@@ -211,10 +210,10 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                 .append(Component.literal(" "))
                 .append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.netPower")
                         .append(ComponentPanelWidget.withButton(this.gtmadvancedhatch$netPower == 0 ?
-                                        Component.translatable("gtmthings.machine.wireless_energy_monitor.net_power_all") :
-                                        this.gtmadvancedhatch$netPower == 1 ?
-                                                Component.translatable("gtmthings.machine.wireless_energy_monitor.net_power_positive") :
-                                                Component.translatable("gtmthings.machine.wireless_energy_monitor.net_power_negative"),
+                                Component.translatable("gtmthings.machine.wireless_energy_monitor.net_power_all") :
+                                this.gtmadvancedhatch$netPower == 1 ?
+                                        Component.translatable("gtmthings.machine.wireless_energy_monitor.net_power_positive") :
+                                        Component.translatable("gtmthings.machine.wireless_energy_monitor.net_power_negative"),
                                 "netPower", Objects.requireNonNull(ChatFormatting.LIGHT_PURPLE.getColor())))));
         int compare = avgEnergy.compareTo(BigDecimal.valueOf(0));
         if (compare > 0) {
@@ -226,15 +225,20 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                     .withStyle(ChatFormatting.GRAY));
         } else if (compare < 0) {
             textList.add(Component.translatable("gtceu.multiblock.power_substation.time_to_drain", getTimeToFillDrainText(energyTotal.divide(avgEnergy.abs()
-                            .toBigInteger()
-                            .multiply(BigInteger.valueOf(20)))))
+                    .toBigInteger()
+                    .multiply(BigInteger.valueOf(20)))))
                     .withStyle(ChatFormatting.GRAY));
         }
 
         for (Map.Entry<Pair<UUID, MetaMachine>, BigDecimal> m : SortedEntriesStorage.getSortedEntries(getOffsetTimer())) {
-            UUID uuid = (UUID) ((Pair<?, ?>) m.getKey()).getFirst();
+            if (m.getKey() == null) {
+                continue; // 跳过键为null的条目
+            }
+            UUID uuid = m.getKey()
+                    .getFirst();
             if (this.all || TeamUtil.getTeamUUID(uuid) == TeamUtil.getTeamUUID(this.userid)) {
-                MetaMachine machine = (MetaMachine) ((Pair<?, ?>) m.getKey()).getSecond();
+                MetaMachine machine = m.getKey()
+                        .getSecond();
                 BigDecimal eut = m.getValue();
                 String pos = machine.getPos()
                         .toShortString();
@@ -247,9 +251,9 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                         .withStyle(Style.EMPTY.withHoverEvent(
                                 new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         Component.translatable(
-                                                        "recipe.condition.dimension.tooltip",
-                                                        new Object[]{Objects.requireNonNull(machine.getLevel())
-                                                                .dimension().location()})
+                                                "recipe.condition.dimension.tooltip",
+                                                new Object[] { Objects.requireNonNull(machine.getLevel())
+                                                        .dimension().location() })
                                                 .append(" [")
                                                 .append(pos)
                                                 .append("] ")
@@ -257,16 +261,16 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine implements 
                         .append(" ");
                 if (eut.compareTo(BigDecimal.ZERO) > 0) {
                     component.append(Component.literal(formatBigDecimalNumberOrSicWithSign(eut, gtmadvancedhatch$isScientificNotation))
-                                    .withStyle(ChatFormatting.GREEN))
+                            .withStyle(ChatFormatting.GREEN))
                             .append(" EU/t (");
                 } else {
                     component.append(Component.literal(formatBigDecimalNumberOrSicWithSign(eut, gtmadvancedhatch$isScientificNotation))
-                                    .withStyle(ChatFormatting.RED))
+                            .withStyle(ChatFormatting.RED))
                             .append(" EU/t (");
                 }
                 component.append(ComponentPanelWidget.withButton(Component.literal(VoltageLevelLookup.findVoltageLevel(eut.abs())),
-                                pos + ", " + level.dimension()
-                                        .location() + ", " + machineName))
+                        pos + ", " + level.dimension()
+                                .location() + ", " + machineName))
                         .append(")");
                 if (gtmadvancedhatch$netPower == 1 && eut.compareTo(BigDecimal.ZERO) > 0)
                     textList.add(component);
