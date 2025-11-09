@@ -23,7 +23,17 @@ public class SortedEntriesStorage {
             WeakHashMap<Pair<UUID, MetaMachine>, BigDecimal> machineData = MachineDataStorage.getConvertedData();
             sortedEntries = machineData.entrySet()
                     .stream()
-                    .sorted(Map.Entry.<Pair<UUID, MetaMachine>, BigDecimal>comparingByValue().reversed())
+                    .sorted((entry1, entry2) -> {
+                        BigDecimal value1 = entry1.getValue();
+                        BigDecimal value2 = entry2.getValue();
+
+                        // 大于0按自然顺序(升序)，小于0按倒序(降序)
+                        if (value1.compareTo(BigDecimal.ZERO) > 0 && value2.compareTo(BigDecimal.ZERO) > 0) {
+                            return value1.compareTo(value2);  // 升序
+                        } else {
+                            return value2.compareTo(value1);  // 降序
+                        }
+                    })
                     .toList();
             machineData.clear();
         }
