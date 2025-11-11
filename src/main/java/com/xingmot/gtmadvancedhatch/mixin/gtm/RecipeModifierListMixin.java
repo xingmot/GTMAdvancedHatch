@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// 批处理机制核心mixin
 @Mixin(RecipeModifierList.class)
 public abstract class RecipeModifierListMixin {
 

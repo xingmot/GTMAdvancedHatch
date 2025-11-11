@@ -5,7 +5,7 @@ import com.lowdragmc.lowdraglib.side.fluid.IFluidTransfer;
 /**
  * 可配置流体槽
  */
-public interface IConfigFluidTransfer extends IFluidTransfer {
+public interface IConfigFluidTransfer extends IFluidTransfer, IMultiCapacity {
 
     void newTankCapacity(long capacity);
 
@@ -18,4 +18,9 @@ public interface IConfigFluidTransfer extends IFluidTransfer {
      * @param capacity 容量
      */
     boolean isTruncateFluid(int index, long capacity);
+
+    /**
+     * 因为capacity并非FluidStorage持久化数据，因此需要手动实现持久化读取
+     */
+    void initTank();
 }

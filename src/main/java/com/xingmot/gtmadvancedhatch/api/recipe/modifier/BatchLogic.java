@@ -20,13 +20,12 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import org.jetbrains.annotations.NotNull;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BatchLogic {
 
-    public static @NotNull Pair<GTRecipe, Integer> applyBatch(MetaMachine machine, @NotNull GTRecipe recipe, int batchLimit) {
+    public static Pair<GTRecipe, Integer> applyBatch(MetaMachine machine, GTRecipe recipe, int batchLimit) {
         if (machine instanceof IRecipeLogicMachine rlm) {
             return doBatchRecipes(recipe, rlm, batchLimit);
         } else {
@@ -34,7 +33,7 @@ public class BatchLogic {
         }
     }
 
-    public static int getMaxRecipeMultiplier(@NotNull GTRecipe recipe, @NotNull IRecipeCapabilityHolder holder, int batchAmount) {
+    public static int getMaxRecipeMultiplier(GTRecipe recipe, IRecipeCapabilityHolder holder, int batchAmount) {
         IntSet multipliers = new IntOpenHashSet();
 
         for (RecipeCapability<?> cap : recipe.inputs.keySet()) {
@@ -50,7 +49,7 @@ public class BatchLogic {
         }
     }
 
-    public static int limitByOutputMerging(@NotNull GTRecipe recipe, @NotNull IRecipeCapabilityHolder holder, int batchAmount, Predicate<RecipeCapability<?>> canVoid) {
+    public static int limitByOutputMerging(GTRecipe recipe, IRecipeCapabilityHolder holder, int batchAmount, Predicate<RecipeCapability<?>> canVoid) {
         Object2IntMap<RecipeCapability<?>> modifiedBatchAmounts = new Object2IntOpenHashMap();
         boolean canVoidAll = true;
 
@@ -83,7 +82,7 @@ public class BatchLogic {
         }
     }
 
-    public static @NotNull Pair<GTRecipe, Integer> doBatchRecipes(@NotNull GTRecipe currentRecipe, @NotNull IRecipeLogicMachine machine, int batchAmount) {
+    public static Pair<GTRecipe, Integer> doBatchRecipes(GTRecipe currentRecipe, IRecipeLogicMachine machine, int batchAmount) {
         int multiplierByInputs = getMaxRecipeMultiplier(currentRecipe, machine, batchAmount);
         if (multiplierByInputs == 0) {
             return Pair.of(currentRecipe, 1);

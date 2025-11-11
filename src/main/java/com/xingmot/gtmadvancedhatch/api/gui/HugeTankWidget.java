@@ -1,5 +1,6 @@
 package com.xingmot.gtmadvancedhatch.api.gui;
 
+import com.xingmot.gtmadvancedhatch.common.data.MachinesConstants;
 import com.xingmot.gtmadvancedhatch.util.AHFormattingUtil;
 import com.xingmot.gtmadvancedhatch.util.AHUtil;
 
@@ -16,6 +17,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -37,6 +39,32 @@ public class HugeTankWidget extends TankWidget {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (isMouseOverElement(mouseX, mouseY)) {
+            if (button == 2) {
+                writeClientAction(MachinesConstants.MOUSE_MIDDLE_CLICK_ACTION_ID, buffer -> {});
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void handleClientAction(int id, FriendlyByteBuf buffer) {
+        if (id == MachinesConstants.MOUSE_MIDDLE_CLICK_ACTION_ID && isCtrlDown()) {
+            if (fluidTank != null)
+                fluidTank.getFluidInTank(this.tank).setAmount(0);
+        } else {
+            super.handleClientAction(id, buffer);
+            return;
+        }
+        if (changeListener != null) {
+            changeListener.run();
+        }
+    }
+
+    @Override
     public List<Component> getFullTooltipTexts() {
         // 缩略显示数值的阈值
         long min = 128000;
@@ -53,6 +81,7 @@ public class HugeTankWidget extends TankWidget {
                 }
                 tooltips.add(Component.translatable("ldlib.fluid.temperature", FluidHelper.getTemperature(fluidStack)));
                 tooltips.add(FluidHelper.isLighterThanAir(fluidStack) ? Component.translatable("ldlib.fluid.state_gas") : Component.translatable("ldlib.fluid.state_liquid"));
+                tooltips.add(Component.translatable("gtmadvancedhatch.gui.huge_tank_widget.tooltips").withStyle(ChatFormatting.GOLD));
                 tooltips.add(Component.translatable("gtmadvancedhatch.gui.shift_expand_tooltips").withStyle(ChatFormatting.DARK_GRAY));
             } else {
                 tooltips.add(Component.translatable("ldlib.fluid.amount", fluidStack.getAmount(), this.lastTankCapacity).append(" " + FluidHelper.getUnit()));
@@ -61,6 +90,7 @@ public class HugeTankWidget extends TankWidget {
                 }
                 tooltips.add(Component.translatable("ldlib.fluid.temperature", FluidHelper.getTemperature(fluidStack)));
                 tooltips.add(FluidHelper.isLighterThanAir(fluidStack) ? Component.translatable("ldlib.fluid.state_gas") : Component.translatable("ldlib.fluid.state_liquid"));
+                tooltips.add(Component.translatable("gtmadvancedhatch.gui.huge_tank_widget.tooltips").withStyle(ChatFormatting.GOLD));
             }
         } else {
             tooltips.add(Component.translatable("ldlib.fluid.empty"));

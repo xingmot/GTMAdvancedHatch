@@ -3,7 +3,7 @@ package com.xingmot.gtmadvancedhatch.api;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 
 import com.lowdragmc.lowdraglib.misc.FluidStorage;
@@ -13,34 +13,46 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 容量可变，可单独设置过滤的流体存储
  */
 public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IConfigFluidTransfer {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(ConfigNotifiableFluidTank.class, NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(ConfigNotifiableFluidTank.class, NotifiableFluidTank.MANAGED_FIELD_HOLDER);
     @Getter
     @Persisted
     @DescSynced
     protected FluidStorage[] lockedFluids;
+    @Getter
+    @Persisted
+    @DescSynced
+    public long[] tankCapacity;
     @Persisted
     protected boolean isLockedEmptySlot;
 
     public ConfigNotifiableFluidTank(MetaMachine machine, int slots, long capacity, IO io, IO capabilityIO) {
         super(machine, slots, capacity, io, capabilityIO);
         this.lockedFluids = new FluidStorage[slots];
-        for (int i = 0; i < slots; i++)
-            lockedFluids[i] = new FluidStorage(capacity);
+        this.tankCapacity = new long[slots];
+        Arrays.fill(this.tankCapacity, capacity);
+        for (int i = 0; i < slots; i++) {
+            lockedFluids[i] = new FluidStorage(tankCapacity[i]);
+        }
     }
 
     public ConfigNotifiableFluidTank(MetaMachine machine, int slots, long capacity, IO io) {
         this(machine, slots, capacity, io, io);
     }
 
+    @Override
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
@@ -53,6 +65,15 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
     @Override
     public void newTankCapacity(int tank, long capacity) {
         resetOneBasicInfo(tank, capacity);
+    }
+
+    // 需要在持久化数据载入完成后调用
+    public void initTank() {
+        for (int i = 0; i < this.tankCapacity.length; i++) {
+            this.resetOneBasicInfo(i, this.tankCapacity[i]);
+            int finalI = i;
+            this.setFilter(i, (stack) -> stack.isFluidEqual(this.lockedFluids[finalI].getFluid()));
+        }
     }
 
     /**
@@ -73,12 +94,16 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
      * @param capacity 容量，最小为1桶，最大为long.max
      */
     public void resetOneBasicInfo(int index, long capacity) {
-        capacity = Math.max(capacity, 0);
-        // 容量小于流体量时进行截断
-        if (isTruncateFluid(index, capacity))
-            this.getFluidInTank(index).setAmount(capacity);
-        this.getStorages()[index].setCapacity(capacity);
-        lockedFluids[index].setCapacity(capacity);
+        if (machine instanceof IMultiCapacity mc_machine) {
+            capacity = Math.max(capacity, 0);
+            // 容量小于流体量时进行截断
+            if (isTruncateFluid(index, capacity))
+                this.getFluidInTank(index)
+                        .setAmount(capacity);
+            this.getStorages()[index].setCapacity(capacity);
+            lockedFluids[index].setCapacity(capacity);
+            mc_machine.getTankCapacity()[index] = capacity;
+        }
     }
 
     @Override
@@ -86,20 +111,115 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
         return !this.getFluidInTank(index).isEmpty() && capacity < this.getFluidInTank(index).getAmount();
     }
 
-    public boolean test(FluidIngredient ingredient) {
-        if (ingredient.isEmpty()) return false;
-        boolean result = false;
-        for (int i = 0; i < this.getSize(); i++) {
-            result = !isLocked(i) || ingredient.test(this.getFluidInTank(i));
-            if (result)
-                break;
-        }
-        return result;
+    @Override
+    public List<FluidIngredient> handleRecipeInner(IO io, GTRecipe recipe, List<FluidIngredient> left, @Nullable String slotName, boolean simulate) {
+        return handleIngredient(io, recipe, left, simulate, this.getStorages());
     }
 
+    // Copied from gtceu 1.6.4 mainly coded by kross
+    public List<FluidIngredient> handleIngredient(IO io, GTRecipe recipe, List<FluidIngredient> left, boolean simulate, FluidStorage[] storages) {
+        if (io != handlerIO) return left;
+        if (io != IO.IN && io != IO.OUT) return left.isEmpty() ? null : left;
+
+        FluidStack[] visited = new FluidStack[storages.length];
+        for (var it = left.iterator(); it.hasNext();) {
+            var ingredient = it.next();
+            if (ingredient.isEmpty()) {
+                it.remove();
+                continue;
+            }
+
+            var fluids = ingredient.getStacks();
+            if (fluids.length == 0 || fluids[0].isEmpty()) {
+                it.remove();
+                continue;
+            }
+
+            if (io == IO.OUT && !allowSameFluids) {
+                FluidStorage existing = null;
+                for (var storage : storages) {
+                    if (!storage.getFluid().isEmpty() && storage.getFluid().isFluidEqual(fluids[0])) {
+                        existing = storage;
+                        break;
+                    }
+                }
+                if (existing != null) {
+                    FluidStack output = fluids[0];
+                    long filled = existing.fill(output, simulate);
+                    ingredient.setAmount(ingredient.getAmount() - filled);
+                    if (ingredient.getAmount() <= 0) {
+                        it.remove();
+                    }
+                    // Continue to next ingredient regardless of if we filled this ingredient completely
+                    continue;
+                }
+            }
+
+            for (int tank = 0; tank < storages.length; ++tank) {
+                FluidStack fluidStack = fluids[0].copy();
+                if (storages[tank].getCapacity() == 0) continue;
+                if (!storages[tank].isFluidValid(fluidStack)) continue;
+                // GTMAdvancedHatch.LOGGER.info("{},capacity{}",
+                // fluidStack.getDisplayName().getString(),storages[tank].getCapacity());
+                @NotNull
+                FluidStack stored = getFluidInTank(tank);
+                long amount = (visited[tank] == null ? stored.getAmount() : visited[tank].getAmount());
+                if (io == IO.IN) {
+                    if (amount == 0) continue;
+                    if ((visited[tank] == null && ingredient.test(stored)) || ingredient.test(visited[tank])) {
+                        var drained = storages[tank].drain(ingredient.getAmount(), simulate);
+                        if (drained.getAmount() > 0) {
+                            visited[tank] = drained.copy();
+                            visited[tank].setAmount(amount - drained.getAmount());
+                            ingredient.setAmount(ingredient.getAmount() - drained.getAmount());
+                        }
+                    }
+                } else { // IO.OUT && No tank already has this fluidStack
+                    fluidStack.setAmount(ingredient.getAmount());
+                    if (visited[tank] == null || visited[tank].isFluidEqual(fluidStack)) {
+                        long filled = storages[tank].fill(fluidStack, simulate);
+                        if (filled > 0) {
+                            visited[tank] = fluidStack.copy();
+                            visited[tank].setAmount(filled);
+                            ingredient.setAmount(ingredient.getAmount() - filled);
+                            if (!allowSameFluids) {
+                                if (ingredient.getAmount() <= 0) it.remove();
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (ingredient.getAmount() <= 0) {
+                    it.remove();
+                    break;
+                }
+            }
+        }
+        return left.isEmpty() ? null : left;
+    }
+
+    @Override
+    public boolean test(FluidIngredient ingredient) {
+        if (ingredient.isEmpty()) return false;
+        for (int i = 0; i < this.getSize(); i++) {
+            if (!isLocked(i) || ingredient.test(this.getFluidInTank(i)))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public int getPriority() {
-        return this.isLocked() && !this.lockedFluid.getFluid()
-                .isEmpty() ? 1073741823 - this.getTanks() : super.getPriority();
+        return isLockedFluidsEmpty() ? 1073741823 - this.getTanks() : super.getPriority();
+    }
+
+    public boolean isLockedFluidsEmpty() {
+        for (FluidStorage fluid : this.lockedFluids) {
+            if (fluid != null && !fluid.getFluid().isEmpty())
+                return false;
+        }
+        return true;
     }
 
     @Override
@@ -131,18 +251,7 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
     public void setLocked(boolean locked, int tank) {
         if (tank < this.getSize() && this.isLocked(tank) != locked) {
             FluidStack fluidStack = this.getStorages()[tank].getFluid();
-            if (locked && !fluidStack.isEmpty()) {
-                this.lockedFluids[tank].setFluid(fluidStack.copy());
-                this.lockedFluids[tank].getFluid()
-                        .setAmount(FluidHelper.getBucket());
-                this.onContentsChanged();
-                this.setFilter(tank, (stack) -> stack.isFluidEqual(this.lockedFluids[tank].getFluid()));
-            } else {
-                this.lockedFluids[tank].setFluid(FluidStack.empty());
-                this.setFilter(tank, (stack) -> true);
-                this.onContentsChanged();
-            }
-
+            setLocked(locked, tank, fluidStack);
         }
     }
 
@@ -163,8 +272,12 @@ public class ConfigNotifiableFluidTank extends NotifiableFluidTank implements IC
         }
     }
 
-    public NotifiableFluidTank setFilter(int tank, Predicate<FluidStack> filter) {
+    public ConfigNotifiableFluidTank setFilter(int tank, Predicate<FluidStack> filter) {
         this.getStorages()[tank].setValidator(filter);
         return this;
+    }
+
+    public boolean getAllowSameFluids() {
+        return this.allowSameFluids;
     }
 }

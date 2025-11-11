@@ -67,9 +67,10 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
     @Getter
     private IConfigFluidTransfer icFluidTank;
 
-    public PhantomFluidCapacityWidget(@Nullable IConfigFluidTransfer icFluidTank, long maxCapacity, @Nullable IFluidTransfer fluidTank, int tank, int x, int y, int width, int height, Supplier<FluidStack> phantomFluidGetter, Consumer<FluidStack> phantomFluidSetter) {
+    public PhantomFluidCapacityWidget(@Nullable IConfigFluidTransfer icFluidTank, long currentCapacity, long maxCapacity, @Nullable IFluidTransfer fluidTank, int tank, int x, int y, int width, int height, Supplier<FluidStack> phantomFluidGetter, Consumer<FluidStack> phantomFluidSetter) {
         super(fluidTank, tank, x, y, width, height, phantomFluidGetter, phantomFluidSetter);
         this.icFluidTank = icFluidTank;
+        this.lastTankCapacity = currentCapacity;
         this.maxCapacity = maxCapacity;
         this.phantomFluidGetter = phantomFluidGetter;
         this.phantomFluidSetter = phantomFluidSetter;
@@ -106,10 +107,10 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
         if (GTUtil.isCtrlDown()) {
             long multi = 2;
             if (GTUtil.isShiftDown()) {
-                multi *= 10;
+                multi *= 2;
             }
             if (GTUtil.isAltDown()) {
-                multi *= 1000;
+                multi *= 4;
             }
             return wheel > 0 ? Math.min(maxCapacity, AHUtil.multiplyWithBounds(this.getAmount(), multi)) : AHUtil.divWithBounds(this.getAmount(), multi);
         }
@@ -170,7 +171,7 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
     }
 
     private void handleMidleClick() {
-        if (!isShiftDown() || lockScrool) {
+        if (!isCtrlDown() || lockScrool) {
             reverseLockScrool();
         } else {
             if (this.getFluidTank() != null)
@@ -291,6 +292,7 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
         RenderSystem.setShaderColor(1, 1, 1, 1);
     }
 
+    /* 石山警告 */
     @Override
     public List<Component> getFullTooltipTexts() {
         // 缩略显示数值的阈值
@@ -306,6 +308,8 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
                 }
                 tooltips.add(Component.translatable("ldlib.fluid.temperature", FluidHelper.getTemperature(fluidStack)));
                 tooltips.add(FluidHelper.isLighterThanAir(fluidStack) ? Component.translatable("ldlib.fluid.state_gas") : Component.translatable("ldlib.fluid.state_liquid"));
+                if (this.lastTankCapacity != 0)
+                    tooltips.add(Component.translatable("gtmadvancedhatch.gui.phantom_capacity_tank_widget.tooltips").withStyle(ChatFormatting.GOLD));
                 tooltips.add(Component.translatable("gtmadvancedhatch.gui.shift_expand_tooltips").withStyle(ChatFormatting.DARK_GRAY));
             } else {
                 tooltips.add(Component.translatable("ldlib.fluid.amount", fluidStack.getAmount(), this.lastTankCapacity).append(" " + FluidHelper.getUnit()));
@@ -314,11 +318,15 @@ public class PhantomFluidCapacityWidget extends ScrollablePhantomFluidWidget imp
                 }
                 tooltips.add(Component.translatable("ldlib.fluid.temperature", FluidHelper.getTemperature(fluidStack)));
                 tooltips.add(FluidHelper.isLighterThanAir(fluidStack) ? Component.translatable("ldlib.fluid.state_gas") : Component.translatable("ldlib.fluid.state_liquid"));
+                if (!isShiftDown() && this.lastTankCapacity != 0)
+                    tooltips.add(Component.translatable("gtmadvancedhatch.gui.phantom_capacity_tank_widget.tooltips").withStyle(ChatFormatting.GOLD));
             }
         } else {
             tooltips.add(Component.translatable("ldlib.fluid.empty"));
             if (!isShiftDown() && this.lastTankCapacity > min) {
                 tooltips.add(Component.translatable("ldlib.fluid.amount", 0, AHFormattingUtil.formatLongBucketsToShort(this.lastTankCapacity, min)));
+                if (this.lastTankCapacity != 0)
+                    tooltips.add(Component.translatable("gtmadvancedhatch.gui.phantom_capacity_tank_widget.tooltips").withStyle(ChatFormatting.GOLD));
                 tooltips.add(Component.translatable("gtmadvancedhatch.gui.shift_expand_tooltips").withStyle(ChatFormatting.DARK_GRAY));
             } else {
                 tooltips.add(Component.translatable("ldlib.fluid.amount", 0, this.lastTankCapacity)

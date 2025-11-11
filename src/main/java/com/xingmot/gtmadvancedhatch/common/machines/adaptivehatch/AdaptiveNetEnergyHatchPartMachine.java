@@ -218,16 +218,18 @@ public class AdaptiveNetEnergyHatchPartMachine extends NetEnergyHatchPartMachine
     // 负责动态更新机器状态，这里主要是刷新电压电流
     // TODO 机器电压电流变化时，JADE不能及时更新显示信息，此处标记一个需要mixin的todo
     private void updateMultiMachine() {
-        Level level = this.getLevel();
-        for (BlockPos pos : this.controllerPositions) {
-            if (level instanceof ServerLevel && level.isLoaded(pos)) {
-                MetaMachine machine = MetaMachine.getMachine(level, pos);
-                if (machine instanceof IMultiController controller) {
-                    controller.onPartUnload();
-                    controller.onStructureFormed();
+        try {
+            Level level = this.getLevel();
+            for (BlockPos pos : this.controllerPositions) {
+                if (level instanceof ServerLevel && level.isLoaded(pos)) {
+                    MetaMachine machine = MetaMachine.getMachine(level, pos);
+                    if (machine instanceof IMultiController controller) {
+                        controller.onPartUnload();
+                        controller.onStructureFormed();
+                    }
                 }
             }
-        }
+        } catch (Exception ignored) {}
     }
 
     private void bindNetUUID(ItemStack is, LivingEntity player) {

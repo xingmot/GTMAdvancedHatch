@@ -1,6 +1,8 @@
 package com.xingmot.gtmadvancedhatch.common.machines;
 
 import com.xingmot.gtmadvancedhatch.api.ConfigNotifiableFluidTank;
+import com.xingmot.gtmadvancedhatch.api.IConfigFluidTransfer;
+import com.xingmot.gtmadvancedhatch.api.IMultiCapacity;
 import com.xingmot.gtmadvancedhatch.api.gui.HugeTankWidget;
 import com.xingmot.gtmadvancedhatch.api.gui.PhantomFluidCapacityWidget;
 import com.xingmot.gtmadvancedhatch.util.AHUtil;
@@ -8,6 +10,8 @@ import com.xingmot.gtmadvancedhatch.util.AHUtil;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
+import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CircuitFancyConfigurator;
@@ -19,10 +23,10 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
+import com.gregtechceu.gtceu.data.lang.LangHandler;
 
+import com.lowdragmc.lowdraglib.LDLib;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
 import com.lowdragmc.lowdraglib.side.fluid.FluidTransferHelper;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -31,6 +35,8 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -43,14 +49,18 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine implements IMachineLife, IInteractedMachine {
+public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine implements IMachineLife, IInteractedMachine, IMultiCapacity {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(ConfigurableFluidHatchPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
     @Persisted
@@ -61,7 +71,6 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
     @Persisted
     protected final NotifiableItemStackHandler circuitInventory;
     private final int slots;
-    protected ExportOnlyAEFluidList fluidHandler;
     protected @Nullable TickableSubscription autoIOSubs;
     protected @Nullable ISubscription tankSubs;
 
@@ -70,13 +79,18 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
         this.slots = slots;
         this.maxCapacity = getTankCapacity(initialCapacity, tier);
         this.tank = this.createTank(slots, args);
-        this.fluidHandler = new ExportOnlyAEFluidList(this, slots);
+        this.tank.setAllowSameFluids(true);
         this.circuitInventory = this.createCircuitItemHandler(io);
     }
 
     public static long getTankCapacity(long initialCapacity, int tier) {
         if (tier >= 3) return AHUtil.multiplyWithBounds(initialCapacity, (1L << (4 * Math.min(13, tier - 1))));
         return initialCapacity * (1L << tier);
+    }
+
+    public void initTank() {
+        if (this.tank instanceof ConfigNotifiableFluidTank cfTank)
+            cfTank.initTank();
     }
 
     @Override
@@ -113,6 +127,7 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
         super.onLoad();
         Level var2 = this.getLevel();
         if (var2 instanceof ServerLevel serverLevel) {
+            this.initTank();
             serverLevel.getServer()
                     .tell(new TickTask(0, this::updateTankSubscription));
         }
@@ -137,9 +152,27 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
         } else if (is.is(GTItems.TOOL_DATA_STICK.asItem())) {
             // TODO复制配置
             return InteractionResult.SUCCESS;
-        } else if (is.is(Items.STICK)) {
-            if (this.tank instanceof ConfigNotifiableFluidTank fluidtank)
-                fluidtank.resetOneBasicInfo(0, this.tank.getTankCapacity(0) + 1000);
+        } else if (is.is(Items.OAK_SIGN.asItem()) && player.isCreative()) {
+            /* 橡木告示牌右击查看调试数据 */
+            MutableComponent c = Component.empty();
+            if (LDLib.isClient() && !LDLib.isRemote() && tank instanceof ConfigNotifiableFluidTank cfTank) {
+                c.append("过滤：[");
+                for (int i = 0; i < this.tank.getTanks(); i++) {
+                    c.append(cfTank.getLockedFluids()[i].getFluid()
+                            .getDisplayName());
+                    if (i < this.tank.getTanks() - 1)
+                        c.append(",");
+                }
+                c.append("]");
+
+                player.sendSystemMessage(c);
+            }
+            return InteractionResult.SUCCESS;
+        } else if (player.isCreative() && this.tank instanceof ConfigNotifiableFluidTank cfTank) {
+            if (LDLib.isClient())
+                if (ToolHelper.isTool(is, GTToolType.SCREWDRIVER)) {
+                    this.tank.setAllowSameFluids(!cfTank.getAllowSameFluids());
+                }
             return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
@@ -184,6 +217,14 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
     }
 
     @Override
+    public long[] getTankCapacity() {
+        if (this.tank instanceof IConfigFluidTransfer ctank) {
+            return ctank.getTankCapacity();
+        }
+        return null;
+    }
+
+    @Override
     public void setWorkingEnabled(boolean workingEnabled) {
         super.setWorkingEnabled(workingEnabled);
         this.updateTankSubscription();
@@ -200,10 +241,6 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
     @Override
     public Widget createUIWidget() {
         return this.createMultiSlotGUI();
-    }
-
-    public String getFormattedFluidAmount(FluidStack fluidStack) {
-        return String.format("%,d", fluidStack.isEmpty() ? 0L : fluidStack.getAmount());
     }
 
     protected Widget createMultiSlotGUI() {
@@ -228,7 +265,7 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
                     int finalIndex = index;
                     container.addWidget(new HugeTankWidget(ctank.getStorages()[index], 4 + x * 18, 4 + y * 36 + 18,
                             true, this.io.support(IO.IN)).setBackground(GuiTextures.FLUID_SLOT));
-                    container.addWidget((new PhantomFluidCapacityWidget(ctank, this.maxCapacity, ctank.getLockedFluids()[index], index++,
+                    container.addWidget((new PhantomFluidCapacityWidget(ctank, this.getTankCapacity()[finalIndex], this.maxCapacity, ctank.getLockedFluids()[index], index++,
                             4 + x * 18, 4 + y * 36, 18, 18,
                             () -> ctank.getLockedFluids()[finalIndex].getFluid(), (f) -> {
                                 if (f != null && !f.isEmpty()) {
@@ -248,5 +285,13 @@ public class ConfigurableFluidHatchPartMachine extends TieredIOPartMachine imple
         container.setBackground(GuiTextures.BACKGROUND_INVERSE);
         group.addWidget(container);
         return group;
+    }
+
+    @Override
+    public void onAddFancyInformationTooltip(@NotNull List<Component> tooltips) {
+        super.onAddFancyInformationTooltip(tooltips);
+        tooltips.addAll(Arrays.stream(
+                LangHandler.getMultiLang("gtmadvancedhatch.gui.configurable_fluid_hatch.tooltip").toArray(new MutableComponent[0]))
+                .toList());
     }
 }

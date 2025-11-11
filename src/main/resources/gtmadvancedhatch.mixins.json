@@ -11,6 +11,8 @@
     "buildinggadgets.ServerTickHandlerMixin",
     "gtlcore.PerformanceMonitorMachineMixin",
     "gtm.GTUtilMixin",
+    "gtm.OverlayeddFluidHandlerMixin",
+    "gtm.OverlayeddFluidHandlerMixin$OverlayedTankMixin",
     "gtm.RecipeModifierListMixin",
     "gtmt.WirelessEnergyManagerMixin",
     "gtmt.WirelessEnergyMonitorMixin",
